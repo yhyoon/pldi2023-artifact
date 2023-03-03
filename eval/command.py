@@ -1,6 +1,5 @@
 import sys
 import argparse
-import shutil
 
 from common_util import *
 import run
@@ -168,11 +167,12 @@ def main():
     # TODO
     args = parser.parse_args()
 
+    if args.log_out is not None:
+        run.log_out = args.log_out
+
     if args.command == 'clean':
         do_clean(args.target, args.yes)
     elif args.command == 'run':
-        run.log_out = args.log_out
-
         for solver in args.solver_list:
             for bench in args.bench_list:
                 print(f"===== run {solver} on {bench} =====")
