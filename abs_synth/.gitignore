@@ -1,8 +1,0 @@
-/_build/**
-/_install/**
-/*.json
-/*.txt
-/*.log
-/*.exe
-/**/.DS_Store
-/**/*.swp

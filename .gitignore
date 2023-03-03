@@ -1,1 +1,6 @@
 /.idea/
+/duet/_build/
+/abs_synth/_build/
+/abs_synth/_install
+/abs_synth/**/*.exe
+/probe/target/
