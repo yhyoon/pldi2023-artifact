@@ -181,7 +181,10 @@ def main():
         print('TODO: print statistics')
         pass  # TODO
     elif args.command == 'batch':
-        print('TODO: do all things')
+        for solver in ["abs_synth", "duet", "probe"]:
+            for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
+                print(f"===== run {solver} on {bench} =====")
+                run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
         pass  # TODO
     elif args.command is None:
         print(f"Command Name is Required (run | stat | batch | clean)", file=sys.stderr)
