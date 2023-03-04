@@ -5,7 +5,7 @@ from common_util import *
 import run
 
 
-def build_clean_dest_dirs(target):
+def build_clean_dest_dirs(target: str):
     dest_dirs = list()
 
     if target == "all":
@@ -112,6 +112,10 @@ def main():
     prepare_result_dirs()
 
     parser = argparse.ArgumentParser(description='artifact commands')
+    parser.add_argument('-log', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
+                           dest='log_out',
+                           help='test progress log print to... (default: stdout)')
+
     subparsers = parser.add_subparsers(dest='command')
 
     # command 1: clean
@@ -141,9 +145,6 @@ def main():
     subparser.add_argument('-overwrite', action='store_true',
                            help='force run solver even if there already exists result file for the benchmark'
                                 '(default: skip existing result)')
-    subparser.add_argument('-log', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
-                           dest='log_out',
-                           help='test progress log print to... (default: stdout)')
 
     # command 3: stat
     subparser = subparsers.add_parser('stat', help='Print Statistics of Run Result')
@@ -163,13 +164,11 @@ def main():
     subparser.add_argument('-overwrite', action='store_true',
                            help='force run solver even if there already exists result file for the benchmark'
                                 '(default: skip existing result)')
-    subparser.add_argument('-log', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
-                           dest='log_out',
-                           help='test progress log print to... (default: stdout)')
     # TODO
     args = parser.parse_args()
 
-    common_util.log_out = args.log_out
+    if args.log_out is not None:
+        common_util.log_out = args.log_out
 
     if args.command == 'clean':
         do_clean(args.target, args.yes)
