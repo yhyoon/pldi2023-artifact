@@ -180,8 +180,8 @@ def main():
         log_write_with_time('TODO: print statistics')
         pass  # TODO
     elif args.command == 'batch':
-        for solver in ["abs_synth", "duet", "probe"]:
-            for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
+        for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
+            for solver in ["abs_synth", "duet", "probe"]:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, False, args.overwrite, args.timeout, args.thread_count)
         pass  # TODO
