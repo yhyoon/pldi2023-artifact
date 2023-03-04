@@ -1,6 +1,6 @@
-import sys
 import argparse
 
+import common_util
 from common_util import *
 import run
 
@@ -167,23 +167,22 @@ def main():
     # TODO
     args = parser.parse_args()
 
-    if args.log_out is not None:
-        run.log_out = args.log_out
+    common_util.log_out = args.log_out
 
     if args.command == 'clean':
         do_clean(args.target, args.yes)
     elif args.command == 'run':
         for solver in args.solver_list:
             for bench in args.bench_list:
-                print(f"===== run {solver} on {bench} =====")
+                log_write_with_time(f"===== run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
     elif args.command == 'stat':
-        print('TODO: print statistics')
+        log_write_with_time('TODO: print statistics')
         pass  # TODO
     elif args.command == 'batch':
         for solver in ["abs_synth", "duet", "probe"]:
             for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
-                print(f"===== run {solver} on {bench} =====")
+                log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, False, args.overwrite, args.timeout, args.thread_count)
         pass  # TODO
     elif args.command is None:

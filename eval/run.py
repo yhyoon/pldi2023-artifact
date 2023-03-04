@@ -1,31 +1,11 @@
 from typing import List, Tuple, Dict
 
-import sys
 import argparse
 import re
-import time
-import threading
 
+import common_util
 from common_util import *
 import timeout_runner
-
-log_out = sys.stdout
-log_lock = threading.Lock()
-
-
-def log_write_internal(s):
-    if s.endswith('\n'):
-        log_out.write(s)
-    else:
-        log_out.write(s + '\n')
-    log_out.flush()
-
-
-def log_write_with_time(s: str):
-    with log_lock:
-        for line in s.splitlines():
-            prefix_time = time.strftime("%Y-%m-%d %H:%M:%S")
-            log_write_internal(prefix_time + f"[{threading.current_thread().name}]" + line)
 
 
 class Solver:
@@ -259,8 +239,7 @@ def main():
 
     args = parser.parse_args()
 
-    global log_out
-    log_out = args.log_out
+    common_util.log_out = args.log_out
 
     run_test(args.solver, args.bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
 

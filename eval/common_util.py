@@ -1,5 +1,27 @@
 from typing import Callable, Any
 import os
+import sys
+import time
+import threading
+
+log_out = sys.stdout
+log_lock = threading.Lock()
+
+
+def log_write_internal(s):
+    if s.endswith('\n'):
+        log_out.write(s)
+    else:
+        log_out.write(s + '\n')
+    log_out.flush()
+
+
+def log_write_with_time(s: str):
+    with log_lock:
+        for line in s.splitlines():
+            prefix_time = time.strftime("%Y-%m-%d %H:%M:%S")
+            log_write_internal(prefix_time + f"[{threading.current_thread().name}]" + line)
+
 
 artifact_root_path = os.path.dirname(os.path.dirname(__file__))
 
