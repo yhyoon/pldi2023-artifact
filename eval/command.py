@@ -152,6 +152,8 @@ def main():
     # command 4: batch
     subparser = subparsers.add_parser('batch', help='Run Every Solvers to Every Benchmarks and Print Statistics'
                                                     '(WARNING: this command is very very time-consuming)')
+    subparser.add_argument('-chosen', action='store_true',
+                           help='run chosen subset of benchmarks (Table 1 in paper)')
     subparser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,
                            dest='thread_count',
                            help='run in parallel process using NUM threads (default: 1)')
@@ -183,7 +185,7 @@ def main():
         for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
             for solver in ["abs_synth", "duet", "probe"]:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
-                run.run_test(solver, bench, False, args.overwrite, args.timeout, args.thread_count)
+                run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
         pass  # TODO
     elif args.command is None:
         print(f"Command Name is Required (run | stat | batch | clean)", file=sys.stderr)
