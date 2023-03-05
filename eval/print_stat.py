@@ -1,6 +1,7 @@
 from typing import Optional, Tuple, List, Dict, FrozenSet
 
 import argparse
+import itertools
 import matplotlib.pyplot as plt
 import numpy
 import pandas as pd
@@ -325,77 +326,13 @@ def draw_bars(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
 
-def draw_tex_tables(table_out, main_summary, table_1):
-    stat_summary = ''.join([f"""
-\\resizebox{{\\textwidth}}{{!}}{{%
-\\small
-\\begin{{tabular}}{{c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r}} \\hline
-Benchmark  &
-    \\multicolumn{{3}}{{c|}}{{\\# Solved}}	&
-        \\multicolumn{{3}}{{c|}}{{Time (Average)}} &
-            \\multicolumn{{3}}{{c}} {{Time (Median)}} &
-                \\multicolumn{{3}}{{|c|}}{{Size (Average)}} &
-                    \\multicolumn{{3}}{{c}} {{Size (Median)}} \\\\ \cline{{2-16}}
-category\! &
-    \\textsc{{{{\\bf A}}bsSynth}} & \\textsc{{{{\\bf D}}uet}} & \\textsc{{{{\\bf P}}robe}} &
-        \\textsc{{{{\\bf A}}}} & \\textsc{{{{\\bf D}}}} & \\textsc{{{{\\bf P}}}} &
-            \\textsc{{{{\\bf A}}}} & \\textsc{{{{\\bf D}}}} & \\textsc{{{{\\bf P}}}} &
-                \\textsc{{{{\\bf A}}}} & \\textsc{{{{\\bf D}}}} & \\textsc{{{{\\bf P}}}} &
-                    \\textsc{{{{\\bf A}}}} & \\textsc{{{{\\bf D}}}} & \\textsc{{{{\\bf P}}}} \\\\
-\hline \hline
-\\textsc{{HD}} \\! &\n"""
-    f"    {' & '.join([str(main_summary['solved'][solver]['hd']) for solver in solver_names])} &\n"
-    f"        {' & '.join(['{:.1f}'.format(main_summary['time_avg'][solver]['hd']) for solver in solver_names])} &\n"
-    f"            {' & '.join(['{:.1f}'.format(main_summary['time_med'][solver]['hd'].item()) for solver in solver_names])} &\n"
-    f"                {' & '.join(['{:.1f}'.format(main_summary['size_avg'][solver]['hd']) for solver in solver_names])} &\n"
-    f"                    {' & '.join(['{:.0f}'.format(main_summary['size_med'][solver]['hd'].item()) for solver in solver_names])} &\n"
-    "\\\\[0.3mm]\n"
-    "\\textsc{Deobfusc} \! &\n"
-    f"    {' & '.join([str(main_summary['solved'][solver]['deobfusc']) for solver in solver_names])} &\n"
-    f"        {' & '.join(['{:.1f}'.format(main_summary['time_avg'][solver]['deobfusc']) for solver in solver_names])} &\n"
-    f"            {' & '.join(['{:.1f}'.format(main_summary['time_med'][solver]['deobfusc'].item()) for solver in solver_names])} &\n"
-    f"                {' & '.join(['{:.1f}'.format(main_summary['size_avg'][solver]['deobfusc']) for solver in solver_names])} &\n"
-    f"                    {' & '.join(['{:.0f}'.format(main_summary['size_med'][solver]['deobfusc'].item()) for solver in solver_names])} &\n"
-    "\\\\[0.3mm]\n"
-    "\\textsc{Lobster}\! &\n"
-    f"    {' & '.join([*[str(main_summary['solved'][solver]['lobster']) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"        {' & '.join([*['{:.1f}'.format(main_summary['time_avg'][solver]['lobster']) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"            {' & '.join([*['{:.1f}'.format(main_summary['time_med'][solver]['lobster'].item()) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"                {' & '.join([*['{:.1f}'.format(main_summary['size_avg'][solver]['lobster']) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"                    {' & '.join([*['{:.0f}'.format(main_summary['size_med'][solver]['lobster'].item()) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    "\\\\[0.3mm]\n"
-    "\\textsc{Crypto}\! &\n"
-    f"    {' & '.join([*[str(main_summary['solved'][solver]['crypto']) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"        {' & '.join([*['{:.1f}'.format(main_summary['time_avg'][solver]['crypto']) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"            {' & '.join([*['{:.1f}'.format(main_summary['time_med'][solver]['crypto'].item()) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"                {' & '.join([*['{:.1f}'.format(main_summary['size_avg'][solver]['crypto']) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    f"                    {' & '.join([*['{:.0f}'.format(main_summary['size_med'][solver]['crypto'].item()) for solver in ['abs_synth', 'duet']], '-'])} &\n"
-    "\\\\[0.3mm]\n"
-    "\\hline\n"
-    "{\\bf Overall} \! &\n"
-    f"    {{\\bf {main_summary['solved']['abs_synth']['overall']}}} &\n"
-    f"    {{\\bf {main_summary['solved']['duet']['overall']}}} &\n"
-    f"    {{\\bf {main_summary['solved']['probe']['overall']}}} &\n"
-    f"        {{\\bf {'{:.1f}'.format(main_summary['time_avg']['abs_synth']['overall'])}}} &\n"
-    f"        {{\\bf {'{:.1f}'.format(main_summary['time_avg']['duet']['overall'])}}} &\n"
-    f"        {{\\bf {'{:.1f}'.format(main_summary['time_avg']['probe']['overall'])}}} &\n"
-    f"            {{\\bf {'{:.1f}'.format(main_summary['time_med']['abs_synth']['overall'].item())}}} &\n"
-    f"            {{\\bf {'{:.1f}'.format(main_summary['time_med']['duet']['overall'].item())}}} &\n"
-    f"            {{\\bf {'{:.1f}'.format(main_summary['time_med']['probe']['overall'].item())}}} &\n"
-    f"                {{\\bf {'{:.1f}'.format(main_summary['size_avg']['abs_synth']['overall'])}}} &\n"
-    f"                {{\\bf {'{:.1f}'.format(main_summary['size_avg']['duet']['overall'])}}} &\n"
-    f"                {{\\bf {'{:.1f}'.format(main_summary['size_avg']['probe']['overall'])}}} &\n"
-    f"                    {{\\bf {'{:.0f}'.format(main_summary['size_med']['abs_synth']['overall'].item())}}} &\n"
-    f"                    {{\\bf {'{:.0f}'.format(main_summary['size_med']['duet']['overall'].item())}}} &\n"
-    f"                    {{\\bf {'{:.0f}'.format(main_summary['size_med']['probe']['overall'].item())}}} &\n"
-    "\\hline\n"
-    "\\end{tabular}}\n"])
-
-    table_out.write(stat_summary)
-
-
 def draw_txt_tables(table_out, main_summary, table_1):
     summary_lines = [
+        "{:12s}|| {:24s}| {:20s}| {:20s}| {:20s}| {:20s}|".format(
+            "".center(12, "-"),
+            "".center(24, "-"),
+            "".center(20, "-"), "".center(20, "-"), "".center(20, "-"), "".center(20, "-")
+        ),
         "{:12s}|| {:24s}| {:20s}| {:20s}| {:20s}| {:20s}|".format(
             "Benchmark".center(12, " "),
             "# Solved".center(24, " "),
@@ -459,20 +396,156 @@ def draw_txt_tables(table_out, main_summary, table_1):
             *[main_summary['time_med'][solver]['overall'] for solver in solver_names],
             *[main_summary['size_avg'][solver]['overall'] for solver in solver_names],
             *[main_summary['size_med'][solver]['overall'] for solver in solver_names],
-        )
+        ),
+        "{:12s}|| {:24s}| {:20s}| {:20s}| {:20s}| {:20s}|".format(
+            "".center(12, "-"),
+            "".center(24, "-"),
+            "".center(20, "-"), "".center(20, "-"), "".center(20, "-"), "".center(20, "-")
+        ),
     ]
 
-    table_out.write("\n".join(summary_lines))
     table_out.write("\n")
+    table_out.write("Fig. 3. (c) Statistics for the solving times and solution sizes.\n")
+    table_out.write("\n".join(summary_lines))
+    table_out.write("\n\n")
+
+    def lookup_time_and_format(solver, bench, problem) -> str:
+        try:
+            return "{:>9.2f}".format(table_1[solver][bench][problem]["time"])
+        except KeyError:
+            try:
+                if table_1[solver][bench][problem]["sol_type"] == "timeout":
+                    return "{:>9s}".format(">1h")
+                else:
+                    return "{:>9s}".format("-")
+            except KeyError:
+                return "{:>9s}".format("-")
+
+    def lookup_size_and_format(solver, bench, problem) -> str:
+        try:
+            return "{:>6.0f}".format(table_1[solver][bench][problem]["size"])
+        except KeyError:
+            try:
+                if table_1[solver][bench][problem]["sol_type"] == "timeout":
+                    return "{:>6s}".format(">1h")
+                else:
+                    return "{:>6s}".format("-")
+            except KeyError:
+                return "{:>6s}".format("-")
 
     detail_lines = [
-
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "".center(25, "-"),
+            "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
+        ),
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "Benchmark".center(25, " "),
+            "Probe".center(15, " "),
+            "Duet".center(15, " "),
+            "AbsSynth".center(15, " "),
+        ),
+        "{:25s}|| {:9s}{:6s}| {:9s}{:6s}| {:9s}{:6s}|".format(
+            "",
+            "Time".center(9, " "), "Size".center(6, " "),
+            "Time".center(9, " "), "Size".center(6, " "),
+            "Time".center(9, " "), "Size".center(6, " "),
+        ),
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "".center(25, "-"),
+            "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
+        ),
+        *[
+            "{:25s}|| {:9s}{:6s}| {:9s}{:6s}| {:9s}{:6s}|".format(
+                problem,
+                *[
+                    *[
+                        lf(solver, "hd", problem)
+                        for solver, lf in itertools.product(
+                            ["probe", "duet", "abs_synth"],
+                            [lookup_time_and_format, lookup_size_and_format]
+                        )
+                    ]
+                ],
+            ) for problem in tbl1_rand_chosen_hd_problems
+        ],
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "".center(25, "-"),
+            "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
+        ),
+        *[
+            "{:25s}|| {:9s}{:6s}| {:9s}{:6s}| {:9s}{:6s}|".format(
+                problem,
+                *[
+                    *[
+                        lf(solver, "deobfusc", problem)
+                        for solver, lf in itertools.product(
+                            ["probe", "duet", "abs_synth"],
+                            [lookup_time_and_format, lookup_size_and_format]
+                        )
+                    ]
+                ],
+            ) for problem in tbl1_rand_chosen_deob_problems
+        ],
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "".center(25, "-"),
+            "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
+        ),
+        *[
+            "{:25s}|| {:9s}{:6s}| {:9s}{:6s}| {:9s}{:6s}|".format(
+                problem.replace("sygus_iter_", ""),
+                *[
+                    *[
+                        lf(solver, "lobster", problem)
+                        for solver, lf in itertools.product(
+                            ["probe", "duet", "abs_synth"],
+                            [lookup_time_and_format, lookup_size_and_format]
+                        )
+                    ]
+                ],
+            ) for problem in tbl1_rand_chosen_lobster_problems
+        ],
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "".center(25, "-"),
+            "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
+        ),
+        *[
+            "{:25s}|| {:9s}{:6s}| {:9s}{:6s}| {:9s}{:6s}|".format(
+                problem,
+                *[
+                    *[
+                        lf(solver, "crypto", problem)
+                        for solver, lf in itertools.product(
+                            ["probe", "duet", "abs_synth"],
+                            [lookup_time_and_format, lookup_size_and_format]
+                        )
+                    ]
+                ],
+            ) for problem in tbl1_rand_chosen_crypto_problems
+        ],
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "".center(25, "-"),
+            "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
+        ),
     ]
 
+    table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n")
+    table_out.write("\n".join(detail_lines))
+    table_out.write("\n\n")
 
-def draw_all(table_format: str, table_out):
+
+def draw_all(table_out):
+    plt.rcParams.update({
+        "legend.fontsize": "16",
+        "figure.figsize": (9, 6),
+        "figure.dpi": 150,
+        "axes.labelsize": "16",
+        "axes.titlesize": "30",
+        "lines.linewidth": "2",
+        "xtick.labelsize": "14",
+        "ytick.labelsize": "14"
+    })
+
     problem_list, problem_bench_map = gen_problems()
-
     main_df = read_all(problem_list, problem_bench_map)
 
     # table of each solver
@@ -492,23 +565,12 @@ def draw_all(table_format: str, table_out):
         for solver in ["abs_synth", "duet", "probe"]
     }
 
-    plt.rcParams.update({
-        "legend.fontsize": "16",
-        "figure.figsize": (9, 6),
-        "figure.dpi": 150,
-        "axes.labelsize": "16",
-        "axes.titlesize": "30",
-        "lines.linewidth": "2",
-        "xtick.labelsize": "14",
-        "ytick.labelsize": "14"
-    })
-
-    def solver_problem_detail(solver: str, problem: str, col_name: str):
-        df = solver_bench_to_df[solver][problem_bench_map[problem]]
+    def solver_problem_detail(solver: str, problem: str):
         try:
-            return df.loc[problem][col_name]
-        except KeyError:
-            return numpy.nan
+            df = solver_bench_to_df[solver][problem_bench_map[problem]]
+            return df.loc[problem]
+        except:
+            return pd.DataFrame()
 
     # comparison table for counting best solver
     hd_cmp_df = build_time_cmp_table(problem_list["hd"][2], abs_synth_df, duet_df, probe_df)
@@ -523,8 +585,16 @@ def draw_all(table_format: str, table_out):
         "crypto": crypto_cmp_df,
         "pbe-bitvec": pbe_bv_cmp_df,
     }
+    solver_to_non_ite_df = {
+        solver: pd.concat([solver_bench_to_df[solver][bench] for bench in ["hd", "deobfusc", "lobster", "crypto"]])
+        for solver in solver_names
+    }
 
-    # figure 3.(c): main summary table: item(solved|time_avg|time_med|size_avg|size_med) |-> solver |-> bench |-> value
+    # figure 3.(c): main summary table raw data
+    # item(solved|time_avg|time_med|size_avg|size_med) |->
+    #   solver |->
+    #       bench(hd|deobfusc|lobster|crypto) |->
+    #           value
     main_summary = {
         "solved": {
             solver: {
@@ -532,17 +602,17 @@ def draw_all(table_format: str, table_out):
                     bench: solver_bench_to_df[solver][bench]["time"].count()
                     for bench in bench_names
                 },
-                "overall": solver_to_df[solver]["time"].count()
+                "overall": solver_to_non_ite_df[solver]["time"].count()
             }
             for solver in solver_names
         },
         "time_avg": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["time"].mean()
+                    bench: solver_bench_to_df[solver][bench]["time"].mean() if solver_bench_to_df[solver][bench]["time"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
-                "overall": solver_to_df[solver]["time"].mean()
+                "overall": solver_to_non_ite_df[solver]["time"].mean() if solver_to_non_ite_df[solver]["time"].count() > 0 else numpy.nan
             }
             for solver in solver_names
         },
@@ -552,17 +622,17 @@ def draw_all(table_format: str, table_out):
                     bench: solver_bench_to_df[solver][bench]["time"].median()
                     for bench in bench_names
                 },
-                "overall": solver_to_df[solver]["time"].median()
+                "overall": solver_to_non_ite_df[solver]["time"].median()
             }
             for solver in solver_names
         },
         "size_avg": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["size"].mean()
+                    bench: solver_bench_to_df[solver][bench]["size"].mean() if solver_bench_to_df[solver][bench]["size"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
-                "overall": solver_to_df[solver]["size"].mean()
+                "overall": solver_to_non_ite_df[solver]["size"].mean() if solver_to_non_ite_df[solver]["size"].count() > 0 else numpy.nan
             }
             for solver in solver_names
         },
@@ -572,34 +642,36 @@ def draw_all(table_format: str, table_out):
                     bench: solver_bench_to_df[solver][bench]["size"].median()
                     for bench in bench_names
                 },
-                "overall": solver_to_df[solver]["size"].median()
+                "overall": solver_to_non_ite_df[solver]["size"].median()
             }
             for solver in solver_names
         },
     }
 
-    # table 1: randomly chosen detail table: solver |-> bench |-> time, size
+    bench_to_chosen = {
+        "hd": tbl1_rand_chosen_hd_problems,
+        "deobfusc": tbl1_rand_chosen_deob_problems,
+        "lobster": tbl1_rand_chosen_lobster_problems,
+        "crypto": tbl1_rand_chosen_crypto_problems,
+    }
+
+    # table 1: randomly chosen detail table raw data
+    # solver |->
+    #   bench |->
+    #       problem |->
+    #           DataFrame row
     table_1 = {
         solver: {
-            problem: {
-                "time": solver_problem_detail(solver, problem, "time"),
-                "size": solver_problem_detail(solver, problem, "size"),
+            bench: {
+                problem: solver_problem_detail(solver, problem)
+                for problem in bench_to_chosen[bench]
             }
-            for problem in [
-                *tbl1_rand_chosen_hd_problems,
-                *tbl1_rand_chosen_deob_problems,
-                *tbl1_rand_chosen_lobster_problems,
-                *tbl1_rand_chosen_crypto_problems
-            ]
+            for bench in ["hd", "deobfusc", "lobster", "crypto"]
         }
         for solver in solver_names
     }
 
     draw_txt_tables(table_out, main_summary, table_1)
-    # if table_format == "tex":
-    #     draw_tex_tables(table_out, main_summary, table_1)
-    # else:
-    #     draw_txt_tables(table_out, main_summary, table_1)
     draw_bars(solver_bench_to_df, bench_cmp_map)
     draw_plots(problem_list, solver_bench_to_df)
 
@@ -610,8 +682,6 @@ def main():
     parser.add_argument('-log', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                         dest='log_out',
                         help='test progress log print to... (default: stdout)')
-    parser.add_argument('-table_format', type=str, metavar='FORMAT', default="txt",
-                        help='statistics table format (txt | tex) (default: txt)')
     parser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                         help='print statistics table to... (default: stdout)')
 
@@ -619,7 +689,7 @@ def main():
 
     common_util.log_out = args.log_out
 
-    draw_all(args.table_format, args.table_out)
+    draw_all(args.table_out)
 
 
 if __name__ == '__main__':

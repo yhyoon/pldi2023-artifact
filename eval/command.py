@@ -3,6 +3,7 @@ import argparse
 import common_util
 from common_util import *
 import run
+import print_stat
 
 
 def build_clean_dest_dirs(target: str):
@@ -148,7 +149,8 @@ def main():
 
     # command 3: stat
     subparser = subparsers.add_parser('stat', help='Print Statistics of Run Result')
-    # TODO
+    subparser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
+                           help='print statistics table to... (default: stdout)')
 
     # command 4: batch
     subparser = subparsers.add_parser('batch', help='Run Every Solvers to Every Benchmarks and Print Statistics'
@@ -164,6 +166,9 @@ def main():
     subparser.add_argument('-overwrite', action='store_true',
                            help='force run solver even if there already exists result file for the benchmark'
                                 '(default: skip existing result)')
+    subparser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
+                           help='print statistics table to... (default: stdout)')
+
     # TODO
     args = parser.parse_args()
 
@@ -178,14 +183,13 @@ def main():
                 log_write_with_time(f"===== run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
     elif args.command == 'stat':
-        log_write_with_time('TODO: print statistics')
-        pass  # TODO
+        print_stat.draw_all(args.table_out)
     elif args.command == 'batch':
         for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
             for solver in ["abs_synth", "duet", "probe"]:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
-        pass  # TODO
+        print_stat.draw_all(args.table_out)
     elif args.command is None:
         print(f"Command Name is Required (run | stat | batch | clean)", file=sys.stderr)
     else:
