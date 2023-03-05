@@ -9,40 +9,29 @@ import common_util
 from common_util import *
 
 
-def gen_problem_list() -> Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]]:
-    deobfusc_list = list()
-    hd_list = list()
-    crypto_list = list()
-    lobster_list = list()
-    pbe_bitvec_list = list()
-
-    traverse(bench_name_to_dir["deobfusc"],
-             lambda f: f.endswith(".sl"),
-             lambda f, index: deobfusc_list.append(os.path.splitext(os.path.split(f)[1])[0])
-             )
-    traverse(bench_name_to_dir["hd"],
-             lambda f: f.endswith(".sl"),
-             lambda f, index: hd_list.append(os.path.splitext(os.path.split(f)[1])[0])
-             )
-    traverse(bench_name_to_dir["crypto"],
-             lambda f: f.endswith(".sl"),
-             lambda f, index: crypto_list.append(os.path.splitext(os.path.split(f)[1])[0])
-             )
-    traverse(bench_name_to_dir["lobster"],
-             lambda f: f.endswith(".sl"),
-             lambda f, index: lobster_list.append(os.path.splitext(os.path.split(f)[1])[0])
-             )
-    traverse(bench_name_to_dir["pbe-bitvec"],
-             lambda f: f.endswith(".sl"),
-             lambda f, index: pbe_bitvec_list.append(os.path.splitext(os.path.split(f)[1])[0])
-             )
-    return {
-        "deobfusc": (deobfusc_list, frozenset(deobfusc_list), pd.DataFrame({"problem": deobfusc_list})),
-        "hd": (hd_list, frozenset(hd_list), pd.DataFrame({"problem": hd_list})),
-        "crypto": (crypto_list, frozenset(crypto_list), pd.DataFrame({"problem": crypto_list})),
-        "lobster": (lobster_list, frozenset(lobster_list), pd.DataFrame({"problem": lobster_list})),
-        "pbe-bitvec": (pbe_bitvec_list, frozenset(pbe_bitvec_list), pd.DataFrame({"problem": pbe_bitvec_list})),
+def gen_problems() -> Tuple[Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]], Dict[str, str]]:
+    problem_map: Dict[str, str] = dict()
+    problem_list_map: Dict[str, List[str]] = {
+        "deobfusc": list(),
+        "hd": list(),
+        "crypto": list(),
+        "lobster": list(),
+        "pbe-bitvec": list(),
     }
+
+    def add_to(bench_name: str, problem_file_path: str):
+        problem_name = os.path.splitext(os.path.split(problem_file_path)[1])[0]
+        problem_list_map[bench_name].append(problem_name)
+        problem_map[problem_name] = bench_name
+
+    for b in ["deobfusc", "hd", "crypto", "lobster", "pbe-bitvec"]:
+        traverse(bench_name_to_dir[b],
+                 lambda f: f.endswith(".sl"),
+                 lambda f, index: add_to(b, f)
+                 )
+
+    return {b: (problem_list_map[b], frozenset(problem_list_map[b]), pd.DataFrame({"problem": problem_list_map[b]}).set_index('problem'))
+            for b in ["deobfusc", "hd", "crypto", "lobster", "pbe-bitvec"]}, problem_map
 
 
 def parse_csv_result(line: str) -> Tuple[str, str, str, Optional[float], Optional[int], Optional[str]]:
@@ -59,7 +48,7 @@ def parse_csv_result(line: str) -> Tuple[str, str, str, Optional[float], Optiona
                 sol_time = float(sol_time_str)
                 sol_size = None
                 sol = None
-            elif sol == "failure":
+            elif sol == "failure" or sol_size_str.endswith(")"):
                 sol_type = "failure"
                 sol_time = None
                 sol_size = None
@@ -78,8 +67,9 @@ def parse_csv_result(line: str) -> Tuple[str, str, str, Optional[float], Optiona
     return solver, problem, sol_type, sol_time, sol_size, sol
 
 
-def read_all() -> pd.DataFrame:
+def read_all(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]], problem_bench_map: Dict[str, str]) -> pd.DataFrame:
     solver_list: List[str] = list()
+    bench_list: List[str] = list()
     problem_list: List[str] = list()
     sol_type_list: List[str] = list()
     sol_time_list: List[Optional[float]] = list()
@@ -94,6 +84,7 @@ def read_all() -> pd.DataFrame:
                 else:
                     solver, problem, sol_type, sol_time, sol_size, sol = parse_csv_result(line)
                     solver_list.append(solver)
+                    bench_list.append(problem_bench_map[problem])
                     problem_list.append(problem)
                     sol_type_list.append(sol_type)
                     sol_time_list.append(sol_time)
@@ -106,6 +97,7 @@ def read_all() -> pd.DataFrame:
              target_handler=read_and_add)
 
     df = pd.DataFrame({"solver": solver_list,
+                       "bench": bench_list,
                        "problem": problem_list,
                        "sol_type": sol_type_list,
                        "time": sol_time_list,
@@ -116,17 +108,18 @@ def read_all() -> pd.DataFrame:
     return df
 
 
-def build_time_cmp_table(key_df, abs_df, duet_df, probe_df=None):
-    accum_df = key_df.join(abs_df.rename(columns={'time': 'abs'})['abs'], on='problem')
-    accum_df = accum_df.join(duet_df.rename(columns={'time': 'duet'})['duet'], on='problem')
+def build_time_cmp_table(key_df, abs_df, duet_df, probe_df=None) -> pd.DataFrame:
+    accum_df: pd.DataFrame = key_df.join(abs_df.rename(columns={'time': 'abs'})['abs'])
+    accum_df: pd.DataFrame = accum_df.join(duet_df.rename(columns={'time': 'duet'})['duet'])
 
     if probe_df is not None:
-        accum_df = accum_df.join(probe_df.rename(columns={'time': 'probe'})['probe'], on='problem')
+        accum_df: pd.DataFrame = accum_df.join(probe_df.rename(columns={'time': 'probe'})['probe'])
         accum_df['win'] = accum_df[['abs', 'duet', 'probe']].idxmin(axis=1)
     else:
         accum_df['win'] = accum_df[['abs', 'duet']].idxmin(axis=1)
 
-    return accum_df
+    return accum_df.sort_index()
+
 
 def main():
     parser = argparse.ArgumentParser(description='print statistics')
@@ -139,14 +132,25 @@ def main():
 
     common_util.log_out = args.log_out
 
-    problem_list = gen_problem_list()
+    problem_list, problem_bench_map = gen_problems()
 
-    main_df = read_all()
+    main_df = read_all(problem_list, problem_bench_map)
 
     # table of each solver
     abs_synth_df = main_df[main_df["solver"] == "abs_synth"].set_index("problem")
     duet_df = main_df[main_df["solver"] == "duet"].set_index("problem")
     probe_df = main_df[main_df["solver"] == "probe"].set_index("problem")
+    solver_to_df: Dict[str, pd.DataFrame] = {
+        solver: main_df[main_df["solver"] == solver].set_index("problem")
+        for solver in ["abs_synth", "duet", "probe"]
+    }
+    solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]] = {
+        solver: {
+            bench: solver_to_df[solver][solver_to_df[solver]["bench"] == bench]
+            for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+        }
+        for solver in ["abs_synth", "duet", "probe"]
+    }
 
     # comparison table for counting best solver
     hd_cmp_df = build_time_cmp_table(problem_list["hd"][2], abs_synth_df, duet_df, probe_df)
@@ -154,6 +158,46 @@ def main():
     lobster_cmp_df = build_time_cmp_table(problem_list["lobster"][2], abs_synth_df, duet_df)
     crypto_cmp_df = build_time_cmp_table(problem_list["crypto"][2], abs_synth_df, duet_df)
     pbe_bv_cmp_df = build_time_cmp_table(problem_list["pbe-bitvec"][2], abs_synth_df, duet_df)
+
+    # main summary table
+    figure_3_c = {
+        "solved": {
+            solver: {
+                bench: solver_bench_to_df[solver][bench]["time"].count()
+                for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+            }
+            for solver in ["abs_synth", "duet", "probe"]
+        },
+        "time_avg": {
+            solver: {
+                bench: solver_bench_to_df[solver][bench]["time"].mean()
+                for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+            }
+            for solver in ["abs_synth", "duet", "probe"]
+        },
+        "time_med": {
+            solver: {
+                bench: solver_bench_to_df[solver][bench]["time"].median()
+                for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+            }
+            for solver in ["abs_synth", "duet", "probe"]
+        },
+        "size_avg": {
+            solver: {
+                bench: solver_bench_to_df[solver][bench]["size"].mean()
+                for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+            }
+            for solver in ["abs_synth", "duet", "probe"]
+        },
+        "size_med": {
+            solver: {
+                bench: solver_bench_to_df[solver][bench]["size"].median()
+                for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+            }
+            for solver in ["abs_synth", "duet", "probe"]
+        }
+    }
+    print(figure_3_c)
 
 
 if __name__ == '__main__':

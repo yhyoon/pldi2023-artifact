@@ -102,7 +102,7 @@ class SolverProbe(Solver):
         result_time_ms = handle.get_elapsed_time()
 
         row = result_string.split(",")
-        if len(row) == 5:
+        if len(row) == 5 and not row[3].endswith(")"):  # handle error case: size ends with ")" instead of pure integer
             result_definition = row[1]
             result_size = row[3]
             return str(result_time_ms), str(result_size), result_definition
