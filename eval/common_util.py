@@ -38,6 +38,15 @@ bench_name_to_dir = {
     "pbe-bitvec":   os.path.join(bench_root_path, "pbe-bitvec"),
 }
 
+bench_names = [
+    "deobfusc", "hd", "crypto", "lobster", "pbe-bitvec"
+]
+
+solver_names = [
+    "abs_synth", "duet", "probe"
+]
+
+
 tbl1_rand_chosen_hd_problems = [
     "hd-03-d5-prog",
     "hd-07-d0-prog",
