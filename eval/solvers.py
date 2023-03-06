@@ -13,7 +13,7 @@ class Solver:
         raise NotImplementedError("solver.executable")
 
     def result_path(self) -> str:
-        return result_root_path(self.name())
+        return result_path(self.name())
 
     def additional_env(self) -> Optional[Dict[str, str]]:
         return None
