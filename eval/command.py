@@ -90,6 +90,26 @@ def prepare_result_dirs():
     os.makedirs(os.path.join(result_root_path, "abs_synth", "circuit", "lobster"), exist_ok=True)
     os.makedirs(os.path.join(result_root_path, "abs_synth", "pbe-bitvec"), exist_ok=True)
 
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_000"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_100"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_200"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_300"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_400"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "hd"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "circuit", "crypto"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "circuit", "lobster"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "pbe-bitvec"), exist_ok=True)
+
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_000"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_100"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_200"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_300"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_400"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "hd"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "circuit", "crypto"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "circuit", "lobster"), exist_ok=True)
+    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "pbe-bitvec"), exist_ok=True)
+
     os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_000"), exist_ok=True)
     os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_100"), exist_ok=True)
     os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_200"), exist_ok=True)
@@ -114,27 +134,28 @@ def main():
 
     parser = argparse.ArgumentParser(description='artifact commands')
     parser.add_argument('-log', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
-                           dest='log_out',
-                           help='test progress log print to... (default: stdout)')
+                        dest='log_out',
+                        help='test progress log print to... (default: stdout)')
 
     subparsers = parser.add_subparsers(dest='command')
 
     # command 1: clean
     subparser = subparsers.add_parser('clean', help='Clean All Result Files (BE CAREFUL: cannot undo)')
     subparser.add_argument('target', type=str, metavar='TARGET',
-                           help='all | (abs_synth | duet | probe) | (deobfusc | hd | crypto | lobster | pbe-bitvec)')
+                           help=f'all | ({"|".join(solver_names)}) | ({"|".join(bench_names)})')
     subparser.add_argument('--yes', action='store_true',
-                           help='do clean without asking (BE CAREFUL!)')
+                           help='do clean without asking(BE CAREFUL! we strongly recommend to do back-up before clean)')
 
     # command 2: run
     subparser = subparsers.add_parser('run', help='Run Solvers on Benchmarks')
     subparser.add_argument('-solvers', type=str, metavar='NAME', nargs='+', required=True,
                            dest='solver_list',
-                           help='list solvers to be evaluated(abs_synth | duet | probe)')
+                           help='list solvers to be evaluated'
+                                f'({" | ".join(solver_names)})')
     subparser.add_argument('-benches', type=str, metavar='NAME', nargs='+', required=True,
                            dest='bench_list',
                            help='benchmarks to be evaluated'
-                                '(pbe-bitvec | deobfusc | hd | crypto | lobster)')
+                                f'({" | ".join(bench_names)})')
     subparser.add_argument('-chosen', action='store_true',
                            help='run chosen subset of benchmarks (Table 1 in paper)')
     subparser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,
@@ -145,7 +166,7 @@ def main():
                            help='timeout for each problem in seconds (default: 3600)')
     subparser.add_argument('-overwrite', action='store_true',
                            help='force run solver even if there already exists result file for the benchmark'
-                                '(default: skip existing result)')
+                                '(default: skip if result exists)')
 
     # command 3: stat
     subparser = subparsers.add_parser('stat', help='Print Statistics of Run Result')
@@ -157,6 +178,8 @@ def main():
                                                     '(WARNING: this command is very very time-consuming)')
     subparser.add_argument('-chosen', action='store_true',
                            help='run chosen subset of benchmarks (Table 1 in paper)')
+    subparser.add_argument('-ablation', action='store_true',
+                           help='run variation solvers of abs_synth for ablation study too (Figure 4 in paper)')
     subparser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,
                            dest='thread_count',
                            help='run in parallel process using NUM threads (default: 1)')
@@ -169,7 +192,6 @@ def main():
     subparser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                            help='print statistics table to... (default: stdout)')
 
-    # TODO
     args = parser.parse_args()
 
     if args.log_out is not None:
@@ -189,6 +211,10 @@ def main():
             for solver in ["abs_synth", "duet", "probe"]:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
+            if args.ablation:
+                for solver in ["abs_synth_bf", "abs_synth_smt", "abs_synth_smt_noback"]:
+                    log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
+                    run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
         print_stat.draw_all(args.table_out)
     elif args.command is None:
         print(f"Command Name is Required (run | stat | batch | clean)", file=sys.stderr)

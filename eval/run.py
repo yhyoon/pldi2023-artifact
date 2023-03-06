@@ -37,7 +37,7 @@ class SolverAbsSynth(Solver):
     def extract_result(self, handle: timeout_runner.TimeoutRunner) -> Tuple[str, str, str]:
         result_string = handle.captured_stderr
         result_time_ms = handle.get_elapsed_time()
-        max_size_error: bool = re.search(r"hit bottom-up limit", result_string, re.MULTILINE) is not None
+        max_size_error: bool = re.search(r"hit bottom.up limit", result_string, re.MULTILINE) is not None
 
         error_string = "failure"
         if max_size_error:
@@ -48,6 +48,42 @@ class SolverAbsSynth(Solver):
         result_size_search = re.search(r"^size : (\d+)$", result_string, re.MULTILINE)
         result_size = int(result_size_search.group(1)) if result_size_search is not None else error_string
         return str(result_time_ms), str(result_size), result_definition
+
+
+class SolverAbsSynthBF(SolverAbsSynth):
+    # command: ./abs_synth.exe -pruning bruteforce [target_name]
+
+    def __init__(self):
+        super().__init__()
+        self.name = "abs_synth_bf"
+        self.result_path = os.path.join(artifact_root_path, "result", "abs_synth_bf")
+
+    def params(self, target: str) -> List[str]:
+        return ["-pruning", "bruteforce", target]
+
+
+class SolverAbsSynthSMT(SolverAbsSynth):
+    # command: ./abs_synth.exe -pruning solver [target_name]
+
+    def __init__(self):
+        super().__init__()
+        self.name = "abs_synth_smt"
+        self.result_path = os.path.join(artifact_root_path, "result", "abs_synth_smt")
+
+    def params(self, target: str) -> List[str]:
+        return ["-pruning", "solver", target]
+
+
+class SolverAbsSynthNoBack(SolverAbsSynth):
+    # command: ./abs_synth.exe -pruning solver [target_name]
+
+    def __init__(self):
+        super().__init__()
+        self.name = "abs_synth_noback"
+        self.result_path = os.path.join(artifact_root_path, "result", "abs_synth_noback")
+
+    def params(self, target: str) -> List[str]:
+        return ["-no_backward", target]
 
 
 class SolverDuet(Solver):
@@ -120,6 +156,9 @@ class SolverProbe(Solver):
 
 solvers: Dict[str, Solver] = {
     "abs_synth": SolverAbsSynth(),
+    "abs_synth_bf": SolverAbsSynthBF(),
+    "abs_synth_smt": SolverAbsSynthSMT(),
+    "abs_synth_noback": SolverAbsSynthNoBack(),
     "duet": SolverDuet(),
     "probe": SolverProbe(),
 }

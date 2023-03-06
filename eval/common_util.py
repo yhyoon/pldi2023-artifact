@@ -39,13 +39,20 @@ bench_name_to_dir = {
 }
 
 bench_names = [
-    "deobfusc", "hd", "crypto", "lobster", "pbe-bitvec"
+    "deobfusc", "hd", "crypto", "lobster", "pbe-bitvec",
+]
+
+no_cond_bench_names = [
+    "deobfusc", "hd", "crypto", "lobster",
 ]
 
 solver_names = [
     "abs_synth", "duet", "probe"
 ]
 
+ablation_names = [
+    "abs_synth_bf", "abs_synth_smt", "abs_synth_noback"
+]
 
 tbl1_rand_chosen_hd_problems = [
     "hd-03-d5-prog",

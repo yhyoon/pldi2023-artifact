@@ -291,6 +291,37 @@ def draw_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataF
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
     ])
 
+    draw_cactus("All Benchmarks", "all_ablation", len([*problem_list["hd"][0], *problem_list["deobfusc"][0], *problem_list["lobster"][0], *problem_list["crypto"][0]]), [
+        {'time_df': pd.concat([
+            solver_bench_to_df["abs_synth_bf"]["hd"],
+            solver_bench_to_df["abs_synth_bf"]["deobfusc"],
+            solver_bench_to_df["abs_synth_bf"]["lobster"],
+            solver_bench_to_df["abs_synth_bf"]["crypto"],
+        ])["time"].sort_values(ignore_index=True),
+         'label': "BruteForce", 'color': 'g', 'marker': '^'},
+        {'time_df': pd.concat([
+            solver_bench_to_df["abs_synth_smt"]["hd"],
+            solver_bench_to_df["abs_synth_smt"]["deobfusc"],
+            solver_bench_to_df["abs_synth_smt"]["lobster"],
+            solver_bench_to_df["abs_synth_smt"]["crypto"],
+        ])["time"].sort_values(ignore_index=True),
+         'label': "SMTSolver", 'color': 'm', 'marker': 'v'},
+        {'time_df': pd.concat([
+            solver_bench_to_df["abs_synth_noback"]["hd"],
+            solver_bench_to_df["abs_synth_noback"]["deobfusc"],
+            solver_bench_to_df["abs_synth_noback"]["lobster"],
+            solver_bench_to_df["abs_synth_noback"]["crypto"],
+        ])["time"].sort_values(ignore_index=True),
+         'label': "ForwardOnly", 'color': 'y', 'marker': '+'},
+        {'time_df': pd.concat([
+            solver_bench_to_df["abs_synth"]["hd"],
+            solver_bench_to_df["abs_synth"]["deobfusc"],
+            solver_bench_to_df["abs_synth"]["lobster"],
+            solver_bench_to_df["abs_synth"]["crypto"],
+        ])["time"].sort_values(ignore_index=True),
+         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+    ])
+
 
 # figure 3.(a), 3.(b): solved count and fastest count
 def draw_bars(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
@@ -326,7 +357,7 @@ def draw_bars(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
 
-def draw_txt_tables(table_out, main_summary, table_1):
+def draw_txt_tables(table_out, main_summary, table_1: Dict[str, Dict[str, Dict[str, pd.Series]]]):
     summary_lines = [
         "{:12s}|| {:24s}| {:20s}| {:20s}| {:20s}| {:20s}|".format(
             "".center(12, "-"),
@@ -352,7 +383,7 @@ def draw_txt_tables(table_out, main_summary, table_1):
             "".center(24, "-"),
             "".center(20, "-"), "".center(20, "-"), "".center(20, "-"), "".center(20, "-")
         ),
-        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}|".format(
+        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
             "HD".center(12, " "),
             *[main_summary['solved'][solver]['hd'] for solver in solver_names],
             *[main_summary['time_avg'][solver]['hd'] for solver in solver_names],
@@ -360,7 +391,7 @@ def draw_txt_tables(table_out, main_summary, table_1):
             *[main_summary['size_avg'][solver]['hd'] for solver in solver_names],
             *[main_summary['size_med'][solver]['hd'] for solver in solver_names],
         ),
-        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}|".format(
+        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
             "DEOBFUSC".center(12, " "),
             *[main_summary['solved'][solver]['deobfusc'] for solver in solver_names],
             *[main_summary['time_avg'][solver]['deobfusc'] for solver in solver_names],
@@ -368,7 +399,7 @@ def draw_txt_tables(table_out, main_summary, table_1):
             *[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names],
             *[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names],
         ),
-        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}|".format(
+        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
             "LOBSTER".center(12, " "),
             *[main_summary['solved'][solver]['lobster'] for solver in solver_names],
             *[main_summary['time_avg'][solver]['lobster'] for solver in solver_names],
@@ -376,7 +407,7 @@ def draw_txt_tables(table_out, main_summary, table_1):
             *[main_summary['size_avg'][solver]['lobster'] for solver in solver_names],
             *[main_summary['size_med'][solver]['lobster'] for solver in solver_names],
         ),
-        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}|".format(
+        "{:12s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
             "CRYPTO".center(12, " "),
             *[main_summary['solved'][solver]['crypto'] for solver in solver_names],
             *[main_summary['time_avg'][solver]['crypto'] for solver in solver_names],
@@ -411,27 +442,35 @@ def draw_txt_tables(table_out, main_summary, table_1):
 
     def lookup_time_and_format(solver, bench, problem) -> str:
         try:
-            return "{:>9.2f}".format(table_1[solver][bench][problem]["time"])
-        except KeyError:
-            try:
-                if table_1[solver][bench][problem]["sol_type"] == "timeout":
-                    return "{:>9s}".format(">1h")
-                else:
-                    return "{:>9s}".format("-")
-            except KeyError:
+            if table_1[solver][bench][problem]["sol_type"] == "timeout":
+                return "{:>9s}".format("timeout")
+            elif table_1[solver][bench][problem]["sol_type"] == "failure":
                 return "{:>9s}".format("-")
+            else:
+                v = table_1[solver][bench][problem]["time"]
+                if v is None or numpy.isnan(v):
+                    return "{:>9s}".format("-")
+                else:
+                    return "{:>9.2f}".format(v)
+        except KeyError as exn:
+            log_write_with_time(f"empty table: {solver} on {problem}")
+            return "{:>9s}".format("-")
 
     def lookup_size_and_format(solver, bench, problem) -> str:
         try:
-            return "{:>6.0f}".format(table_1[solver][bench][problem]["size"])
-        except KeyError:
-            try:
-                if table_1[solver][bench][problem]["sol_type"] == "timeout":
-                    return "{:>6s}".format(">1h")
-                else:
-                    return "{:>6s}".format("-")
-            except KeyError:
+            if table_1[solver][bench][problem]["sol_type"] == "timeout":
                 return "{:>6s}".format("-")
+            elif table_1[solver][bench][problem]["sol_type"] == "failure":
+                return "{:>6s}".format("-")
+            else:
+                v = table_1[solver][bench][problem]["size"]
+                if v is None or numpy.isnan(v):
+                    return "{:>6s}".format("-")
+                else:
+                    return "{:>6.20}".format(v)
+        except KeyError as exn:
+            log_write_with_time(f"empty table: {solver} on {problem}")
+            return "{:>6s}".format("-")
 
     detail_lines = [
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
@@ -545,13 +584,13 @@ def draw_all(table_out):
         "ytick.labelsize": "14"
     })
 
-    problem_list, problem_bench_map = gen_problems()
-    main_df = read_all(problem_list, problem_bench_map)
+    problem_map, problem_bench_map = gen_problems()
+    main_df = read_all(problem_map, problem_bench_map)
 
     # table of each solver
     solver_to_df: Dict[str, pd.DataFrame] = {
         solver: main_df[main_df["solver"] == solver].set_index("problem").sort_index()
-        for solver in solver_names
+        for solver in [*solver_names, *ablation_names]
     }
     abs_synth_df = solver_to_df["abs_synth"]
     duet_df = solver_to_df["duet"]
@@ -562,22 +601,27 @@ def draw_all(table_out):
             bench: solver_to_df[solver][solver_to_df[solver]["bench"] == bench]
             for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
         }
-        for solver in ["abs_synth", "duet", "probe"]
+        for solver in [*solver_names, *ablation_names]
     }
 
-    def solver_problem_detail(solver: str, problem: str):
+    def solver_problem_detail(solver: str, problem: str) -> pd.Series:
         try:
             df = solver_bench_to_df[solver][problem_bench_map[problem]]
             return df.loc[problem]
-        except:
-            return pd.DataFrame()
+        except KeyError:
+            return pd.Series({"bench": problem_bench_map[problem],
+                              "problem": problem,
+                              "sol_type": "not_yet",
+                              "time": None,
+                              "size": None,
+                              "solution": None})
 
     # comparison table for counting best solver
-    hd_cmp_df = build_time_cmp_table(problem_list["hd"][2], abs_synth_df, duet_df, probe_df)
-    deobfusc_cmp_df = build_time_cmp_table(problem_list["deobfusc"][2], abs_synth_df, duet_df, probe_df)
-    lobster_cmp_df = build_time_cmp_table(problem_list["lobster"][2], abs_synth_df, duet_df)
-    crypto_cmp_df = build_time_cmp_table(problem_list["crypto"][2], abs_synth_df, duet_df)
-    pbe_bv_cmp_df = build_time_cmp_table(problem_list["pbe-bitvec"][2], abs_synth_df, duet_df, probe_df)
+    hd_cmp_df = build_time_cmp_table(problem_map["hd"][2], abs_synth_df, duet_df, probe_df)
+    deobfusc_cmp_df = build_time_cmp_table(problem_map["deobfusc"][2], abs_synth_df, duet_df, probe_df)
+    lobster_cmp_df = build_time_cmp_table(problem_map["lobster"][2], abs_synth_df, duet_df)
+    crypto_cmp_df = build_time_cmp_table(problem_map["crypto"][2], abs_synth_df, duet_df)
+    pbe_bv_cmp_df = build_time_cmp_table(problem_map["pbe-bitvec"][2], abs_synth_df, duet_df, probe_df)
     bench_cmp_map: Dict[str, pd.DataFrame] = {
         "hd": hd_cmp_df,
         "deobfusc": deobfusc_cmp_df,
@@ -586,7 +630,7 @@ def draw_all(table_out):
         "pbe-bitvec": pbe_bv_cmp_df,
     }
     solver_to_non_ite_df = {
-        solver: pd.concat([solver_bench_to_df[solver][bench] for bench in ["hd", "deobfusc", "lobster", "crypto"]])
+        solver: pd.concat([solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
         for solver in solver_names
     }
 
@@ -660,20 +704,20 @@ def draw_all(table_out):
     #   bench |->
     #       problem |->
     #           DataFrame row
-    table_1 = {
+    table_1: Dict[str, Dict[str, Dict[str, pd.Series]]] = {
         solver: {
             bench: {
                 problem: solver_problem_detail(solver, problem)
                 for problem in bench_to_chosen[bench]
             }
-            for bench in ["hd", "deobfusc", "lobster", "crypto"]
+            for bench in no_cond_bench_names
         }
         for solver in solver_names
     }
 
     draw_txt_tables(table_out, main_summary, table_1)
     draw_bars(solver_bench_to_df, bench_cmp_map)
-    draw_plots(problem_list, solver_bench_to_df)
+    draw_plots(problem_map, solver_bench_to_df)
 
 
 def main():
