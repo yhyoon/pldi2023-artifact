@@ -87,7 +87,7 @@ def prepare_result_dirs():
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "lobster"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "pbe-bitvec"), exist_ok=True)
 
-    os.makedirs(os.path.join(artifact_root_path, "figures"))
+    os.makedirs(os.path.join(artifact_root_path, "figures"), exist_ok=True)
 
 
 def main():
