@@ -159,7 +159,7 @@ def draw_cactus(bench_name: str, file_name: str, all_problem_count, tds, *, mark
 
     ax.legend(loc='upper left')
     figure.savefig(os.path.join(artifact_root_path, "figures", f"cactus_{file_name}.png"), transparent=True)
-    log_write_with_time(f"created cactus_{file_name}.png")
+    log_write_with_time(f"created figures/cactus_{file_name}.png")
 
 
 def draw_stack_bar(kind: str, ylabel: str, tool_lbls: List[str], bench_lbls: List[str], colors: List[str],
@@ -217,12 +217,12 @@ def draw_stack_bar(kind: str, ylabel: str, tool_lbls: List[str], bench_lbls: Lis
                 bbox={'boxstyle': 'square', 'facecolor': 'white', 'edgecolor': 'black'})
     figure.legend(loc='upper center', ncol=2, frameon=False)
     figure.savefig(os.path.join(artifact_root_path, "figures", f"bar_{kind}.png"), transparent=True)
-    log_write_with_time(f"created bar_{kind}.png")
+    log_write_with_time(f"created figures/bar_{kind}.png")
 
 
 # figure 2: overall cactus plots
-def draw_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]],
-               solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]]):
+def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]],
+                      solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]]):
     draw_cactus("Lobster", "lobster", len(problem_list["lobster"][0]), [
         {'time_df': solver_bench_to_df["duet"]["lobster"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
@@ -324,8 +324,8 @@ def draw_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataF
 
 
 # figure 3.(a), 3.(b): solved count and fastest count
-def draw_bars(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
-              bench_cmp_map: Dict[str, pd.DataFrame]):
+def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
+                   bench_cmp_map: Dict[str, pd.DataFrame]):
     bar_colors = ['gold', '#96b4fa']
 
     # stacked bar1 - bitvec cnt
@@ -357,7 +357,7 @@ def draw_bars(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
 
-def draw_txt_tables(table_out, main_summary, table_1: Dict[str, Dict[str, Dict[str, pd.Series]]]):
+def draw_main_table(table_out, main_summary):
     summary_lines = [
         "{:12s}|| {:24s}| {:20s}| {:20s}| {:20s}| {:20s}|".format(
             "".center(12, "-"),
@@ -435,11 +435,15 @@ def draw_txt_tables(table_out, main_summary, table_1: Dict[str, Dict[str, Dict[s
         ),
     ]
 
+    summary_lines = [line.replace("nan", "  -") for line in summary_lines]
+
     table_out.write("\n")
     table_out.write("Fig. 3. (c) Statistics for the solving times and solution sizes.\n")
     table_out.write("\n".join(summary_lines))
     table_out.write("\n\n")
 
+
+def draw_detail_table(table_out, table_1: Dict[str, Dict[str, Dict[str, pd.Series]]]):
     def lookup_time_and_format(solver, bench, problem) -> str:
         try:
             if table_1[solver][bench][problem]["sol_type"] == "timeout":
@@ -467,7 +471,7 @@ def draw_txt_tables(table_out, main_summary, table_1: Dict[str, Dict[str, Dict[s
                 if v is None or numpy.isnan(v):
                     return "{:>6s}".format("-")
                 else:
-                    return "{:>6.20}".format(v)
+                    return "{:>6.0f}".format(v)
         except KeyError as exn:
             log_write_with_time(f"empty table: {solver} on {problem}")
             return "{:>6s}".format("-")
@@ -567,8 +571,88 @@ def draw_txt_tables(table_out, main_summary, table_1: Dict[str, Dict[str, Dict[s
         ),
     ]
 
-    table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n")
+    table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n"
+                    "Analysis times are not included in this table. You can see them by manually running\n"
+                    " abs_synth with option '-log stdout'.\n")
     table_out.write("\n".join(detail_lines))
+    table_out.write("\n\n")
+
+
+def draw_ablation_table(table_out, ablation_summary):
+    ablations_in_order = ["abs_synth", "abs_synth_noback", "abs_synth_smt", "abs_synth_bf"]
+    summary_lines = [
+        "{:12s}|| {:27s}| {:27s}| {:27s}|".format(
+            "".center(12, "-"),
+            "".center(27, "-"), "".center(27, "-"), "".center(27, "-")
+        ),
+        "{:12s}|| {:27}| {:27}| {:27}|".format(
+            "Benchmark".center(12, " "),
+            "# Solved".center(27, " "),
+            "Time(Average)".center(27, " "),
+            "Size(Average)".center(27, " "),
+        ),
+        "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
+            "category".center(12, " "),
+            "A".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
+            "A".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
+            "A".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
+        ),
+        "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
+            "".center(12, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+        ),
+        "{:12s}|| {:6.0f}|{:6.0f}|{:6.0f}|{:6.0f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}|".format(
+            "HD".center(12, " "),
+            *[ablation_summary['solved'][solver]['hd'] for solver in ablations_in_order],
+            *[ablation_summary['time_avg'][solver]['hd'] for solver in ablations_in_order],
+            *[ablation_summary['size_avg'][solver]['hd'] for solver in ablations_in_order],
+        ),
+        "{:12s}|| {:6.0f}|{:6.0f}|{:6.0f}|{:6.0f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}|".format(
+            "DEOBFUSC".center(12, " "),
+            *[ablation_summary['solved'][solver]['deobfusc'] for solver in ablations_in_order],
+            *[ablation_summary['time_avg'][solver]['deobfusc'] for solver in ablations_in_order],
+            *[ablation_summary['size_avg'][solver]['deobfusc'] for solver in ablations_in_order],
+        ),
+        "{:12s}|| {:6.0f}|{:6.0f}|{:6.0f}|{:6.0f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}|".format(
+            "LOBSTER".center(12, " "),
+            *[ablation_summary['solved'][solver]['lobster'] for solver in ablations_in_order],
+            *[ablation_summary['time_avg'][solver]['lobster'] for solver in ablations_in_order],
+            *[ablation_summary['size_avg'][solver]['lobster'] for solver in ablations_in_order],
+        ),
+        "{:12s}|| {:6.0f}|{:6.0f}|{:6.0f}|{:6.0f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}|".format(
+            "CRYPTO".center(12, " "),
+            *[ablation_summary['solved'][solver]['crypto'] for solver in ablations_in_order],
+            *[ablation_summary['time_avg'][solver]['crypto'] for solver in ablations_in_order],
+            *[ablation_summary['size_avg'][solver]['crypto'] for solver in ablations_in_order],
+        ),
+        "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
+            "".center(12, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+        ),
+        "{:12s}|| {:6.0f}|{:6.0f}|{:6.0f}|{:6.0f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}| {:6.1f}|{:6.1f}|{:6.1f}|{:6.1f}|".format(
+            "Overall".center(12, " "),
+            *[ablation_summary['solved'][solver]['overall'] for solver in ablations_in_order],
+            *[ablation_summary['time_avg'][solver]['overall'] for solver in ablations_in_order],
+            *[ablation_summary['size_avg'][solver]['overall'] for solver in ablations_in_order],
+        ),
+        "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
+            "".center(12, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+            "".center(6, "-"), "".center(6, "-"), "".center(6, "-"), "".center(6, "-"),
+        ),
+    ]
+
+    summary_lines = [line.replace("nan", "  -") for line in summary_lines]
+
+    table_out.write("\n")
+    table_out.write("Fig. 4. (b) Statistics for the solving times and solution sizes."
+                    "A(bsSynth), F(orwardOnly), S(MTSolver), B(ruteForce).\n")
+    table_out.write("\n".join(summary_lines))
     table_out.write("\n\n")
 
 
@@ -638,8 +722,8 @@ def draw_all(table_out):
     # item(solved|time_avg|time_med|size_avg|size_med) |->
     #   solver |->
     #       bench(hd|deobfusc|lobster|crypto) |->
-    #           value
-    main_summary = {
+    #           value(count|average|median)
+    main_summary: Dict[str, Dict[str, Dict[str, Any]]] = {
         "solved": {
             solver: {
                 **{
@@ -715,9 +799,55 @@ def draw_all(table_out):
         for solver in solver_names
     }
 
-    draw_txt_tables(table_out, main_summary, table_1)
-    draw_bars(solver_bench_to_df, bench_cmp_map)
-    draw_plots(problem_map, solver_bench_to_df)
+    solver_var_to_non_ite_df = {
+        solver: pd.concat([solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
+        for solver in ["abs_synth", *ablation_names]
+    }
+
+    # figure 4.(b): ablation summary table raw data
+    # item(solved|time_avg|size_avg) |->
+    #   solver_variation |->
+    #       bench(hd|deobfusc|lobster|crypto) |->
+    #           value(count|average)
+    ablation_summary: Dict[str, Dict[str, Dict[str, Any]]] = {
+        "solved": {
+            solver: {
+                **{
+                    bench: solver_bench_to_df[solver][bench]["time"].count()
+                    for bench in bench_names
+                },
+                "overall": solver_var_to_non_ite_df[solver]["time"].count()
+            }
+            for solver in ["abs_synth", *ablation_names]
+        },
+        "time_avg": {
+            solver: {
+                **{
+                    bench: solver_bench_to_df[solver][bench]["time"].mean() if solver_bench_to_df[solver][bench]["time"].count() > 0 else numpy.nan
+                    for bench in bench_names
+                },
+                "overall": solver_var_to_non_ite_df[solver]["time"].mean() if solver_var_to_non_ite_df[solver]["time"].count() > 0 else numpy.nan
+            }
+            for solver in ["abs_synth", *ablation_names]
+        },
+        "size_avg": {
+            solver: {
+                **{
+                    bench: solver_bench_to_df[solver][bench]["size"].mean() if solver_bench_to_df[solver][bench]["size"].count() > 0 else numpy.nan
+                    for bench in bench_names
+                },
+                "overall": solver_var_to_non_ite_df[solver]["size"].mean() if solver_var_to_non_ite_df[solver]["size"].count() > 0 else numpy.nan
+            }
+            for solver in ["abs_synth", *ablation_names]
+        },
+    }
+
+    draw_main_table(table_out, main_summary)
+    draw_detail_table(table_out, table_1)
+    draw_ablation_table(table_out, ablation_summary)
+
+    draw_bar_plots(solver_bench_to_df, bench_cmp_map)
+    draw_cactus_plots(problem_map, solver_bench_to_df)
 
 
 def main():
