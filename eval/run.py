@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Optional
 
 import argparse
 import re
@@ -9,9 +9,17 @@ import timeout_runner
 
 
 class Solver:
-    name: str
-    executable: str
-    result_path: str
+    def name(self) -> str:
+        raise NotImplementedError("solver.name")
+
+    def executable(self) -> str:
+        raise NotImplementedError("solver.executable")
+
+    def result_path(self) -> str:
+        return os.path.join(artifact_root_path, "result", self.name())
+
+    def additional_env(self) -> Optional[Dict[str, str]]:
+        return None
 
     def params(self, target: str) -> List[str]:
         raise NotImplementedError("solver.params")
@@ -26,10 +34,11 @@ class Solver:
 class SolverAbsSynth(Solver):
     # command: ./abs_synth.exe [target_name]
 
-    def __init__(self):
-        self.name = "abs_synth"
-        self.executable = os.path.join(artifact_root_path, "abs_synth", "abs_synth.exe")
-        self.result_path = os.path.join(artifact_root_path, "result", "abs_synth")
+    def name(self) -> str:
+        return "abs_synth"
+
+    def executable(self) -> str:
+        return os.path.join(artifact_root_path, "abs_synth", "abs_synth.exe")
 
     def params(self, target: str) -> List[str]:
         return [target]
@@ -52,11 +61,8 @@ class SolverAbsSynth(Solver):
 
 class SolverAbsSynthBF(SolverAbsSynth):
     # command: ./abs_synth.exe -pruning bruteforce [target_name]
-
-    def __init__(self):
-        super().__init__()
-        self.name = "abs_synth_bf"
-        self.result_path = os.path.join(artifact_root_path, "result", "abs_synth_bf")
+    def name(self) -> str:
+        return "abs_synth_bf"
 
     def params(self, target: str) -> List[str]:
         return ["-pruning", "bruteforce", target]
@@ -64,11 +70,8 @@ class SolverAbsSynthBF(SolverAbsSynth):
 
 class SolverAbsSynthSMT(SolverAbsSynth):
     # command: ./abs_synth.exe -pruning solver [target_name]
-
-    def __init__(self):
-        super().__init__()
-        self.name = "abs_synth_smt"
-        self.result_path = os.path.join(artifact_root_path, "result", "abs_synth_smt")
+    def name(self) -> str:
+        return "abs_synth_smt"
 
     def params(self, target: str) -> List[str]:
         return ["-pruning", "solver", target]
@@ -76,11 +79,8 @@ class SolverAbsSynthSMT(SolverAbsSynth):
 
 class SolverAbsSynthNoBack(SolverAbsSynth):
     # command: ./abs_synth.exe -pruning solver [target_name]
-
-    def __init__(self):
-        super().__init__()
-        self.name = "abs_synth_noback"
-        self.result_path = os.path.join(artifact_root_path, "result", "abs_synth_noback")
+    def name(self) -> str:
+        return "abs_synth_noback"
 
     def params(self, target: str) -> List[str]:
         return ["-no_backward", target]
@@ -90,10 +90,11 @@ class SolverDuet(Solver):
     # command for bv: ./main.native -fastdt -ex_all -max_size 10000 -init_comp_size 3 [target_name]
     # command for circuit: ./main.native -max_size 128 -max_height 16 -init_comp_size 1 [target_name]
 
-    def __init__(self):
-        self.name = "duet"
-        self.executable = "./duet/main.native"
-        self.result_path = os.path.join(artifact_root_path, "result", "duet")
+    def name(self) -> str:
+        return "duet"
+
+    def executable(self) -> str:
+        return os.path.join(artifact_root_path, "duet", "main.native")
 
     def params(self, target: str) -> List[str]:
         if target.startswith(bench_name_to_dir["bitvec"]):
@@ -124,10 +125,17 @@ class SolverDuet(Solver):
 class SolverProbe(Solver):
     # command: java -cp probe-assembly-0.1.jar sygus/ProbeMain [target_name]
 
-    def __init__(self):
-        self.name = "probe"
-        self.executable = "java"
-        self.result_path = os.path.join(artifact_root_path, "result", "probe")
+    def name(self) -> str:
+        return "probe"
+
+    def executable(self) -> str:
+        return "java"
+
+    def result_path(self) -> str:
+        return os.path.join(artifact_root_path, "result", "probe")
+
+    def additional_env(self) -> Optional[Dict[str, str]]:
+        return {"PATH": os.path.join(artifact_root_path, "probe") + ":" + os.environ["PATH"]}
 
     def params(self, target: str) -> List[str]:
         return ["-cp", os.path.join("probe", "target", "scala-2.12", "probe-assembly-0.1.jar"), "sygus/ProbeMain", target]
@@ -170,7 +178,7 @@ def write_result(out_path: str, solver: Solver, problem_name: str, result_time: 
     with open(out_path, "wt") as out:
         # csv format
         # solver, problem_name, time, size, solution
-        out.write(f"{solver.name},{problem_name},{result_time},{result_size},{result_sol}\n")
+        out.write(f"{solver.name()},{problem_name},{result_time},{result_size},{result_sol}\n")
 
 
 def pop_target_and_run(solver: Solver, targets: List[List[str]], targets_lock, targets_len, timeout_in_sec, overwrite):
@@ -186,15 +194,15 @@ def pop_target_and_run(solver: Solver, targets: List[List[str]], targets_lock, t
         target_file_path = target[-1]  # last arg is sl file name
         target_file_name = os.path.split(target_file_path)[1]
         problem_name = os.path.splitext(target_file_name)[0]
-        out_path = solver.result_path + os.sep + os.path.splitext(target_file_path[len(bench_root_path):])[0] + ".result.txt"
+        out_path = solver.result_path() + os.sep + os.path.splitext(target_file_path[len(bench_root_path):])[0] + ".result.txt"
 
         if os.path.isfile(out_path) and not overwrite:
             log_write_with_time(f"  [Target {target_cnt}/{targets_len}] is already evaluated => skip")
         else:
-            handle = timeout_runner.TimeoutRunner(solver.executable, target, timeout_in_sec)
+            handle = timeout_runner.TimeoutRunner(solver.executable(), target, timeout_in_sec, solver.additional_env())
             log_write_with_time(f"  [Target {target_cnt}/{targets_len}]"
                                 f" run command[pid={handle.get_pid()}] for {handle.timeout} sec: "
-                                f"{solver.executable} {' '.join(target)}")
+                                f"{solver.executable()} {' '.join(target)}")
             handle.wait_for_result()
 
             if handle.killed_by_timeout:
@@ -204,7 +212,7 @@ def pop_target_and_run(solver: Solver, targets: List[List[str]], targets_lock, t
                 write_result(out_path, solver, problem_name, "timeout", "timeout", "timeout")
             else:
                 sol_time, sol_size, sol = solver.extract_result(handle)
-                log_write_with_time(f"RESULT_SUMMARY: {solver.name},{problem_name},{sol_time},{sol_size},{sol}")
+                log_write_with_time(f"RESULT_SUMMARY: {solver.name()},{problem_name},{sol_time},{sol_size},{sol}")
                 write_result(out_path, solver, problem_name, sol_time, sol_size, sol)
 
 
@@ -212,7 +220,7 @@ def run_test(solver_name: str, bench: str, chosen: bool, overwrite: bool, timeou
     solver = solvers[solver_name]
 
     if not solver.solvable(bench):
-        log_write_with_time(f"{solver.name} cannot solve {bench}")
+        log_write_with_time(f"{solver.name()} cannot solve {bench}")
         return
 
     target_files: List[str] = list()
