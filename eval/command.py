@@ -80,53 +80,12 @@ def do_clean(target, yes):
 
 
 def prepare_result_dirs():
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "bitvec", "deobfusc", "target_000"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "bitvec", "deobfusc", "target_100"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "bitvec", "deobfusc", "target_200"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "bitvec", "deobfusc", "target_300"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "bitvec", "deobfusc", "target_400"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "bitvec", "hd"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "circuit", "crypto"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "circuit", "lobster"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth", "pbe-bitvec"), exist_ok=True)
-
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_000"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_100"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_200"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_300"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "deobfusc", "target_400"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "bitvec", "hd"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "circuit", "crypto"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "circuit", "lobster"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_bf", "pbe-bitvec"), exist_ok=True)
-
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_000"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_100"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_200"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_300"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "deobfusc", "target_400"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "bitvec", "hd"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "circuit", "crypto"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "circuit", "lobster"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "abs_synth_smt", "pbe-bitvec"), exist_ok=True)
-
-    os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_000"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_100"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_200"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_300"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "deobfusc", "target_400"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "bitvec", "hd"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "circuit", "crypto"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "circuit", "lobster"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "duet", "pbe-bitvec"), exist_ok=True)
-
-    os.makedirs(os.path.join(result_root_path, "probe", "bitvec", "deobfusc", "target_000"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "probe", "bitvec", "deobfusc", "target_100"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "probe", "bitvec", "deobfusc", "target_200"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "probe", "bitvec", "deobfusc", "target_300"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "probe", "bitvec", "deobfusc", "target_400"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "probe", "bitvec", "hd"), exist_ok=True)
-    os.makedirs(os.path.join(result_root_path, "probe", "pbe-bitvec"), exist_ok=True)
+    for solver in [*solver_names, *ablation_names]:
+        os.makedirs(os.path.join(result_root_path, solver, "bitvec", "deobfusc"), exist_ok=True)
+        os.makedirs(os.path.join(result_root_path, solver, "bitvec", "hd"), exist_ok=True)
+        os.makedirs(os.path.join(result_root_path, solver, "circuit", "crypto"), exist_ok=True)
+        os.makedirs(os.path.join(result_root_path, solver, "circuit", "lobster"), exist_ok=True)
+        os.makedirs(os.path.join(result_root_path, solver, "pbe-bitvec"), exist_ok=True)
 
 
 def main():
