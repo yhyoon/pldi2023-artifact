@@ -1,41 +1,13 @@
-from typing import Optional, Tuple, List, Dict, FrozenSet
+from typing import Optional
 
 import argparse
 import itertools
 import matplotlib.pyplot as plt
 import numpy
-import pandas as pd
 
+import solvers
 import common_util
 from common_util import *
-
-
-def gen_problems() -> Tuple[Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]], Dict[str, str]]:
-    problem_map: Dict[str, str] = dict()
-    problem_list_map: Dict[str, List[str]] = {
-        "deobfusc": list(),
-        "hd": list(),
-        "crypto": list(),
-        "lobster": list(),
-        "pbe-bitvec": list(),
-    }
-
-    def add_to(bench_name: str, problem_file_path: str):
-        problem_name = os.path.splitext(os.path.split(problem_file_path)[1])[0]
-        problem_list_map[bench_name].append(problem_name)
-        problem_map[problem_name] = bench_name
-
-    for b in bench_names:
-        traverse(bench_name_to_dir[b],
-                 lambda f: f.endswith(".sl"),
-                 lambda f, index: add_to(b, f)
-                 )
-
-    return {b: (problem_list_map[b],
-                frozenset(problem_list_map[b]),
-                pd.DataFrame({"problem": problem_list_map[b]}).set_index('problem')
-                )
-            for b in bench_names}, problem_map
 
 
 def parse_csv_result(line: str) -> Tuple[str, str, str, Optional[float], Optional[int], Optional[str]]:
@@ -71,8 +43,7 @@ def parse_csv_result(line: str) -> Tuple[str, str, str, Optional[float], Optiona
     return solver, problem, sol_type, sol_time, sol_size, sol
 
 
-def read_all(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]],
-             problem_bench_map: Dict[str, str]) -> pd.DataFrame:
+def read_all() -> pd.DataFrame:
     solver_list: List[str] = list()
     bench_list: List[str] = list()
     problem_list: List[str] = list()
@@ -438,6 +409,18 @@ def draw_main_table(table_out, main_summary):
     summary_lines = [line.replace("nan", "  -") for line in summary_lines]
 
     table_out.write("\n")
+
+    # health check
+    status_tbl = all_result_status_tbl()
+    required_pairs = list()
+    for solver in solver_names:
+        for bench in no_cond_bench_names:
+            if status_tbl[solver][bench]["no_result"] > 0 and solvers.solver_map[solver].solvable(bench):
+                required_pairs.append((solver, bench))
+
+    if len(required_pairs) > 0:
+        table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}")
+
     table_out.write("Fig. 3. (c) Statistics for the solving times and solution sizes.\n")
     table_out.write("\n".join(summary_lines))
     table_out.write("\n\n")
@@ -571,6 +554,17 @@ def draw_detail_table(table_out, table_1: Dict[str, Dict[str, Dict[str, pd.Serie
         ),
     ]
 
+    # health check
+    status_tbl = all_result_status_tbl()
+    required_pairs = list()
+    for solver_name in solver_names:
+        for problem in tbl1_rand_chosen_bench:
+            if result_status(solver_name, problem) == "no_result" and solvers.solver_map[solver_name].solvable(problem_bench_map[problem]):
+                required_pairs.append((solver_name, problem))
+
+    if len(required_pairs) > 0:
+        table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
+
     table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n"
                     "Analysis times are not included in this table. You can see them by manually running\n"
                     " abs_synth with option '-log stdout'.\n")
@@ -649,7 +643,16 @@ def draw_ablation_table(table_out, ablation_summary):
 
     summary_lines = [line.replace("nan", "  -") for line in summary_lines]
 
-    table_out.write("\n")
+    status_tbl = all_result_status_tbl()
+    required_pairs = list()
+    for solver in ["abs_synth", *ablation_names]:
+        for bench in no_cond_bench_names:
+            if status_tbl[solver][bench]["no_result"]:
+                required_pairs.append((solver, bench))
+
+    if len(required_pairs) > 0:
+        table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
+
     table_out.write("Fig. 4. (b) Statistics for the solving times and solution sizes."
                     "A(bsSynth), F(orwardOnly), S(MTSolver), B(ruteForce).\n")
     table_out.write("\n".join(summary_lines))
@@ -657,6 +660,9 @@ def draw_ablation_table(table_out, ablation_summary):
 
 
 def draw_all(table_out):
+    for line in all_result_status_str():
+        log_write_with_time(line)
+
     plt.rcParams.update({
         "legend.fontsize": "16",
         "figure.figsize": (9, 6),
@@ -668,8 +674,7 @@ def draw_all(table_out):
         "ytick.labelsize": "14"
     })
 
-    problem_map, problem_bench_map = gen_problems()
-    main_df = read_all(problem_map, problem_bench_map)
+    main_df = read_all()
 
     # table of each solver
     solver_to_df: Dict[str, pd.DataFrame] = {

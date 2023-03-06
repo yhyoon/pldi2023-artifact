@@ -1,8 +1,10 @@
-from typing import Callable, Any
+from typing import Callable, Any, Tuple, Dict, List, FrozenSet
 import os
 import sys
 import time
 import threading
+import pandas as pd
+
 
 log_out = sys.stdout
 log_lock = threading.Lock()
@@ -21,6 +23,19 @@ def log_write_with_time(s: str):
         for line in s.splitlines():
             prefix_time = time.strftime("%Y-%m-%d %H:%M:%S")
             log_write_internal(prefix_time + f"[{threading.current_thread().name}]" + line)
+
+
+def traverse(current_path: str,
+             is_target: Callable[[str], bool],
+             target_handler: Callable[[str, int], Any],
+             index: int = 0) -> int:
+    if os.path.isdir(current_path):
+        for f in os.listdir(current_path):
+            index = traverse(os.path.join(current_path, f), is_target, target_handler, index)
+    elif os.path.isfile(current_path) and is_target(current_path):
+        target_handler(current_path, index)
+        index += 1
+    return index
 
 
 artifact_root_path = os.path.dirname(os.path.dirname(__file__))
@@ -90,17 +105,104 @@ tbl1_rand_chosen_bench = frozenset((
     *tbl1_rand_chosen_crypto_problems
 ))
 
+
+def _gen_problems() -> Tuple[Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]], Dict[str, str]]:
+    building_problem_map: Dict[str, str] = dict()
+    building_problem_list_map: Dict[str, List[str]] = {
+        "deobfusc": list(),
+        "hd": list(),
+        "crypto": list(),
+        "lobster": list(),
+        "pbe-bitvec": list(),
+    }
+
+    def add_to(bench_name: str, problem_file_path: str):
+        problem_name = os.path.splitext(os.path.split(problem_file_path)[1])[0]
+        building_problem_list_map[bench_name].append(problem_name)
+        building_problem_map[problem_name] = bench_name
+
+    for b in bench_names:
+        traverse(bench_name_to_dir[b],
+                 lambda f: f.endswith(".sl"),
+                 lambda f, index: add_to(b, f)
+                 )
+
+    return {b: (building_problem_list_map[b],
+                frozenset(building_problem_list_map[b]),
+                pd.DataFrame({"problem": building_problem_list_map[b]}).set_index('problem')
+                )
+            for b in bench_names}, building_problem_map
+
+
+(problem_map, problem_bench_map) = _gen_problems()
+
+
 result_root_path = os.path.join(artifact_root_path, "result")
 
 
-def traverse(current_path: str,
-             is_target: Callable[[str], bool],
-             target_handler: Callable[[str, int], Any],
-             index: int = 0) -> int:
-    if os.path.isdir(current_path):
-        for f in os.listdir(current_path):
-            index = traverse(os.path.join(current_path, f), is_target, target_handler, index)
-    elif os.path.isfile(current_path) and is_target(current_path):
-        target_handler(current_path, index)
-        index += 1
-    return index
+def result_path(solver_name: str) -> str:
+    return os.path.join(result_root_path, solver_name)
+
+
+# no_result, timeout, failure, success
+def result_status(solver_name: str, problem_name: str) -> str:
+    problem_path = os.path.join(bench_name_to_dir[problem_bench_map[problem_name]], problem_name + ".sl")
+    result_file_path = result_path(solver_name) + os.sep + os.path.splitext(problem_path[len(bench_root_path):])[0] + ".result.txt"
+    try:
+        with open(result_file_path, "rt") as fin:
+            line = fin.readline()
+            solver, problem, sol_time_str, sol_size_str, sol = line.strip().split(sep=",")
+
+            if sol == "timeout":
+                return "timeout"
+            elif sol == "fail_with_max_size":
+                return "success"
+            elif sol == "failure" or sol_size_str.endswith(")"):
+                return "failure"
+            else:
+                return "success"
+    except FileNotFoundError:
+        return "no_result"
+
+
+# solver |-> bench |-> (success|timeout|failure|no_result) |-> count
+def all_result_status_tbl() -> Dict[str, Dict[str, Dict[str, int]]]:
+    tbl = dict()
+    counter_items = ["success", "timeout", "failure", "no_result"]
+
+    for solver in [*solver_names, *ablation_names]:
+        tbl[solver] = dict()
+        for bench in bench_names:
+            bench_counters = {ci: 0 for ci in counter_items}
+            for problem in problem_map[bench][0]:
+                bench_counters[result_status(solver, problem)] += 1
+            tbl[solver][bench] = bench_counters
+
+    return tbl
+
+
+def all_result_status_str() -> List[str]:
+    lines = list()
+    counter_items = ["success", "timeout", "failure", "no_result"]
+
+    tbl = all_result_status_tbl()
+    for solver in [*solver_names, *ablation_names]:
+        if all(tbl[solver][bench]["no_result"] == 0 for bench in bench_names):
+            lines.append(f"{solver}: DONE")
+        elif all(tbl[solver][bench]["no_result"] == len(problem_map[bench][1]) for bench in bench_names):
+            lines.append(f"{solver}: NO_RESULT")
+        else:
+            lines.append(f"{solver}:")
+            for bench in bench_names:
+                if tbl[solver][bench]["no_result"] == 0:
+                    lines.append(f"  {bench}:[{len(problem_map[bench][1])}/{len(problem_map[bench][1])}] DONE")
+                elif tbl[solver][bench]["no_result"] == len(problem_map[bench][1]):
+                    lines.append(f"  {bench}: NO_RESULT")
+                else:
+                    lines.append(f"  {bench}:[{len(problem_map[bench][1]) - tbl[solver][bench]['no_result']}/{len(problem_map[bench][1])}]")
+                    for ci in counter_items:
+                        if tbl[solver][bench][ci] > 0:
+                            lines.append(f"    {ci}: {tbl[solver][bench][ci]}")
+
+    return lines
+
