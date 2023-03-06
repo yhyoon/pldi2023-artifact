@@ -97,6 +97,26 @@ def build_time_cmp_table(problem_df, abs_df, duet_df, probe_df=None) -> pd.DataF
     return accum_df.sort_index()
 
 
+def health_check_solver_bench(s, b) -> List[Tuple[str, str]]:
+    # health check
+    status_tbl = all_result_status_tbl()
+    required_pairs = list()
+    for solver in s:
+        for bench in b:
+            if status_tbl[solver][bench]["no_result"] > 0 and solvers.solver_map[solver].solvable(bench):
+                required_pairs.append((solver, bench))
+    return required_pairs
+
+
+def health_check_solver_problem(s, p) -> List[Tuple[str, str]]:
+    required_pairs = list()
+    for solver_name in s:
+        for problem in p:
+            if result_status(solver_name, problem) == "no_result" and solvers.solver_map[solver_name].solvable(problem_bench_map[problem]):
+                required_pairs.append((solver_name, problem))
+    return required_pairs
+
+
 # draw figures: cactus
 def draw_cactus(bench_name: str, file_name: str, all_problem_count, tds, *, mark_every=None, xtick_step=None):
     figure = plt.figure()
@@ -194,6 +214,9 @@ def draw_stack_bar(kind: str, ylabel: str, tool_lbls: List[str], bench_lbls: Lis
 # figure 2: overall cactus plots
 def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]],
                       solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]]):
+    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["lobster"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_cactus("Lobster", "lobster", len(problem_list["lobster"][0]), [
         {'time_df': solver_bench_to_df["duet"]["lobster"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
@@ -201,6 +224,9 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
     ], xtick_step=41)
 
+    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["crypto"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_cactus("Crypto", "crypto", len(problem_list["crypto"][0]), [
         {'time_df': solver_bench_to_df["duet"]["crypto"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
@@ -208,6 +234,9 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
     ])
 
+    required_pairs = health_check_solver_bench(solver_names, ["hd"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_cactus("Hacker's Delight", "hd", len(problem_list["hd"][0]), [
         {'time_df': solver_bench_to_df["duet"]["hd"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
@@ -217,6 +246,9 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
     ], xtick_step=4)
 
+    required_pairs = health_check_solver_bench(solver_names, ["deobfusc"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_cactus("Deobfuscation", "deob", len(problem_list["deobfusc"][0]), [
         {'time_df': solver_bench_to_df["duet"]["deobfusc"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
@@ -226,6 +258,9 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
     ], xtick_step=50)
 
+    required_pairs = health_check_solver_bench(solver_names, ["hd", "deobfusc"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_cactus("BitVec (HD+DEOBFUSC)", "bitvec", len([*problem_list["hd"][0], *problem_list["deobfusc"][0]]), [
         {'time_df': pd.concat(
             [
@@ -247,6 +282,10 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'}
     ])
 
+    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["lobster", "crypto"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
+
     draw_cactus("CIRCUIT (LOBSTER+CRYPTO)", "bool", len([*problem_list["lobster"][0], *problem_list["crypto"][0]]), [
         {'time_df': pd.concat(
             [
@@ -261,6 +300,10 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
             ])["time"].sort_values(ignore_index=True),
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
     ])
+
+    required_pairs = health_check_solver_bench(["abs_synth", *ablation_names], no_cond_bench_names)
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
 
     draw_cactus("All Benchmarks", "all_ablation", len([*problem_list["hd"][0], *problem_list["deobfusc"][0], *problem_list["lobster"][0], *problem_list["crypto"][0]]), [
         {'time_df': pd.concat([
@@ -300,23 +343,29 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     bar_colors = ['gold', '#96b4fa']
 
     # stacked bar1 - bitvec cnt
+    required_pairs = health_check_solver_bench(solver_names, ["deobfusc", "hd"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_stack_bar("bv_cnt", "# Solved Benchmarks", ["ABSSYNTH", "DUET", "PROBE"], ["DEOBUSC", "HD"], bar_colors,  [
         [solver_bench_to_df[solver][bench]["time"].count() for solver in solver_names]
         for bench in ["deobfusc", "hd"]
     ])
 
-    # stacked bar2 - circuit cnt
-    draw_stack_bar("circuit_cnt", "# Solved Benchmarks", ["ABSSYNTH", "DUET"], ["LOBSTER", "CRYPTO"], bar_colors, [
-        [solver_bench_to_df[solver][bench]["time"].count() for solver in ["abs_synth", "duet"]]
-        for bench in ["lobster", "crypto"]
-    ])
-
-    # stacked bar3 - bitvec fastest
+    # stacked bar2 - bitvec fastest
     hd_win = bench_cmp_map["hd"]["win"].value_counts()
     deob_win = bench_cmp_map["deobfusc"]["win"].value_counts()
     draw_stack_bar("bv_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET", "PROBE"], ["DEOBFUSC", "HD"], bar_colors, [
         [deob_win.get("abs", 0), deob_win.get("duet", 0), deob_win.get("probe", 0)],
         [hd_win.get("abs", 0), hd_win.get("duet", 0), hd_win.get("probe", 0)],
+    ])
+
+    # stacked bar3 - circuit cnt
+    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["lobster", "crypto"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
+    draw_stack_bar("circuit_cnt", "# Solved Benchmarks", ["ABSSYNTH", "DUET"], ["LOBSTER", "CRYPTO"], bar_colors, [
+        [solver_bench_to_df[solver][bench]["time"].count() for solver in ["abs_synth", "duet"]]
+        for bench in ["lobster", "crypto"]
     ])
 
     # stacked bar4 - circuit fastest
@@ -411,13 +460,7 @@ def draw_main_table(table_out, main_summary):
     table_out.write("\n")
 
     # health check
-    status_tbl = all_result_status_tbl()
-    required_pairs = list()
-    for solver in solver_names:
-        for bench in no_cond_bench_names:
-            if status_tbl[solver][bench]["no_result"] > 0 and solvers.solver_map[solver].solvable(bench):
-                required_pairs.append((solver, bench))
-
+    required_pairs = health_check_solver_bench(solver_names, no_cond_bench_names)
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}")
 
@@ -555,13 +598,7 @@ def draw_detail_table(table_out, table_1: Dict[str, Dict[str, Dict[str, pd.Serie
     ]
 
     # health check
-    status_tbl = all_result_status_tbl()
-    required_pairs = list()
-    for solver_name in solver_names:
-        for problem in tbl1_rand_chosen_bench:
-            if result_status(solver_name, problem) == "no_result" and solvers.solver_map[solver_name].solvable(problem_bench_map[problem]):
-                required_pairs.append((solver_name, problem))
-
+    required_pairs = health_check_solver_problem(solver_names, tbl1_rand_chosen_bench)
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
@@ -643,13 +680,7 @@ def draw_ablation_table(table_out, ablation_summary):
 
     summary_lines = [line.replace("nan", "  -") for line in summary_lines]
 
-    status_tbl = all_result_status_tbl()
-    required_pairs = list()
-    for solver in ["abs_synth", *ablation_names]:
-        for bench in no_cond_bench_names:
-            if status_tbl[solver][bench]["no_result"]:
-                required_pairs.append((solver, bench))
-
+    required_pairs = health_check_solver_bench(["abs_synth", *ablation_names], no_cond_bench_names)
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
