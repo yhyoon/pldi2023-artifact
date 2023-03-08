@@ -1,3 +1,5 @@
+#!/bin/bash
+
 dune build
 dune install --prefix=_install
 ln -s _install/bin/abs_synth abs_synth.exe

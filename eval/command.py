@@ -126,6 +126,14 @@ def main():
 
     # command 3: stat
     subparser = subparsers.add_parser('stat', help='Print Statistics of Run Result')
+    subparser.add_argument('-main_table', action='store_true',
+                           help='print Figure 3.(c) (main summary table) in the paper')
+    subparser.add_argument('-detail_table', action='store_true',
+                           help='print Table 1 (detail results of chosen subset) in the paper')
+    subparser.add_argument('-ablation_table', action='store_true',
+                           help='print Figure 4.(b) (ablation summary table) in the paper')
+    subparser.add_argument('-plot', action='store_true',
+                           help='draw and store all the plots(Figure 2, Figure 3.(a)(b), Figure 4.(a) in the paper')
     subparser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                            help='print statistics table to... (default: stdout)')
 
@@ -148,6 +156,12 @@ def main():
     subparser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                            help='print statistics table to... (default: stdout)')
 
+    # command 5: aggregation
+    subparser = subparsers.add_parser('aggregation',
+                                      help='Put all results into single csv file')
+    subparser.add_argument('-csv_out', type=str, metavar='FILE', nargs='?', default="all_result.csv",
+                           help='store aggregated csv file to... (default: all_result.csv)')
+
     args = parser.parse_args()
 
     if args.log_out is not None:
@@ -161,7 +175,7 @@ def main():
                 log_write_with_time(f"===== run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
     elif args.command == 'stat':
-        print_stat.draw_all(args.table_out)
+        print_stat.draw_all(args.main_table, args.detail_table, args.ablation_table, args.plot, args.table_out)
     elif args.command == 'batch':
         for bench in ["crypto", "lobster", "hd", "deobfusc"]:
             for solver in solver_names:
@@ -171,7 +185,27 @@ def main():
                 for solver in ablation_names:
                     log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                     run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
-        print_stat.draw_all(args.table_out)
+        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, args.ablation, not args.chosen, args.table_out)
+    elif args.command == 'aggregation':
+        with open(args.csv_out, "wt") as fout:
+            def read_and_write(f, index):
+                with open(f, "rt") as fin:
+                    for line in fin.readlines():
+                        if len(line.strip()) == 0:
+                            pass
+                        else:
+                            solver_name, problem, sol_type, sol_time, sol_size, sol = print_stat.parse_csv_result(line)
+                            if sol_type == "success":
+                                fout.write(f"{solver_name},{problem},{sol_type},{sol_time},{sol_size},{sol}\n")
+                            elif sol_time is not None:
+                                fout.write(f"{solver_name},{problem},{sol_type},{sol_time},n/a,n/a\n")
+                            else:
+                                fout.write(f"{solver_name},{problem},{sol_type},n/a,n/a,n/a\n")
+
+            fout.write("solver,problem,sol_type,time,size,sol\n")
+            traverse(result_root_path,
+                     is_target=lambda path: os.path.split(path)[1].endswith(".result.txt"),
+                     target_handler=read_and_write)
     elif args.command is None:
         print(f"Command Name is Required (run | stat | batch | clean)", file=sys.stderr)
     else:

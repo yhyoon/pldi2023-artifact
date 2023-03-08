@@ -16,7 +16,7 @@ let options = [
 	("-exn_trace", Arg.Unit (fun () -> o.exn_trace <- true), "print stack trace for uncaught exception");
 	("-init_comp_size", Arg.Int (fun n -> o.init_comp_size <- n), "set the initial size of each component (default=1)");
 	("-max_comp_size", Arg.Int (fun n -> o.max_comp_size <- n), "set the maximum size of each component (default=128)");
-	("-gamma_size", Arg.Int (fun n -> o.gamma_size <- n), "set the maximum size of size-constrainted concretization(default=4)");
+	("-gamma_size", Arg.Int (fun n -> o.gamma_size <- n), "set the maximum size of size-constrainted concretization(default=8)");
 	("-topdown", Arg.String (fun s -> o.topdown <- s), "set top-down strategey(example: depth1, depth2, holeN) (default=hole2)");
 	("-pruning", Arg.String (fun s -> if BatList.mem s allowed_pruning_options then o.pruning_mode <- s), "select one of pruning method(abstsem, bruteforce, solver) (default=abstsem)");
 	("-cegis_jump", Arg.Bool (fun b -> o.cegis_jump <- Some b), "Jump to previous iteration progress point in CEGIS (default=true)");
