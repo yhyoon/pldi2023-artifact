@@ -6,6 +6,7 @@ then
 	opam init --auto-setup --disable-sandboxing --yes --compiler=$OCAML_VERSION && opam clean
 fi
 opam switch create $OCAML_VERSION
+opam switch $OCAML_VERSION
 eval `opam config env`
 opam install --yes containers containers-data z3.4.8.1 core.v0.13.0 batteries.3.0.0 ocamlgraph.1.8.8 
 if [ "$(uname)" == "Darwin" ]; then
