@@ -321,10 +321,10 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
         ])["time"].sort_values(ignore_index=True),
          'label': "SMTSolver", 'color': 'm', 'marker': 'v'},
         {'time_df': pd.concat([
-            solver_bench_to_df["abs_synth_noback"]["hd"],
-            solver_bench_to_df["abs_synth_noback"]["deobfusc"],
-            solver_bench_to_df["abs_synth_noback"]["lobster"],
-            solver_bench_to_df["abs_synth_noback"]["crypto"],
+            solver_bench_to_df["abs_synth_fonly"]["hd"],
+            solver_bench_to_df["abs_synth_fonly"]["deobfusc"],
+            solver_bench_to_df["abs_synth_fonly"]["lobster"],
+            solver_bench_to_df["abs_synth_fonly"]["crypto"],
         ])["time"].sort_values(ignore_index=True),
          'label': "ForwardOnly", 'color': 'y', 'marker': '+'},
         {'time_df': pd.concat([
@@ -475,7 +475,7 @@ def draw_detail_table(table_out, table_1: Dict[str, Dict[str, Dict[str, pd.Serie
             if table_1[solver][bench][problem]["sol_type"] == "timeout":
                 return "{:>9s}".format("timeout")
             elif table_1[solver][bench][problem]["sol_type"] == "failure":
-                return "{:>9s}".format("-")
+                return "{:>9s}".format("failure")
             else:
                 v = table_1[solver][bench][problem]["time"]
                 if v is None or numpy.isnan(v):
@@ -610,7 +610,7 @@ def draw_detail_table(table_out, table_1: Dict[str, Dict[str, Dict[str, pd.Serie
 
 
 def draw_ablation_table(table_out, ablation_summary):
-    ablations_in_order = ["abs_synth", "abs_synth_noback", "abs_synth_smt", "abs_synth_bf"]
+    ablations_in_order = ["abs_synth", "abs_synth_fonly", "abs_synth_smt", "abs_synth_bf"]
     summary_lines = [
         "{:12s}|| {:27s}| {:27s}| {:27s}|".format(
             "".center(12, "-"),

@@ -74,10 +74,10 @@ class SolverAbsSynthSMT(SolverAbsSynth):
         return ["-pruning", "solver", target]
 
 
-class SolverAbsSynthNoBack(SolverAbsSynth):
+class SolverAbsSynthForwardOnly(SolverAbsSynth):
     # command: ./abs_synth.exe -pruning solver [target_name]
     def name(self) -> str:
-        return "abs_synth_noback"
+        return "abs_synth_fonly"
 
     def params(self, target: str) -> List[str]:
         return ["-no_backward", target]
@@ -158,7 +158,7 @@ solver_map: Dict[str, Solver] = {
     "abs_synth": SolverAbsSynth(),
     "abs_synth_bf": SolverAbsSynthBF(),
     "abs_synth_smt": SolverAbsSynthSMT(),
-    "abs_synth_noback": SolverAbsSynthNoBack(),
+    "abs_synth_fonly": SolverAbsSynthForwardOnly(),
     "duet": SolverDuet(),
     "probe": SolverProbe(),
 }

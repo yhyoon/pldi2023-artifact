@@ -107,7 +107,7 @@ def main():
     subparser.add_argument('-solvers', type=str, metavar='NAME', nargs='+', required=True,
                            dest='solver_list',
                            help='list solvers to be evaluated'
-                                f'({" | ".join(solver_names)})')
+                                f'({" | ".join([*solver_names, *ablation_names])})')
     subparser.add_argument('-benches', type=str, metavar='NAME', nargs='+', required=True,
                            dest='bench_list',
                            help='benchmarks to be evaluated'
@@ -164,11 +164,11 @@ def main():
         print_stat.draw_all(args.table_out)
     elif args.command == 'batch':
         for bench in ["crypto", "lobster", "hd", "deobfusc"]:
-            for solver in ["abs_synth", "duet", "probe"]:
+            for solver in solver_names:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
             if args.ablation:
-                for solver in ["abs_synth_bf", "abs_synth_smt", "abs_synth_smt_noback"]:
+                for solver in ablation_names:
                     log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                     run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
         print_stat.draw_all(args.table_out)
