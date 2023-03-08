@@ -1,12 +1,12 @@
-# ABS_SYNTH
+# AbsSynth
 
-ABS_SYNTH(tentative) is an inductive program synthesizer that combines top-down deduction and bottom-up enumeration and do abstract interpretation for pruning.
+AbsSynth is an inductive program synthesizer accelerated by
+forward-backward abstract interpretation.
 
 ## Dependencies
 
-If you use lesser version of these tools, success of build or execution is not guaranteed.
-
-* OPAM >= 2.1.2
+* opam
+* libgmp
 
 ## Build
 
@@ -15,10 +15,11 @@ If you use lesser version of these tools, success of build or execution is not g
 ```
 opam switch create abs_synth 4.12.0
 opam switch abs_synth
-opam install --yes dune merlin ocaml-lsp-server dune-build-info batteries ocamlgraph core_kernel yojson z3
+opam install --yes dune merlin ocaml-lsp-server dune-build-info batteries ocamlgraph core_kernel yojson containers-data containers z3
 ```
 
 ### Libraries
+
 * `dune` : build system
 * `dune-build_info` : insert version information(commit id) to binary
 * `merlin` : IntelliSense system
