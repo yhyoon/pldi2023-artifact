@@ -2,14 +2,17 @@
 
 ## Virtual Machine Image
 
-We provide a VirtualBox VM image to address the difficulty of setting up the execution environment for the artifact.
+We provide a VirtualBox VM image to address the difficulty
+of setting up the execution environment for the artifact.
 The image includes all the necessary components to immediately run the artifact.
 You can skip the [Dependencies](#dependencies) and [Build](#build) part
 and just jump to the [Running](#running) part.
 However, due to limitations of the virtual machine,
 it may not achieve the performance number reported in the paper.
 
-* OS: Ubuntu 22.04.5 LTS 64bit Server
+* Tested on VM Platform: [VirtualBox 7.0](https://www.virtualbox.org/wiki/Downloads)
+* Tested on Host: macOS Ventura 13.1 with 2.3GHz QuadCore Intel Core i7
+* Guest OS: Ubuntu 22.04.5 LTS 64bit Server
 * Username: abssynth
 * Password: synthesis2023
 
@@ -75,6 +78,7 @@ Be aware that all packages and libraries will be installed directly into your en
 ## Build
 tested on :
 * Ubuntu 20.04.5 LTS 64bit Server
+* Ubuntu 22.04.5 LTS 64bit Server
 * macOS Ventura 13.1 (Intel Core Mac)
 
 ```sh
