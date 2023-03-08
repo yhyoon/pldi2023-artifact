@@ -1,14 +1,17 @@
 #!/bin/bash
 
+echo "Build AbsSynth"
 cd abs_synth
-./ready_to_build.sh
-./build.sh
+./first_build.sh
 cd ..
 
+echo "Build Duet"
 cd duet
 ./build
+make
 cd ..
 
+echo "Build Probe"
 cd probe
 sbt assembly
 cd ..

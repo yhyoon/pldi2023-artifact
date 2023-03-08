@@ -79,8 +79,7 @@ tested on :
 
 ```sh
 $ cd abs_synth
-$ ./ready_to_build.sh
-$ ./build.sh
+$ ./first_build.sh
 $ cd ..
 $
 $ cd duet
