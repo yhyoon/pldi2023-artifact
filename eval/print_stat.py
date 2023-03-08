@@ -604,7 +604,7 @@ def draw_detail_table(table_out, table_1: Dict[str, Dict[str, Dict[str, pd.Serie
 
     table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n"
                     "Analysis times are not included in this table. You can see them by manually running\n"
-                    " abs_synth with option '-log stdout'.\n")
+                    " abs_synth with option '-log'.\n")
     table_out.write("\n".join(detail_lines))
     table_out.write("\n\n")
 
@@ -719,7 +719,7 @@ def draw_all(table_out):
     solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]] = {
         solver: {
             bench: solver_to_df[solver][solver_to_df[solver]["bench"] == bench]
-            for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+            for bench in ["deobfusc", "hd", "lobster", "crypto"]
         }
         for solver in [*solver_names, *ablation_names]
     }
@@ -741,13 +741,11 @@ def draw_all(table_out):
     deobfusc_cmp_df = build_time_cmp_table(problem_map["deobfusc"][2], abs_synth_df, duet_df, probe_df)
     lobster_cmp_df = build_time_cmp_table(problem_map["lobster"][2], abs_synth_df, duet_df)
     crypto_cmp_df = build_time_cmp_table(problem_map["crypto"][2], abs_synth_df, duet_df)
-    pbe_bv_cmp_df = build_time_cmp_table(problem_map["pbe-bitvec"][2], abs_synth_df, duet_df, probe_df)
     bench_cmp_map: Dict[str, pd.DataFrame] = {
         "hd": hd_cmp_df,
         "deobfusc": deobfusc_cmp_df,
         "lobster": lobster_cmp_df,
         "crypto": crypto_cmp_df,
-        "pbe-bitvec": pbe_bv_cmp_df,
     }
     solver_to_non_ite_df = {
         solver: pd.concat([solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])

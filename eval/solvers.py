@@ -98,8 +98,6 @@ class SolverDuet(Solver):
             return ["-fastdt", "-ex_all", "-max_size", "10000", "-init_comp_size", "3", target]
         elif target.startswith(bench_name_to_dir["circuit"]):
             return ["-max_size", "128", "-max_height", "16", "-init_comp_size", "1", target]
-        elif target.startswith(bench_name_to_dir["pbe-bitvec"]):
-            return ["-max_size", "128", "-max_height", "16", "-init_comp_size", "1", target]
         else:
             return [target]
 
@@ -153,7 +151,7 @@ class SolverProbe(Solver):
             return str(result_time_ms), "failure", "failure"
 
     def solvable(self, bench: str) -> bool:
-        return bench in {"bitvec", "deobfusc", "hd", "pbe-bitvec"}
+        return bench in {"bitvec", "deobfusc", "hd"}
 
 
 solver_map: Dict[str, Solver] = {
