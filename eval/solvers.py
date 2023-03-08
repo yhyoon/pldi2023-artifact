@@ -97,10 +97,14 @@ class SolverDuet(Solver):
         import platform
         os_name = platform.system()
         if os_name == "Darwin":
-            # DYLD_LIBRARY_PATH=~/.opam/${OCAML_VERSION}/lib/z3:$DYLD_LIBRARY_PATH
-            return {"DYLD_LIBRARY_PATH": os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3") + ":" + os.environ["DYLD_LIBRARY_PATH"]}
+            lib_path_key = "DYLD_LIBRARY_PATH"
         else:
-            return {"LD_LIBRARY_PATH": os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3") + ":" + os.environ["LD_LIBRARY_PATH"]}
+            lib_path_key = "LD_LIBRARY_PATH"
+
+        if lib_path_key in os.environ:
+            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3") + ":" + os.environ[lib_path_key]}
+        else:
+            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3")}
 
     def params(self, target: str) -> List[str]:
         if target.startswith(bench_name_to_dir["bitvec"]):
