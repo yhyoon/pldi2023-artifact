@@ -13,8 +13,8 @@ if [ "$(uname)" = "Darwin" ]; then
 else
   echo 'DO: sudo apt install libgmp-dev opam openjdk-8-jdk python3 python3-pip'
   sudo apt install libgmp-dev opam openjdk-8-jdk python3 python3-pip
-  echo 'DO: curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > cs && chmod +x cs && ./cs setup'
-  curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > cs && chmod +x cs && ./cs setup
+  echo 'DO: curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux-static.gz | gzip -d > cs && chmod +x cs && ./cs setup'
+  curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux-static.gz | gzip -d > cs && chmod +x cs && ./cs setup
 
   echo 'DO: cd probe'
   cd probe
