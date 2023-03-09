@@ -10,7 +10,7 @@ and just jump to the [Running](#running) part.
 However, due to limitations of the virtual machine,
 it may not achieve the performance number reported in the paper.
 
-* Tested on VM Platform: [VirtualBox 7.0](https://www.virtualbox.org/wiki/Downloads)
+* Tested on VM Player: [VirtualBox 7.0](https://www.virtualbox.org/wiki/Downloads)
 * Tested on Host: macOS Ventura 13.1 with 2.3GHz QuadCore Intel Core i7
 * Guest OS: Ubuntu 22.04.5 LTS 64bit Server
 * Username: abssynth
