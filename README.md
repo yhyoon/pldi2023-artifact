@@ -66,13 +66,12 @@ $ brew tap cvc4/cvc4
 $ brew install cvc4/cvc4/cvc4
 ```
 
-* `python3`, `pip`, `pandas` `matplotlib`: for running evaluation scripts (all)
+* `python3`, `pip3`, `pandas` `matplotlib`: for running evaluation scripts (all)
 ```sh
 $ sudo apt install python3  # for linux
 $ sudo apt install python3-pip
 $
 $ brew install python3  # for mac
-$ brew install pip3
 $
 $ pip3 install pandas matplotlib  # common
 ```

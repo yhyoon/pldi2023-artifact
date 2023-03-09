@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [ "$(uname)" = "Darwin" ]; then
-  echo 'DO: brew install gmp opam openjdk@8 python3 pip3'
-  brew install gmp opam openjdk@8 python3 pip3
+  echo 'DO: brew install gmp opam openjdk@8 python3'
+  brew install gmp opam openjdk@8 python3
   echo 'DO: brew install coursier/formulas/coursier && cs setup'
   brew install coursier/formulas/coursier && cs setup
 
