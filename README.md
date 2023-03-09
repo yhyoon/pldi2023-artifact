@@ -21,6 +21,15 @@ The artifact is in directory `~/pldi2023-artifact`.
 ## Dependencies
 This artifact requires following tools and libraries to build and run.
 
+### TL;DR
+In one line command:
+```sh
+$ ./prepare_dependency.sh
+```
+Be aware that all packages and libraries will be installed directly into your environment, and may affect your existing system, therefore proceed with caution.
+
+### Detail
+
 * `libgmp-dev`(https://gmplib.org/): for z3 solver (`abs_synth`, `duet`)
 ```sh
 $ sudo apt install libgmp-dev # for linux
@@ -68,18 +77,22 @@ $
 $ pip3 install pandas matplotlib  # common
 ```
 
-Or, in one line command:
-```sh
-$ ./prepare_dependency.sh
-```
-Be aware that all packages and libraries will be installed directly into your environment, and may affect your existing system, therefore proceed with caution.
-
-
 ## Build
 tested on :
 * Ubuntu 20.04.5 LTS 64bit Server
 * Ubuntu 22.04.5 LTS 64bit Server
 * macOS Ventura 13.1 (Intel Core Mac)
+
+### TL;DR
+
+In one line command:
+```sh
+$ ./build_all.sh
+```
+
+### Detail
+
+The `./build_all.sh` script runs the following commands. 
 
 ```sh
 $ cd abs_synth
@@ -93,11 +106,6 @@ $
 $ cd probe
 $ sbt assembly
 $ cd ..
-```
-
-Or, in one line command:
-```sh
-$ ./build_all.sh
 ```
 
 ## Running
