@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, NamedTuple
 
 import argparse
 import itertools
@@ -10,7 +10,22 @@ import common_util
 from common_util import *
 
 
-def parse_csv_result(line: str) -> Tuple[str, str, str, Optional[float], Optional[int], Optional[str]]:
+AllDfs = NamedTuple('AllDfs',
+                    main_df=pd.DataFrame,
+                    solver_to_df=Dict[str, pd.DataFrame],
+                    solver_bench_to_df=Dict[str, Dict[str, pd.DataFrame]],
+                    bench_to_cmp_df=Dict[str, pd.DataFrame])
+
+
+ResultRow = NamedTuple('ResultRow', [('solver_name', str),
+                                     ('problem', str),
+                                     ('sol_type', str),
+                                     ('time', Optional[float]),
+                                     ('size', Optional[int]),
+                                     ('sol', Optional[str])])
+
+
+def parse_csv_result(line: str) -> ResultRow:
     try:
         solver, problem, sol_time_str, sol_size_str, sol = line.strip().split(sep=",")
         try:
@@ -40,7 +55,7 @@ def parse_csv_result(line: str) -> Tuple[str, str, str, Optional[float], Optiona
         log_write_with_time(f"bad comma-separated data: {line}")
         raise
 
-    return solver, problem, sol_type, sol_time, sol_size, sol
+    return ResultRow(solver, problem, sol_type, sol_time, sol_size, sol)
 
 
 def read_all() -> pd.DataFrame:
@@ -58,14 +73,14 @@ def read_all() -> pd.DataFrame:
                 if len(line.strip()) == 0:
                     pass
                 else:
-                    solver, problem, sol_type, sol_time, sol_size, sol = parse_csv_result(line)
-                    solver_list.append(solver)
-                    bench_list.append(problem_bench_map[problem])
-                    problem_list.append(problem)
-                    sol_type_list.append(sol_type)
-                    sol_time_list.append(sol_time)
-                    sol_size_list.append(sol_size)
-                    sol_list.append(sol)
+                    row = parse_csv_result(line)
+                    solver_list.append(row.solver_name)
+                    bench_list.append(problem_bench_map[row.problem])
+                    problem_list.append(row.problem)
+                    sol_type_list.append(row.sol_type)
+                    sol_time_list.append(row.time)
+                    sol_size_list.append(row.size)
+                    sol_list.append(row.sol)
 
     log_write_with_time(f"read all data in {result_root_path}...")
     traverse(result_root_path,
@@ -377,12 +392,10 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
 
-def draw_detail_table(dfs, table_out):
-    main_df, solver_to_df, solver_bench_to_df = dfs
-
+def draw_detail_table(dfs: AllDfs, table_out):
     def solver_problem_detail(solver: str, problem: str) -> pd.Series:
         try:
-            df = solver_bench_to_df[solver][problem_bench_map[problem]]
+            df = dfs.solver_bench_to_df[solver][problem_bench_map[problem]]
             return df.loc[problem]
         except KeyError:
             return pd.Series({"bench": problem_bench_map[problem],
@@ -554,11 +567,15 @@ def draw_detail_table(dfs, table_out):
     table_out.write("\n\n")
 
 
-def draw_ablation_table(dfs, table_out):
-    main_df, solver_to_df, solver_bench_to_df = dfs
+def draw_cmp_table(dfs: AllDfs, cmp_bench_names: List[str], table_out):
+    for bench_name in cmp_bench_names:
+        cmp_df = dfs.bench_to_cmp_df[bench_name]
+        table_out.write(cmp_df.to_string())
 
+
+def draw_ablation_table(dfs: AllDfs, table_out):
     solver_var_to_non_ite_df = {
-        solver: pd.concat([solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
+        solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
         for solver in ["abs_synth", *ablation_names]
     }
 
@@ -571,7 +588,7 @@ def draw_ablation_table(dfs, table_out):
         "solved": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["time"].count()
+                    bench: dfs.solver_bench_to_df[solver][bench]["time"].count()
                     for bench in bench_names
                 },
                 "overall": solver_var_to_non_ite_df[solver]["time"].count()
@@ -581,7 +598,7 @@ def draw_ablation_table(dfs, table_out):
         "time_avg": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["time"].mean() if solver_bench_to_df[solver][bench]["time"].count() > 0 else numpy.nan
+                    bench: dfs.solver_bench_to_df[solver][bench]["time"].mean() if dfs.solver_bench_to_df[solver][bench]["time"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
                 "overall": solver_var_to_non_ite_df[solver]["time"].mean() if solver_var_to_non_ite_df[solver]["time"].count() > 0 else numpy.nan
@@ -591,7 +608,7 @@ def draw_ablation_table(dfs, table_out):
         "size_avg": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["size"].mean() if solver_bench_to_df[solver][bench]["size"].count() > 0 else numpy.nan
+                    bench: dfs.solver_bench_to_df[solver][bench]["size"].mean() if dfs.solver_bench_to_df[solver][bench]["size"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
                 "overall": solver_var_to_non_ite_df[solver]["size"].mean() if solver_var_to_non_ite_df[solver]["size"].count() > 0 else numpy.nan
@@ -681,7 +698,7 @@ def draw_ablation_table(dfs, table_out):
     table_out.write("\n\n")
 
 
-def prepare_df() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, Dict[str, pd.DataFrame]]]:
+def prepare_df() -> AllDfs:
     main_df = read_all()
 
     # table of each solver
@@ -698,15 +715,27 @@ def prepare_df() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, Dict[
         for solver in [*solver_names, *ablation_names]
     }
 
-    return main_df, solver_to_df, solver_bench_to_df
+    abs_synth_df, duet_df, probe_df = solver_to_df["abs_synth"], solver_to_df["duet"], solver_to_df["probe"]
+    # comparison table for counting best solver
+    hd_cmp_df = build_time_cmp_table(problem_map["hd"][2], abs_synth_df, duet_df, probe_df)
+    deobfusc_cmp_df = build_time_cmp_table(problem_map["deobfusc"][2], abs_synth_df, duet_df, probe_df)
+    lobster_cmp_df = build_time_cmp_table(problem_map["lobster"][2], abs_synth_df, duet_df)
+    crypto_cmp_df = build_time_cmp_table(problem_map["crypto"][2], abs_synth_df, duet_df)
+    pbe_bv_cmp_df = build_time_cmp_table(problem_map["pbe-bitvec"][2], abs_synth_df, duet_df, probe_df)
+    bench_to_cmp_df: Dict[str, pd.DataFrame] = {
+        "hd": hd_cmp_df,
+        "deobfusc": deobfusc_cmp_df,
+        "lobster": lobster_cmp_df,
+        "crypto": crypto_cmp_df,
+        "pbe-bitvec": pbe_bv_cmp_df,
+    }
+
+    return AllDfs(main_df, solver_to_df, solver_bench_to_df, bench_to_cmp_df)
 
 
-def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, Dict[str, pd.DataFrame]]],
-                    table_out):
-    main_df, solver_to_df, solver_bench_to_df = dfs
-
+def draw_main_table(dfs: AllDfs, table_out):
     solver_to_non_ite_df = {
-        solver: pd.concat([solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
+        solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
         for solver in solver_names
     }
 
@@ -719,7 +748,7 @@ def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, 
         "solved": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["time"].count()
+                    bench: dfs.solver_bench_to_df[solver][bench]["time"].count()
                     for bench in bench_names
                 },
                 "overall": solver_to_non_ite_df[solver]["time"].count()
@@ -729,7 +758,7 @@ def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, 
         "time_avg": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["time"].mean() if solver_bench_to_df[solver][bench]["time"].count() > 0 else numpy.nan
+                    bench: dfs.solver_bench_to_df[solver][bench]["time"].mean() if dfs.solver_bench_to_df[solver][bench]["time"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
                 "overall": solver_to_non_ite_df[solver]["time"].mean() if solver_to_non_ite_df[solver]["time"].count() > 0 else numpy.nan
@@ -739,7 +768,7 @@ def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, 
         "time_med": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["time"].median()
+                    bench: dfs.solver_bench_to_df[solver][bench]["time"].median()
                     for bench in bench_names
                 },
                 "overall": solver_to_non_ite_df[solver]["time"].median()
@@ -749,7 +778,7 @@ def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, 
         "size_avg": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["size"].mean() if solver_bench_to_df[solver][bench]["size"].count() > 0 else numpy.nan
+                    bench: dfs.solver_bench_to_df[solver][bench]["size"].mean() if dfs.solver_bench_to_df[solver][bench]["size"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
                 "overall": solver_to_non_ite_df[solver]["size"].mean() if solver_to_non_ite_df[solver]["size"].count() > 0 else numpy.nan
@@ -759,7 +788,7 @@ def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, 
         "size_med": {
             solver: {
                 **{
-                    bench: solver_bench_to_df[solver][bench]["size"].median()
+                    bench: dfs.solver_bench_to_df[solver][bench]["size"].median()
                     for bench in bench_names
                 },
                 "overall": solver_to_non_ite_df[solver]["size"].median()
@@ -861,11 +890,11 @@ def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, 
 
 def draw_all(print_main_table: bool,
              print_detail_table: bool,
+             cmp_bench_names: List[str],
              print_ablation_table: bool,
              print_plot: bool,
              table_out):
     dfs = prepare_df()
-    main_df, solver_to_df, solver_bench_to_df = dfs
 
     for line in all_result_status_str():
         log_write_with_time(line)
@@ -875,6 +904,9 @@ def draw_all(print_main_table: bool,
 
     if print_detail_table:
         draw_detail_table(dfs, table_out)
+
+    if len(cmp_bench_names) > 0:
+        draw_cmp_table(dfs, cmp_bench_names, table_out)
 
     if print_ablation_table:
         draw_ablation_table(dfs, table_out)
@@ -890,21 +922,9 @@ def draw_all(print_main_table: bool,
             "xtick.labelsize": "14",
             "ytick.labelsize": "14"
         })
-        abs_synth_df, duet_df, probe_df = solver_to_df["abs_synth"], solver_to_df["duet"], solver_to_df["probe"]
-        # comparison table for counting best solver
-        hd_cmp_df = build_time_cmp_table(problem_map["hd"][2], abs_synth_df, duet_df, probe_df)
-        deobfusc_cmp_df = build_time_cmp_table(problem_map["deobfusc"][2], abs_synth_df, duet_df, probe_df)
-        lobster_cmp_df = build_time_cmp_table(problem_map["lobster"][2], abs_synth_df, duet_df)
-        crypto_cmp_df = build_time_cmp_table(problem_map["crypto"][2], abs_synth_df, duet_df)
-        bench_cmp_map: Dict[str, pd.DataFrame] = {
-            "hd": hd_cmp_df,
-            "deobfusc": deobfusc_cmp_df,
-            "lobster": lobster_cmp_df,
-            "crypto": crypto_cmp_df,
-        }
 
-        draw_bar_plots(solver_bench_to_df, bench_cmp_map)
-        draw_cactus_plots(problem_map, solver_bench_to_df)
+        draw_bar_plots(dfs.solver_bench_to_df, dfs.bench_to_cmp_df)
+        draw_cactus_plots(problem_map, dfs.solver_bench_to_df)
 
 
 def main():
@@ -917,6 +937,10 @@ def main():
                         help='print Figure 3.(c) (main summary table) in the paper')
     parser.add_argument('-detail_table', action='store_true',
                         help='print Table 1 (detail results of chosen subset) in the paper')
+    parser.add_argument('-cmp_table', type=str, metavar='NAME', nargs='+', required=True,
+                        dest='cmp_bench_names',
+                        help='list benchmark names to compare solvers'
+                             f'({" | ".join(bench_names)})')
     parser.add_argument('-ablation_table', action='store_true',
                         help='print Figure 4.(b) (ablation summary table) in the paper')
     parser.add_argument('-plot', action='store_true',
@@ -928,7 +952,7 @@ def main():
 
     common_util.log_out = args.log_out
 
-    draw_all(args.main_table, args.detail_table, args.ablation_table, args.plot, args.table_out)
+    draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot, args.table_out)
 
 
 if __name__ == '__main__':

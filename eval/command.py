@@ -135,6 +135,10 @@ def main():
                            help='print Figure 3.(c) (main summary table) in the paper')
     subparser.add_argument('-detail_table', action='store_true',
                            help='print Table 1 (detail results of chosen subset) in the paper')
+    subparser.add_argument('-cmp_table', type=str, metavar='NAME', nargs='+', default=[],
+                           dest='cmp_bench_names',
+                           help='list benchmark names to compare solvers'
+                                f'({" | ".join(bench_names)})')
     subparser.add_argument('-ablation_table', action='store_true',
                            help='print Figure 4.(b) (ablation summary table) in the paper')
     subparser.add_argument('-plot', action='store_true',
@@ -180,7 +184,7 @@ def main():
                 log_write_with_time(f"===== run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
     elif args.command == 'stat':
-        print_stat.draw_all(args.main_table, args.detail_table, args.ablation_table, args.plot, args.table_out)
+        print_stat.draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot, args.table_out)
     elif args.command == 'batch':
         for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
             for solver in solver_names:
@@ -190,7 +194,7 @@ def main():
                 for solver in ablation_names:
                     log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                     run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
-        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, args.ablation, not args.chosen, args.table_out)
+        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, [], args.ablation, not args.chosen, args.table_out)
     elif args.command == 'aggregation':
         with open(args.csv_out, "wt") as fout:
             def read_and_write(f, index):
