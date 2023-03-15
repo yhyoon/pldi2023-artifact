@@ -693,7 +693,7 @@ def prepare_df() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, Dict[
     solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]] = {
         solver: {
             bench: solver_to_df[solver][solver_to_df[solver]["bench"] == bench]
-            for bench in ["deobfusc", "hd", "lobster", "crypto"]
+            for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
         }
         for solver in [*solver_names, *ablation_names]
     }

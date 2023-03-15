@@ -25,6 +25,10 @@ def build_clean_dest_dirs(target: str):
         dest_dirs.append(os.path.join(result_root_path, "abs_synth", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec", "hd"))
+    elif target == "pbe-bitvec":
+        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "pbe-bitvec"))
+        dest_dirs.append(os.path.join(result_root_path, "duet", "pbe-bitvec"))
+        dest_dirs.append(os.path.join(result_root_path, "probe", "pbe-bitvec"))
     elif target == "crypto":
         dest_dirs.append(os.path.join(result_root_path, "abs_synth", "circuit", "crypto"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "circuit", "crypto"))
@@ -81,6 +85,7 @@ def prepare_result_dirs():
         os.makedirs(os.path.join(result_root_path, solver, "bitvec", "hd"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "crypto"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "lobster"), exist_ok=True)
+        os.makedirs(os.path.join(result_root_path, solver, "pbe-bitvec"), exist_ok=True)
 
     os.makedirs(os.path.join(artifact_root_path, "figures"), exist_ok=True)
 
@@ -177,7 +182,7 @@ def main():
     elif args.command == 'stat':
         print_stat.draw_all(args.main_table, args.detail_table, args.ablation_table, args.plot, args.table_out)
     elif args.command == 'batch':
-        for bench in ["crypto", "lobster", "hd", "deobfusc"]:
+        for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
             for solver in solver_names:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)

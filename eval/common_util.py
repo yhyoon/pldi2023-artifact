@@ -50,10 +50,11 @@ bench_name_to_dir = {
     "circuit":      os.path.join(bench_root_path, "circuit"),
     "crypto":       os.path.join(bench_root_path, "circuit", "crypto"),
     "lobster":      os.path.join(bench_root_path, "circuit", "lobster"),
+    "pbe-bitvec":   os.path.join(bench_root_path, "pbe-bitvec"),
 }
 
 bench_names = [
-    "deobfusc", "hd", "crypto", "lobster",
+    "deobfusc", "hd", "crypto", "lobster", "pbe-bitvec",
 ]
 
 no_cond_bench_names = [
@@ -65,7 +66,7 @@ solver_names = [
 ]
 
 ablation_names = [
-    "abs_synth_bf", "abs_synth_smt", "abs_synth_fonly"
+    "abs_synth_bf", "abs_synth_smt", "abs_synth_noback"
 ]
 
 tbl1_rand_chosen_hd_problems = [
@@ -112,6 +113,7 @@ def _gen_problems() -> Tuple[Dict[str, Tuple[List[str], FrozenSet[str], pd.DataF
         "hd": list(),
         "crypto": list(),
         "lobster": list(),
+        "pbe-bitvec": list(),
     }
 
     def add_to(bench_name: str, problem_file_path: str):
