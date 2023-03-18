@@ -66,7 +66,7 @@ solver_names = [
 ]
 
 ablation_names = [
-    "abs_synth_bf", "abs_synth_smt", "abs_synth_noback"
+    "abs_synth_bf", "abs_synth_smt", "abs_synth_fonly"
 ]
 
 tbl1_rand_chosen_hd_problems = [

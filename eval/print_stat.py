@@ -571,6 +571,7 @@ def draw_cmp_table(dfs: AllDfs, cmp_bench_names: List[str], table_out):
     for bench_name in cmp_bench_names:
         cmp_df = dfs.bench_to_cmp_df[bench_name]
         table_out.write(cmp_df.to_string())
+        table_out.write("\n")
 
 
 def draw_ablation_table(dfs: AllDfs, table_out):
