@@ -38,7 +38,9 @@ class SolverAbsSynth(Solver):
         return os.path.join(artifact_root_path, "abs_synth", "abs_synth.exe")
 
     def params(self, target: str) -> List[str]:
-        return [target]
+        file_name = os.path.split(target)[1]
+        problem_name = os.path.splitext(file_name)[0]
+        return ["-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
 
     def extract_result(self, handle: timeout_runner.TimeoutRunner) -> Tuple[str, str, str]:
         result_string = handle.captured_stderr
@@ -62,7 +64,9 @@ class SolverAbsSynthBF(SolverAbsSynth):
         return "abs_synth_bf"
 
     def params(self, target: str) -> List[str]:
-        return ["-pruning", "bruteforce", target]
+        file_name = os.path.split(target)[1]
+        problem_name = os.path.splitext(file_name)[0]
+        return ["-pruning", "bruteforce", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
 
 
 class SolverAbsSynthSMT(SolverAbsSynth):
@@ -71,7 +75,9 @@ class SolverAbsSynthSMT(SolverAbsSynth):
         return "abs_synth_smt"
 
     def params(self, target: str) -> List[str]:
-        return ["-pruning", "solver", target]
+        file_name = os.path.split(target)[1]
+        problem_name = os.path.splitext(file_name)[0]
+        return ["-pruning", "solver", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
 
 
 class SolverAbsSynthForwardOnly(SolverAbsSynth):
@@ -80,7 +86,9 @@ class SolverAbsSynthForwardOnly(SolverAbsSynth):
         return "abs_synth_fonly"
 
     def params(self, target: str) -> List[str]:
-        return ["-no_backward", target]
+        file_name = os.path.split(target)[1]
+        problem_name = os.path.splitext(file_name)[0]
+        return ["-no_backward", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
 
 
 class SolverDuet(Solver):
