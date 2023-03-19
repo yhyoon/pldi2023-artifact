@@ -143,6 +143,8 @@ def main():
                            help='print Figure 4.(b) (ablation summary table) in the paper')
     subparser.add_argument('-plot', action='store_true',
                            help='draw and store all the plots(Figure 2, Figure 3.(a)(b), Figure 4.(a) in the paper')
+    subparser.add_argument('-all', action='store_true', default=False,
+                           help='activate all flag options to draw all figures and tables')
     subparser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                            help='print statistics table to... (default: stdout)')
 
@@ -184,7 +186,9 @@ def main():
                 log_write_with_time(f"===== run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
     elif args.command == 'stat':
-        print_stat.draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot, args.table_out)
+        print_stat.draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot,
+                            all_on=args.all,
+                            table_out=args.table_out)
     elif args.command == 'batch':
         for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
             for solver in solver_names:
@@ -194,7 +198,9 @@ def main():
                 for solver in ablation_names:
                     log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                     run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
-        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, [], args.ablation, not args.chosen, args.table_out)
+        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, [], args.ablation, not args.chosen,
+                            all_on=False,
+                            table_out=args.table_out)
     elif args.command == 'aggregation':
         with open(args.csv_out, "wt") as fout:
             def read_and_write(f, index):

@@ -19,7 +19,7 @@ fi
 
 if [ ! -d "./abs_synth" ]; then
   echo "first cloning abs_synth"
-  git clone https://github.com/yhyoon/abs_synth
+  git clone git@github.com:yhyoon/abs_synth.git
 fi
 
 if [ "$(uname)" = "Darwin" ]; then

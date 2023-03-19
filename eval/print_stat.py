@@ -460,7 +460,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
             log_write_with_time(f"empty table: {solver} on {problem}")
             return "{:>6s}".format("-")
 
-    detail_lines = [
+    txt_detail_lines = [
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
             "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
@@ -563,8 +563,82 @@ def draw_detail_table(dfs: AllDfs, table_out):
     table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n"
                     "Analysis times are not included in this table. You can see them by manually running\n"
                     " abs_synth with option '-log'.\n")
-    table_out.write("\n".join(detail_lines))
+    table_out.write("\n".join(txt_detail_lines))
     table_out.write("\n\n")
+
+    tex_detail_lines = [
+        "\\begin{table}",
+        "  \\centering",
+        "  \\caption{Results for 20 randomly chosen benchmark problems (5 for each domain), where \\textbf{Time} gives synthesis time,",
+        "  $T_{A}$ gives time spent for forward and backward analysis,",
+        "  and $|P|$ shows the size of the synthesized program (measured by number of AST nodes).}",
+        "  \\label{tbl:compare_detail}",
+        "  \\begin{tabular}{l|rr|rr|rrr}",
+        "    \\toprule",
+        "    \\multirow{2}{*}{Benchmark} &",
+        "      \\multicolumn{2}{c|}{ \\probe } & \\multicolumn{2}{c|}{ \\duet } &",
+        "      \\multicolumn{{3}}{{c}}{{ \\tool }} \\\\",
+        "    & \\textbf{Time} & $|P|$ & \\textbf{Time} & $|P|$ & \\textbf{Time} & $T_{A}$ & $|P|$  \\\\",
+        "    \\hline",
+        *[
+            "    {:25s} &  {:s} & {:s} &  {:s} & {:s} &  {:s} & {:s} & {:s} \\\\".format(
+                problem,
+                lookup_time_and_format("probe", "hd", problem),
+                lookup_size_and_format("probe", "hd", problem),
+                lookup_time_and_format("duet", "hd", problem),
+                lookup_size_and_format("duet", "hd", problem),
+                lookup_time_and_format("abs_synth", "hd", problem),
+                "-",
+                lookup_size_and_format("abs_synth", "hd", problem),
+            ) for problem in tbl1_rand_chosen_hd_problems
+        ],
+        "    \\hline",
+        *[
+            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+                problem,
+                lookup_time_and_format("probe", "deobfusc", problem),
+                lookup_size_and_format("probe", "deobfusc", problem),
+                lookup_time_and_format("duet", "deobfusc", problem),
+                lookup_size_and_format("duet", "deobfusc", problem),
+                lookup_time_and_format("abs_synth", "deobfusc", problem),
+                "-",
+                lookup_size_and_format("abs_synth", "deobfusc", problem),
+            ) for problem in tbl1_rand_chosen_deob_problems
+        ],
+        "    \\hline",
+        *[
+            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+                problem.replace("sygus_iter_", ""),
+                lookup_time_and_format("probe", "lobster", problem),
+                lookup_size_and_format("probe", "lobster", problem),
+                lookup_time_and_format("duet", "lobster", problem),
+                lookup_size_and_format("duet", "lobster", problem),
+                lookup_time_and_format("abs_synth", "lobster", problem),
+                "-",
+                lookup_size_and_format("abs_synth", "lobster", problem),
+            ) for problem in tbl1_rand_chosen_lobster_problems
+        ],
+        "    \\hline",
+        *[
+            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+                problem,
+                lookup_time_and_format("probe", "crypto", problem),
+                lookup_size_and_format("probe", "crypto", problem),
+                lookup_time_and_format("duet", "crypto", problem),
+                lookup_size_and_format("duet", "crypto", problem),
+                lookup_time_and_format("abs_synth", "crypto", problem),
+                "-",
+                lookup_size_and_format("abs_synth", "crypto", problem),
+            ) for problem in tbl1_rand_chosen_crypto_problems
+        ],
+        "    \\bottomrule",
+        "  \\end{tabular}",
+        "\\end{table}"
+    ]
+
+    with open(os.path.join(artifact_root_path, "figures", "tbl_sample_detail.tex"), "wt") as f:
+        f.write("\n".join(tex_detail_lines))
+    log_write_with_time("created tbl_sample_detail.tex: randomly chosen 5 samples for each domains")
 
 
 def draw_cmp_table(dfs: AllDfs, cmp_bench_names: List[str], table_out):
@@ -620,7 +694,7 @@ def draw_ablation_table(dfs: AllDfs, table_out):
 
     ablations_in_order = ["abs_synth", "abs_synth_fonly", "abs_synth_smt", "abs_synth_bf"]
 
-    summary_lines = [
+    txt_summary_lines = [
         "{:12s}|| {:27s}| {:27s}| {:27s}|".format(
             "".center(12, "-"),
             "".center(27, "-"), "".center(27, "-"), "".center(27, "-")
@@ -687,7 +761,7 @@ def draw_ablation_table(dfs: AllDfs, table_out):
         ),
     ]
 
-    summary_lines = [line.replace("nan", "  -") for line in summary_lines]
+    txt_summary_lines = [line.replace("nan", "  -") for line in txt_summary_lines]
 
     required_pairs = health_check_solver_bench(["abs_synth", *ablation_names], no_cond_bench_names)
     if len(required_pairs) > 0:
@@ -695,8 +769,52 @@ def draw_ablation_table(dfs: AllDfs, table_out):
 
     table_out.write("Fig. 4. (b) Statistics for the solving times and solution sizes."
                     "A(bsSynth), F(orwardOnly), S(MTSolver), B(ruteForce).\n")
-    table_out.write("\n".join(summary_lines))
+    table_out.write("\n".join(txt_summary_lines))
     table_out.write("\n\n")
+
+    tex_summary_lines = [
+        "\\begin{tabular}{c|r|r|r|r|r|r|r|r|r|r|r|r}",
+        "\\hline",
+        "Benchmark &",
+        "  \\multicolumn{4}{c|}{\\# Solved} &",
+        "    \\multicolumn{4}{c|}{Time (Average)} &",
+        "      \\multicolumn{4}{c}{Size (Average)} \\\\",
+        "        \\cline{{2-13}}",
+        "category\\! &",
+        "  {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} &",
+        "    {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} &",
+        "      {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} \\\\",
+        "\\hline \\hline",
+        "\\textsc{HD} \\! &",
+        "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['hd'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['hd'] for solver in ablations_in_order]),
+        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['hd'] for solver in ablations_in_order]),
+        "\\textsc{Deobfusc}\\! &",
+        "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['deobfusc'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['deobfusc'] for solver in ablations_in_order]),
+        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['deobfusc'] for solver in ablations_in_order]),
+        "\\textsc{Lobster}\\! &",
+        "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['lobster'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['lobster'] for solver in ablations_in_order]),
+        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['lobster'] for solver in ablations_in_order]),
+        "\\textsc{Crypto}\\! &",
+        "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['crypto'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['crypto'] for solver in ablations_in_order]),
+        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['crypto'] for solver in ablations_in_order]),
+        "\\hline",
+        "{\\bf Overall}\\! &",
+        "  {{\\bf {:.0f}}} &  {{\\bf {:.0f}}} & {{\\bf {:.0f}}} & {{\\bf {:.0f}}} &".format(*[ablation_summary['solved'][solver]['overall'] for solver in ablations_in_order]),
+        "    {{\\bf {:.1f}}} &  {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} &".format(*[ablation_summary['time_avg'][solver]['overall'] for solver in ablations_in_order]),
+        "      {{\\bf {:.1f}}} &  {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['overall'] for solver in ablations_in_order]),
+        "\\hline",
+        "\\end{tabular}"
+    ]
+
+    tex_summary_lines = [line.replace("nan", "  -") for line in tex_summary_lines]
+
+    with open(os.path.join(artifact_root_path, "figures", "tbl_ablation_summary.tex"), "wt") as f:
+        f.write("\n".join(tex_summary_lines))
+        log_write_with_time("created figures/tbl_ablation_summary.tex: statistics for ablation study")
 
 
 def prepare_df() -> AllDfs:
@@ -878,7 +996,6 @@ def draw_main_table(dfs: AllDfs, table_out):
     summary_lines = [line.replace("nan", "  -") for line in summary_lines]
 
     table_out.write("\n")
-
     # health check
     required_pairs = health_check_solver_bench(solver_names, no_cond_bench_names)
     if len(required_pairs) > 0:
@@ -888,14 +1005,80 @@ def draw_main_table(dfs: AllDfs, table_out):
     table_out.write("\n".join(summary_lines))
     table_out.write("\n\n")
 
+    tex_summary_lines = [
+        "\\resizebox{\\textwidth}{!}{%",
+        "\\small",
+        "\\begin{{tabular}}{{c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r}} \\hline",
+        "Benchmark  &",
+        "\\multicolumn{3}{c|}{\\# Solved}	&",
+        "\\multicolumn{3}{c|}{Time (Average)} &",
+        "\\multicolumn{3}{c} {Time (Median)} &",
+        "  \\multicolumn{3}{|c|}{Size (Average)} &",
+        "    \\multicolumn{3}{c} {Size (Median)} \\\\ \\cline{2-16}",
+        "category\\! &",
+        "\\textsc{{\\bf A}bsSynth} & \\textsc{{\\bf D}uet} & \\textsc{{\\bf P}robe} &",
+        "  \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "    \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "      \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "        \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} \\\\",
+        "\\hline \\hline",
+        "\\textsc{HD} \\! &",
+        "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['hd'] for solver in solver_names]),
+        "    {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_avg'][solver]['hd'] for solver in solver_names]),
+        "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['hd'] for solver in solver_names]),
+        "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['hd'] for solver in solver_names]),
+        "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['hd'] for solver in solver_names]),
+        "\\textsc{Deobfusc} \\! &",
+        "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['deobfusc'] for solver in solver_names]),
+        "    {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_avg'][solver]['deobfusc'] for solver in solver_names]),
+        "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['deobfusc'] for solver in solver_names]),
+        "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names]),
+        "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names]),
+        "\\textsc{Lobster}\\! &",
+        "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['lobster'] for solver in solver_names]),
+        "    {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_avg'][solver]['lobster'] for solver in solver_names]),
+        "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['lobster'] for solver in solver_names]),
+        "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['lobster'] for solver in solver_names]),
+        "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['lobster'] for solver in solver_names]),
+        "\\textsc{Crypto}\\! &",
+        "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['crypto'] for solver in solver_names]),
+        "    {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_avg'][solver]['crypto'] for solver in solver_names]),
+        "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['crypto'] for solver in solver_names]),
+        "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['crypto'] for solver in solver_names]),
+        "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['crypto'] for solver in solver_names]),
+        "\\hline",
+        "  {\\bf Overall} \\! &",
+        "  {{\\bf {:d}}} & {{\\bf {:d}}} & {{\\bf {:d}}} &".format(*[main_summary['solved'][solver]['overall'] for solver in solver_names]),
+        "    {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} &".format(*[main_summary['time_avg'][solver]['overall'] for solver in solver_names]),
+        "      {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} &".format(*[main_summary['time_med'][solver]['overall'] for solver in solver_names]),
+        "        {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} &".format(*[main_summary['size_avg'][solver]['overall'] for solver in solver_names]),
+        "          {{\\bf {:.0f}}} & {{\\bf {:.0f}}} & {{\\bf {:.0f}}} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['overall'] for solver in solver_names]),
+        "\\hline",
+        "\\end{tabular}}",
+    ]
+
+    tex_summary_lines = [line.replace("nan", "-") for line in tex_summary_lines]
+
+    with open(os.path.join(artifact_root_path, "figures", "tbl_summary.tex"), "wt") as f:
+        f.write("\n".join(tex_summary_lines))
+        log_write_with_time("created figures/tbl_summary.tex: statistics for overall bench & tools")
+
 
 def draw_all(print_main_table: bool,
              print_detail_table: bool,
              cmp_bench_names: List[str],
              print_ablation_table: bool,
              print_plot: bool,
+             *,
+             all_on: bool,
              table_out):
     dfs = prepare_df()
+
+    if all_on:
+        print_main_table = True
+        print_detail_table = True
+        print_ablation_table = True
+        print_plot = True
 
     for line in all_result_status_str():
         log_write_with_time(line)
@@ -946,6 +1129,8 @@ def main():
                         help='print Figure 4.(b) (ablation summary table) in the paper')
     parser.add_argument('-plot', action='store_true',
                         help='draw and store all the plots(Figure 2, Figure 3.(a)(b), Figure 4.(a) in the paper')
+    parser.add_argument('-all', action='store_true', default=False,
+                        help='activate all flag options to draw all figures and tables')
     parser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                         help='print tables to... (default: stdout)')
 
@@ -953,7 +1138,8 @@ def main():
 
     common_util.log_out = args.log_out
 
-    draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot, args.table_out)
+    draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot,
+             all_on=args.all, table_out=args.table_out)
 
 
 if __name__ == '__main__':

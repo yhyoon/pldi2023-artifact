@@ -1,7 +1,7 @@
 /.idea/
 **/__pycache__/
-/duet/_build/
-/abs_synth/_build/
-/abs_synth/_install
-/abs_synth/**/*.exe
-/probe/target/
+/duet
+/abs_synth
+/probe
+/figures
+/result
