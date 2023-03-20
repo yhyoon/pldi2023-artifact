@@ -487,12 +487,15 @@ def draw_detail_table(dfs: AllDfs, table_out):
             log_write_with_time(f"empty table: {solver} on {problem}")
             return "{:>6s}".format("-")
 
-    def lookup_analysis_time(solver, bench, problem) -> str:
+    def lookup_analysis_time(solver_name, bench, problem) -> str:
+        solver = solvers.solver_map[solver_name]
+        json_path = solver.result_path() + bench_name_to_dir[bench][len(bench_root_path):] + os.sep + problem + "." + solver_name + ".json"
         try:
-            with open(os.path.join(solvers.solver_map[solver].result_path(), problem + "." + solver + ".json")) as json_file:
+            with open(json_path) as json_file:
                 report_root = json.load(json_file)
                 return "{:.2f}".format(float(report_root["prune"]["time"]))
         except FileNotFoundError:
+            log_write_with_time(f"for {solver_name} {bench} {problem}, file not found: {json_path}")
             return "-"
 
     txt_detail_lines = [

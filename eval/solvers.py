@@ -38,9 +38,8 @@ class SolverAbsSynth(Solver):
         return os.path.join(artifact_root_path, "abs_synth", "abs_synth.exe")
 
     def params(self, target: str) -> List[str]:
-        file_name = os.path.split(target)[1]
-        problem_name = os.path.splitext(file_name)[0]
-        return ["-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-report_json", json_path, target]
 
     def extract_result(self, handle: timeout_runner.TimeoutRunner) -> Tuple[str, str, str]:
         result_string = handle.captured_stderr
@@ -64,9 +63,8 @@ class SolverAbsSynthBF(SolverAbsSynth):
         return "abs_synth_bf"
 
     def params(self, target: str) -> List[str]:
-        file_name = os.path.split(target)[1]
-        problem_name = os.path.splitext(file_name)[0]
-        return ["-pruning", "bruteforce", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-pruning", "bruteforce", "-report_json", json_path, target]
 
 
 class SolverAbsSynthSMT(SolverAbsSynth):
@@ -75,9 +73,8 @@ class SolverAbsSynthSMT(SolverAbsSynth):
         return "abs_synth_smt"
 
     def params(self, target: str) -> List[str]:
-        file_name = os.path.split(target)[1]
-        problem_name = os.path.splitext(file_name)[0]
-        return ["-pruning", "solver", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-pruning", "solver", "-report_json", json_path, target]
 
 
 class SolverAbsSynthForwardOnly(SolverAbsSynth):
@@ -86,9 +83,8 @@ class SolverAbsSynthForwardOnly(SolverAbsSynth):
         return "abs_synth_fonly"
 
     def params(self, target: str) -> List[str]:
-        file_name = os.path.split(target)[1]
-        problem_name = os.path.splitext(file_name)[0]
-        return ["-no_backward", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-no_backward", "-report_json", json_path, target]
 
 
 class SolverAbsSynthEx05(SolverAbsSynth):
@@ -97,9 +93,8 @@ class SolverAbsSynthEx05(SolverAbsSynth):
         return "abs_synth_ex05"
 
     def params(self, target: str) -> List[str]:
-        file_name = os.path.split(target)[1]
-        problem_name = os.path.splitext(file_name)[0]
-        return ["-ex_cut", "5", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-ex_cut", "5", "-report_json", json_path, target]
 
 
 class SolverAbsSynthEx10(SolverAbsSynth):
@@ -108,9 +103,8 @@ class SolverAbsSynthEx10(SolverAbsSynth):
         return "abs_synth_ex10"
 
     def params(self, target: str) -> List[str]:
-        file_name = os.path.split(target)[1]
-        problem_name = os.path.splitext(file_name)[0]
-        return ["-ex_cut", "10", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-ex_cut", "10", "-report_json", json_path, target]
 
 
 class SolverAbsSynthEx15(SolverAbsSynth):
@@ -119,9 +113,8 @@ class SolverAbsSynthEx15(SolverAbsSynth):
         return "abs_synth_ex15"
 
     def params(self, target: str) -> List[str]:
-        file_name = os.path.split(target)[1]
-        problem_name = os.path.splitext(file_name)[0]
-        return ["-ex_cut", "15", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-ex_cut", "15", "-report_json", json_path, target]
 
 
 class SolverDuet(Solver):
