@@ -431,9 +431,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
     def lookup_time_and_format(solver, bench, problem) -> str:
         try:
             if table_1[solver][bench][problem]["sol_type"] == "timeout":
-                return "{:>9s}".format("timeout")
+                return "{:>9s}".format(">1h")
             elif table_1[solver][bench][problem]["sol_type"] == "failure":
-                return "{:>9s}".format("failure")
+                return "{:>9s}".format(">1h")
             else:
                 v = table_1[solver][bench][problem]["time"]
                 if v is None or numpy.isnan(v):
@@ -568,6 +568,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
 
     tex_detail_lines = [
         "\\begin{table}",
+        "  \\small",
         "  \\centering",
         "  \\caption{Results for 20 randomly chosen benchmark problems (5 for each domain), where \\textbf{Time} gives synthesis time,",
         "  $T_{A}$ gives time spent for forward and backward analysis,",
@@ -577,12 +578,12 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "    \\toprule",
         "    \\multirow{2}{*}{Benchmark} &",
         "      \\multicolumn{2}{c|}{ \\probe } & \\multicolumn{2}{c|}{ \\duet } &",
-        "      \\multicolumn{{3}}{{c}}{{ \\tool }} \\\\",
+        "      \\multicolumn{3}{c}{ \\tool } \\\\",
         "    & \\textbf{Time} & $|P|$ & \\textbf{Time} & $|P|$ & \\textbf{Time} & $T_{A}$ & $|P|$  \\\\",
         "    \\hline",
         *[
             "    {:25s} &  {:s} & {:s} &  {:s} & {:s} &  {:s} & {:s} & {:s} \\\\".format(
-                problem,
+                problem.replace("_", "\\_"),
                 lookup_time_and_format("probe", "hd", problem),
                 lookup_size_and_format("probe", "hd", problem),
                 lookup_time_and_format("duet", "hd", problem),
@@ -595,7 +596,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "    \\hline",
         *[
             "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
-                problem,
+                problem.replace("_", "\\_"),
                 lookup_time_and_format("probe", "deobfusc", problem),
                 lookup_size_and_format("probe", "deobfusc", problem),
                 lookup_time_and_format("duet", "deobfusc", problem),
@@ -608,7 +609,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "    \\hline",
         *[
             "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
-                problem.replace("sygus_iter_", ""),
+                problem.replace("sygus_iter_", "").replace("_", "\\_"),
                 lookup_time_and_format("probe", "lobster", problem),
                 lookup_size_and_format("probe", "lobster", problem),
                 lookup_time_and_format("duet", "lobster", problem),
@@ -621,7 +622,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "    \\hline",
         *[
             "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
-                problem,
+                problem.replace("_", "\\_"),
                 lookup_time_and_format("probe", "crypto", problem),
                 lookup_size_and_format("probe", "crypto", problem),
                 lookup_time_and_format("duet", "crypto", problem),
@@ -1008,19 +1009,19 @@ def draw_main_table(dfs: AllDfs, table_out):
     tex_summary_lines = [
         "\\resizebox{\\textwidth}{!}{%",
         "\\small",
-        "\\begin{{tabular}}{{c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r}} \\hline",
+        "\\begin{tabular}{c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r} \\hline",
         "Benchmark  &",
-        "\\multicolumn{3}{c|}{\\# Solved}	&",
-        "\\multicolumn{3}{c|}{Time (Average)} &",
-        "\\multicolumn{3}{c} {Time (Median)} &",
-        "  \\multicolumn{3}{|c|}{Size (Average)} &",
-        "    \\multicolumn{3}{c} {Size (Median)} \\\\ \\cline{2-16}",
+        "  \\multicolumn{3}{c|}{\\# Solved}	&",
+        "    \\multicolumn{3}{c|}{Time (Average)} &",
+        "      \\multicolumn{3}{c} {Time (Median)} &",
+        "        \\multicolumn{3}{|c|}{Size (Average)} &",
+        "          \\multicolumn{3}{c} {Size (Median)} \\\\ \\cline{2-16}",
         "category\\! &",
-        "\\textsc{{\\bf A}bsSynth} & \\textsc{{\\bf D}uet} & \\textsc{{\\bf P}robe} &",
-        "  \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "  \\textsc{{\\bf A}bsSynth} & \\textsc{{\\bf D}uet} & \\textsc{{\\bf P}robe} &",
         "    \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
         "      \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
-        "        \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} \\\\",
+        "        \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "          \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} \\\\",
         "\\hline \\hline",
         "\\textsc{HD} \\! &",
         "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['hd'] for solver in solver_names]),
@@ -1035,7 +1036,7 @@ def draw_main_table(dfs: AllDfs, table_out):
         "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names]),
         "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names]),
         "\\textsc{Lobster}\\! &",
-        "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['lobster'] for solver in solver_names]),
+        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
         "    {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_avg'][solver]['lobster'] for solver in solver_names]),
         "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['lobster'] for solver in solver_names]),
         "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['lobster'] for solver in solver_names]),
