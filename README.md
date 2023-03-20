@@ -76,6 +76,28 @@ $
 $ pip3 install pandas matplotlib  # common
 ```
 
+* `probe`: a baseline solver
+```sh
+$ git clone git@github.com:shraddhabarke/probe.git
+$ cd probe
+$ git checkout f43ed831e0c8ac59ab68863cf6e5aaaa70ebfc3c  # last commit available at 2023-03-01
+$ git apply ../probe_fix.patch  # fix build problem
+$ cd ..
+```
+
+* `duet`: a baseline solver
+```sh
+$ git clone git@github.com:wslee/duet.git
+$ cd duet
+$ git checkout 627199a80c2eaad7c7a1c287ec65bf3de664e493  # last commit available at 2023-03-01
+$ cd ..
+```
+
+* `abs_synth`: our solver
+```sh
+git clone git@github.com:yhyoon/abs_synth.git
+```
+
 ## Build
 tested on :
 * Ubuntu 20.04.5 LTS 64bit Server
@@ -129,6 +151,7 @@ in the `pldi2023-artifact/figure` directory.
 After running the above commands, you can re-draw the tables and figures without re-running solvers by the following command:
 ```sh
 $ ./artifact stat [-main_table] [-detail_table] [-ablation_table] [-plot] [-table_out TABLE_FILE_PATH
+```
 
 ## Reproducing the results for the chosen 20 benchmark problems (Table 1 in the paper)
 ```sh
@@ -163,7 +186,7 @@ You can run AbsSynth to solve other synthesis problems as follows:
 ```sh
 $ abs_synth/abs_synth.exe <options> [a SyGuS input file]
 ```
-The tool is also available in a separate GitHub repository(Anonymized).
+The tool is also available in a separate [GitHub repository](https://github.com/yhyoon/abs_synth).
 
 You may find the options available by:
 ```sh
