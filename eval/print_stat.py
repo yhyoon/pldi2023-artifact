@@ -491,7 +491,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         try:
             with open(os.path.join(solvers.solver_map[solver].result_path(), problem + "." + solver + ".json")) as json_file:
                 report_root = json.load(json_file)
-                "{:.2f}".format(float(report_root["prune"]["time"]))
+                return "{:.2f}".format(float(report_root["prune"]["time"]))
         except FileNotFoundError:
             return "-"
 
