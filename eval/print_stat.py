@@ -316,6 +316,17 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
     ])
 
+    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["pbe-bitvec"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
+
+    draw_cactus("PBE-BITVEC", "pbe_bitvec", len(problem_list["pbe-bitvec"][0]), [
+        {'time_df': solver_bench_to_df["duet"]["pbe-bitvec"]["time"].sort_values(ignore_index=True),
+         'label': "DUET", 'color': 'g', 'marker': '^'},
+        {'time_df': solver_bench_to_df["abs_synth"]["pbe-bitvec"]["time"].sort_values(ignore_index=True),
+         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+    ])
+
     required_pairs = health_check_solver_bench(["abs_synth", *ablation_names], no_cond_bench_names)
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
@@ -390,6 +401,22 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
         [lobster_win.get("abs", 0), lobster_win.get("duet", 0)],
         [crypto_win.get("abs", 0), crypto_win.get("duet", 0)],
     ])
+
+    # stacked bar 5 - pbe cnt
+    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["pbe-bitvec"])
+    if len(required_pairs) > 0:
+        log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
+    draw_stack_bar("pbe_bitvec_cnt", "# Solved Benchmarks", ["ABSSYNTH", "DUET"], ["PBE_BITVEC"], ['gold'], [
+        [solver_bench_to_df[solver][bench]["time"].count() for solver in ["abs_synth", "duet"]]
+        for bench in ["pbe-bitvec"]
+    ])
+
+    # stacked bar6 - pbe fastest
+    pbe_bitvec_win = bench_cmp_map["pbe-bitvec"]["win"].value_counts()
+    draw_stack_bar("pbe_bitvec_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET"], ["PBE_BITVEC"], ['gold'], [
+        [pbe_bitvec_win.get("abs", 0), pbe_bitvec_win.get("duet", 0)],
+    ])
+
 
 
 def draw_detail_table(dfs: AllDfs, table_out):
