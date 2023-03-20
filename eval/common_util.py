@@ -69,6 +69,10 @@ ablation_names = [
     "abs_synth_bf", "abs_synth_smt", "abs_synth_fonly"
 ]
 
+ex_cut_names = [
+    "abs_synth_ex05", "abs_synth_ex10", "abs_synth_ex15"
+]
+
 tbl1_rand_chosen_hd_problems = [
     "hd-03-d5-prog",
     "hd-07-d0-prog",

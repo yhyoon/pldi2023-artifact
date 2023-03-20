@@ -80,7 +80,7 @@ def do_clean(target, yes):
 
 
 def prepare_result_dirs():
-    for solver in [*solver_names, *ablation_names]:
+    for solver in [*solver_names, *ablation_names, *ex_cut_names]:
         os.makedirs(os.path.join(result_root_path, solver, "bitvec", "deobfusc"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "bitvec", "hd"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "crypto"), exist_ok=True)

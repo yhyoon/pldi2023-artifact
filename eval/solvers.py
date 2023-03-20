@@ -91,6 +91,39 @@ class SolverAbsSynthForwardOnly(SolverAbsSynth):
         return ["-no_backward", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
 
 
+class SolverAbsSynthEx05(SolverAbsSynth):
+    # command: ./abs_synth.exe -ex_cut 5 [target_name]
+    def name(self) -> str:
+        return "abs_synth_ex05"
+
+    def params(self, target: str) -> List[str]:
+        file_name = os.path.split(target)[1]
+        problem_name = os.path.splitext(file_name)[0]
+        return ["-ex_cut", "5", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+
+
+class SolverAbsSynthEx10(SolverAbsSynth):
+    # command: ./abs_synth.exe -ex_cut 10 [target_name]
+    def name(self) -> str:
+        return "abs_synth_ex10"
+
+    def params(self, target: str) -> List[str]:
+        file_name = os.path.split(target)[1]
+        problem_name = os.path.splitext(file_name)[0]
+        return ["-ex_cut", "10", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+
+
+class SolverAbsSynthEx15(SolverAbsSynth):
+    # command: ./abs_synth.exe -ex_cut 15 [target_name]
+    def name(self) -> str:
+        return "abs_synth_ex15"
+
+    def params(self, target: str) -> List[str]:
+        file_name = os.path.split(target)[1]
+        problem_name = os.path.splitext(file_name)[0]
+        return ["-ex_cut", "15", "-report_json", os.path.join(self.result_path(), problem_name + "." + self.name() + ".json"), target]
+
+
 class SolverDuet(Solver):
     # command for bv: ./main.native -fastdt -ex_all -max_size 10000 -init_comp_size 3 [target_name]
     # command for circuit: ./main.native -max_size 128 -max_height 16 -init_comp_size 1 [target_name]
@@ -180,6 +213,9 @@ solver_map: Dict[str, Solver] = {
     "abs_synth_bf": SolverAbsSynthBF(),
     "abs_synth_smt": SolverAbsSynthSMT(),
     "abs_synth_fonly": SolverAbsSynthForwardOnly(),
+    "abs_synth_ex05": SolverAbsSynthEx05(),
+    "abs_synth_ex10": SolverAbsSynthEx10(),
+    "abs_synth_ex15": SolverAbsSynthEx15(),
     "duet": SolverDuet(),
     "probe": SolverProbe(),
 }
