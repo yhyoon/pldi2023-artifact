@@ -2,7 +2,7 @@
 
 ## Virtual Machine Image
 
-We provide a VirtualBox VM image to address the difficulty
+We provide a [VirtualBox VM image](https://zenodo.org/record/7710618/files/pldi2023artifact_VM.zip?download=1) to address the difficulty
 of setting up the execution environment for the artifact.
 The image includes all the necessary components to immediately run the artifact.
 You can skip the [Dependencies](#dependencies) and [Build](#build) part
