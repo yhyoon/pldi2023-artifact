@@ -210,14 +210,15 @@ def main():
                             pass
                         else:
                             solver_name, problem, sol_type, sol_time, sol_size, sol = print_stat.parse_csv_result(line)
+                            bench_name = problem_bench_map[problem]
                             if sol_type == "success":
-                                fout.write(f"{solver_name},{problem},{sol_type},{sol_time},{sol_size},{sol}\n")
+                                fout.write(f"{solver_name},{bench_name},{problem},{sol_type},{sol_time},{sol_size},{sol}\n")
                             elif sol_time is not None:
-                                fout.write(f"{solver_name},{problem},{sol_type},{sol_time},n/a,n/a\n")
+                                fout.write(f"{solver_name},{bench_name},{problem},{sol_type},{sol_time},n/a,n/a\n")
                             else:
-                                fout.write(f"{solver_name},{problem},{sol_type},n/a,n/a,n/a\n")
+                                fout.write(f"{solver_name},{bench_name},{problem},{sol_type},n/a,n/a,n/a\n")
 
-            fout.write("solver,problem,sol_type,time,size,sol\n")
+            fout.write("solver,bench,problem,sol_type,time,size,sol\n")
             traverse(result_root_path,
                      is_target=lambda path: os.path.split(path)[1].endswith(".result.txt"),
                      target_handler=read_and_write)

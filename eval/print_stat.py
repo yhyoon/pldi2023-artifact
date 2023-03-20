@@ -2,6 +2,7 @@ from typing import Optional, NamedTuple
 
 import argparse
 import itertools
+import json
 import matplotlib.pyplot as plt
 import numpy
 
@@ -418,7 +419,6 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
 
-
 def draw_detail_table(dfs: AllDfs, table_out):
     def solver_problem_detail(solver: str, problem: str) -> pd.Series:
         try:
@@ -486,6 +486,14 @@ def draw_detail_table(dfs: AllDfs, table_out):
         except KeyError as exn:
             log_write_with_time(f"empty table: {solver} on {problem}")
             return "{:>6s}".format("-")
+
+    def lookup_analysis_time(solver, bench, problem) -> str:
+        try:
+            with open(os.path.join(solvers.solver_map[solver].result_path(), problem + "." + solver + ".json")) as json_file:
+                report_root = json.load(json_file)
+                "{:.2f}".format(float(report_root["prune"]["time"]))
+        except FileNotFoundError:
+            return "-"
 
     txt_detail_lines = [
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
@@ -616,7 +624,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("duet", "hd", problem),
                 lookup_size_and_format("duet", "hd", problem),
                 lookup_time_and_format("abs_synth", "hd", problem),
-                "-",
+                lookup_analysis_time("abs_synth", "hd", problem),
                 lookup_size_and_format("abs_synth", "hd", problem),
             ) for problem in tbl1_rand_chosen_hd_problems
         ],
@@ -629,7 +637,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("duet", "deobfusc", problem),
                 lookup_size_and_format("duet", "deobfusc", problem),
                 lookup_time_and_format("abs_synth", "deobfusc", problem),
-                "-",
+                lookup_analysis_time("abs_synth", "deobfusc", problem),
                 lookup_size_and_format("abs_synth", "deobfusc", problem),
             ) for problem in tbl1_rand_chosen_deob_problems
         ],
@@ -642,7 +650,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("duet", "lobster", problem),
                 lookup_size_and_format("duet", "lobster", problem),
                 lookup_time_and_format("abs_synth", "lobster", problem),
-                "-",
+                lookup_analysis_time("abs_synth", "lobster", problem),
                 lookup_size_and_format("abs_synth", "lobster", problem),
             ) for problem in tbl1_rand_chosen_lobster_problems
         ],
@@ -655,7 +663,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("duet", "crypto", problem),
                 lookup_size_and_format("duet", "crypto", problem),
                 lookup_time_and_format("abs_synth", "crypto", problem),
-                "-",
+                lookup_analysis_time("abs_synth", "crypto", problem),
                 lookup_size_and_format("abs_synth", "crypto", problem),
             ) for problem in tbl1_rand_chosen_crypto_problems
         ],
