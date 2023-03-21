@@ -818,7 +818,7 @@ def draw_ablation_table(dfs: AllDfs, table_out):
         "  \\multicolumn{4}{c|}{\\# Solved} &",
         "    \\multicolumn{4}{c|}{Time (Average)} &",
         "      \\multicolumn{4}{c}{Size (Average)} \\\\",
-        "        \\cline{{2-13}}",
+        "        \\cline{2-13}",
         "category\\! &",
         "  {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} &",
         "    {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} &",
