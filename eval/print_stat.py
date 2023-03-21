@@ -101,14 +101,20 @@ def read_all() -> pd.DataFrame:
 
 
 def build_time_cmp_table(problem_df, abs_df, duet_df, probe_df=None) -> pd.DataFrame:
-    accum_df: pd.DataFrame = problem_df.join(abs_df.rename(columns={"time": "abs"})["abs"])
-    accum_df: pd.DataFrame = accum_df.join(duet_df.rename(columns={"time": "duet"})["duet"])
+    accum_df: pd.DataFrame = problem_df.join(
+        abs_df.rename(columns={"time": "abs", "size": "abs_size"})[["abs", "abs_size"]]
+    )
+    accum_df: pd.DataFrame = accum_df.join(
+        duet_df.rename(columns={"time": "duet", "size": "duet_size"})[["duet", "duet_size"]]
+    )
 
     if probe_df is not None:
-        accum_df: pd.DataFrame = accum_df.join(probe_df.rename(columns={"time": "probe"})["probe"])
-        accum_df["win"] = accum_df[["abs", "duet", "probe"]].idxmin(axis=1)
+        accum_df: pd.DataFrame = accum_df.join(
+            probe_df.rename(columns={"time": "probe", "size": "probe_size"})[["probe", "probe_size"]]
+        )
+        accum_df["fastest"] = accum_df[["abs", "duet", "probe"]].idxmin(axis=1)
     else:
-        accum_df["win"] = accum_df[["abs", "duet"]].idxmin(axis=1)
+        accum_df["fastest"] = accum_df[["abs", "duet"]].idxmin(axis=1)
 
     return accum_df.sort_index()
 
@@ -379,8 +385,8 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
     # stacked bar2 - bitvec fastest
-    hd_win = bench_cmp_map["hd"]["win"].value_counts()
-    deob_win = bench_cmp_map["deobfusc"]["win"].value_counts()
+    hd_win = bench_cmp_map["hd"]["fastest"].value_counts()
+    deob_win = bench_cmp_map["deobfusc"]["fastest"].value_counts()
     draw_stack_bar("bv_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET", "PROBE"], ["DEOBFUSC", "HD"], bar_colors, [
         [deob_win.get("abs", 0), deob_win.get("duet", 0), deob_win.get("probe", 0)],
         [hd_win.get("abs", 0), hd_win.get("duet", 0), hd_win.get("probe", 0)],
@@ -396,8 +402,8 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
     # stacked bar4 - circuit fastest
-    lobster_win = bench_cmp_map["lobster"]["win"].value_counts()
-    crypto_win = bench_cmp_map["crypto"]["win"].value_counts()
+    lobster_win = bench_cmp_map["lobster"]["fastest"].value_counts()
+    crypto_win = bench_cmp_map["crypto"]["fastest"].value_counts()
     draw_stack_bar("circuit_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET"], ["LOBSTER", "CRYPTO"], bar_colors, [
         [lobster_win.get("abs", 0), lobster_win.get("duet", 0)],
         [crypto_win.get("abs", 0), crypto_win.get("duet", 0)],
@@ -413,7 +419,7 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
     # stacked bar6 - pbe fastest
-    pbe_bitvec_win = bench_cmp_map["pbe-bitvec"]["win"].value_counts()
+    pbe_bitvec_win = bench_cmp_map["pbe-bitvec"]["fastest"].value_counts()
     draw_stack_bar("pbe_bitvec_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET"], ["PBE_BITVEC"], ['gold'], [
         [pbe_bitvec_win.get("abs", 0), pbe_bitvec_win.get("duet", 0)],
     ])
@@ -928,6 +934,32 @@ def draw_main_table(dfs: AllDfs, table_out):
         solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in bench_names])
         for solver in solver_names
     }
+
+    a_p_both_solved_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['abs_size', 'probe_size'])
+    a_both_mean = a_p_both_solved_hd['abs_size'].mean()
+    p_both_mean = a_p_both_solved_hd['probe_size'].mean()
+    a_only_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['abs_size'])
+    a_only_hd = a_only_hd[a_only_hd["probe_size"].isna()]
+    p_only_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['probe_size'])
+    p_only_hd = p_only_hd[p_only_hd["abs_size"].isna()]
+    a_only_mean, a_only_cnt = a_only_hd['abs_size'].mean(), a_only_hd['abs_size'].count()
+    p_only_mean, p_only_cnt = p_only_hd['probe_size'].mean(), p_only_hd['probe_size'].count()
+
+    log_write_with_time(f"For HD, 'abssynth probe both solved' problems avg size = [{a_both_mean:.1f}, {p_both_mean:.1f}]")
+    log_write_with_time(f"abssynth only avg size = {a_only_mean:.1f} for {a_only_cnt:d}, probe only avg size = {p_only_mean:.1f} for {p_only_cnt:d}")
+
+    a_p_both_solved_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['abs_size', 'probe_size'])
+    a_both_mean = a_p_both_solved_deobfusc['abs_size'].mean()
+    p_both_mean = a_p_both_solved_deobfusc['probe_size'].mean()
+    a_only_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['abs_size'])
+    a_only_deobfusc = a_only_deobfusc[a_only_deobfusc["probe_size"].isna()]
+    p_only_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['probe_size'])
+    p_only_deobfusc = p_only_deobfusc[p_only_deobfusc["abs_size"].isna()]
+
+    a_only_mean, a_only_cnt = a_only_deobfusc['abs_size'].mean(), a_only_deobfusc['abs_size'].count()
+    p_only_mean, p_only_cnt = p_only_deobfusc['probe_size'].mean(), p_only_deobfusc['probe_size'].count()
+    log_write_with_time(f"For Deobfusc, 'abssynth probe both solved' problems avg size = [{a_both_mean:.1f}, {p_both_mean:.1f}]")
+    log_write_with_time(f"abssynth only avg size = {a_only_mean:.1f} for {a_only_cnt:d}, probe only avg size = {p_only_mean:.1f} for {p_only_cnt:d}")
 
     # figure 3.(c): main summary table raw data
     # item(solved|time_avg|time_med|size_avg|size_med) |->
