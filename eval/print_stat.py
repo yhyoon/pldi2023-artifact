@@ -437,6 +437,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "deobfusc": tbl1_rand_chosen_deob_problems,
         "lobster": tbl1_rand_chosen_lobster_problems,
         "crypto": tbl1_rand_chosen_crypto_problems,
+        "pbe-bitvec": tbl1_rand_chosen_pbe_problems,
     }
 
     # table 1: randomly chosen detail table raw data
@@ -450,7 +451,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 problem: solver_problem_detail(solver, problem)
                 for problem in bench_to_chosen[bench]
             }
-            for bench in no_cond_bench_names
+            for bench in bench_names
         }
         for solver in solver_names
     }
@@ -468,7 +469,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 else:
                     return "{:>9.2f}".format(v)
         except KeyError as exn:
-            log_write_with_time(f"empty table: {solver} on {problem}")
+            log_write_with_time(f"empty table: {solver} on {problem}: {bench}")
             return "{:>9s}".format("-")
 
     def lookup_size_and_format(solver, bench, problem) -> str:
@@ -484,7 +485,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 else:
                     return "{:>6.0f}".format(v)
         except KeyError as exn:
-            log_write_with_time(f"empty table: {solver} on {problem}")
+            log_write_with_time(f"empty table: {solver} on {problem}: {bench}")
             return "{:>6s}".format("-")
 
     def lookup_analysis_time(solver_name, bench, problem) -> str:
@@ -550,6 +551,24 @@ def draw_detail_table(dfs: AllDfs, table_out):
                     ]
                 ],
             ) for problem in tbl1_rand_chosen_deob_problems
+        ],
+        "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
+            "".center(25, "-"),
+            "".center(15, "-"), "".center(15, "-"), "".center(15, "-"), "".center(15, "-"),
+        ),
+        *[
+            "{:25s}|| {:9s}{:6s}| {:9s}{:6s}| {:9s}{:6s}|".format(
+                problem,
+                *[
+                    *[
+                        lf(solver, "pbe-bitvec", problem)
+                        for solver, lf in itertools.product(
+                            ["probe", "duet", "abs_synth"],
+                            [lookup_time_and_format, lookup_size_and_format]
+                        )
+                    ]
+                ],
+            ) for problem in tbl1_rand_chosen_pbe_problems
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -643,6 +662,19 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_analysis_time("abs_synth", "deobfusc", problem),
                 lookup_size_and_format("abs_synth", "deobfusc", problem),
             ) for problem in tbl1_rand_chosen_deob_problems
+        ],
+        "    \\hline",
+        *[
+            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+                problem.replace("_", "\\_"),
+                lookup_time_and_format("probe", "pbe-bitvec", problem),
+                lookup_size_and_format("probe", "pbe-bitvec", problem),
+                lookup_time_and_format("duet", "pbe-bitvec", problem),
+                lookup_size_and_format("duet", "pbe-bitvec", problem),
+                lookup_time_and_format("abs_synth", "pbe-bitvec", problem),
+                lookup_analysis_time("abs_synth", "pbe-bitvec", problem),
+                lookup_size_and_format("abs_synth", "pbe-bitvec", problem),
+            ) for problem in tbl1_rand_chosen_pbe_problems
         ],
         "    \\hline",
         *[
@@ -892,8 +924,8 @@ def prepare_df() -> AllDfs:
 
 
 def draw_main_table(dfs: AllDfs, table_out):
-    solver_to_non_ite_df = {
-        solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
+    solver_to_all_bench_df = {
+        solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in bench_names])
         for solver in solver_names
     }
 
@@ -909,7 +941,7 @@ def draw_main_table(dfs: AllDfs, table_out):
                     bench: dfs.solver_bench_to_df[solver][bench]["time"].count()
                     for bench in bench_names
                 },
-                "overall": solver_to_non_ite_df[solver]["time"].count()
+                "overall": solver_to_all_bench_df[solver]["time"].count()
             }
             for solver in solver_names
         },
@@ -919,7 +951,7 @@ def draw_main_table(dfs: AllDfs, table_out):
                     bench: dfs.solver_bench_to_df[solver][bench]["time"].mean() if dfs.solver_bench_to_df[solver][bench]["time"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
-                "overall": solver_to_non_ite_df[solver]["time"].mean() if solver_to_non_ite_df[solver]["time"].count() > 0 else numpy.nan
+                "overall": solver_to_all_bench_df[solver]["time"].mean() if solver_to_all_bench_df[solver]["time"].count() > 0 else numpy.nan
             }
             for solver in solver_names
         },
@@ -929,7 +961,7 @@ def draw_main_table(dfs: AllDfs, table_out):
                     bench: dfs.solver_bench_to_df[solver][bench]["time"].median()
                     for bench in bench_names
                 },
-                "overall": solver_to_non_ite_df[solver]["time"].median()
+                "overall": solver_to_all_bench_df[solver]["time"].median()
             }
             for solver in solver_names
         },
@@ -939,7 +971,7 @@ def draw_main_table(dfs: AllDfs, table_out):
                     bench: dfs.solver_bench_to_df[solver][bench]["size"].mean() if dfs.solver_bench_to_df[solver][bench]["size"].count() > 0 else numpy.nan
                     for bench in bench_names
                 },
-                "overall": solver_to_non_ite_df[solver]["size"].mean() if solver_to_non_ite_df[solver]["size"].count() > 0 else numpy.nan
+                "overall": solver_to_all_bench_df[solver]["size"].mean() if solver_to_all_bench_df[solver]["size"].count() > 0 else numpy.nan
             }
             for solver in solver_names
         },
@@ -949,7 +981,7 @@ def draw_main_table(dfs: AllDfs, table_out):
                     bench: dfs.solver_bench_to_df[solver][bench]["size"].median()
                     for bench in bench_names
                 },
-                "overall": solver_to_non_ite_df[solver]["size"].median()
+                "overall": solver_to_all_bench_df[solver]["size"].median()
             }
             for solver in solver_names
         },
@@ -995,6 +1027,14 @@ def draw_main_table(dfs: AllDfs, table_out):
             *[main_summary['time_med'][solver]['deobfusc'] for solver in solver_names],
             *[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names],
             *[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names],
+        ),
+        "{:11s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
+            "PBE-BV".center(12, " "),
+            *[main_summary['solved'][solver]['pbe-bitvec'] for solver in solver_names],
+            *[main_summary['time_avg'][solver]['pbe-bitvec'] for solver in solver_names],
+            *[main_summary['time_med'][solver]['pbe-bitvec'] for solver in solver_names],
+            *[main_summary['size_avg'][solver]['pbe-bitvec'] for solver in solver_names],
+            *[main_summary['size_med'][solver]['pbe-bitvec'] for solver in solver_names],
         ),
         "{:11s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
             "LOBSTER".center(12, " "),
@@ -1073,18 +1113,24 @@ def draw_main_table(dfs: AllDfs, table_out):
         "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['deobfusc'] for solver in solver_names]),
         "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names]),
         "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names]),
+        "\\textsc{PBE-BitVec} \\! &",
+        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
+        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
+        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
+        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
+        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
         "\\textsc{Lobster}\\! &",
         "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
-        "    {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_avg'][solver]['lobster'] for solver in solver_names]),
-        "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['lobster'] for solver in solver_names]),
-        "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['lobster'] for solver in solver_names]),
-        "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['lobster'] for solver in solver_names]),
+        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
+        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
+        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
+        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
         "\\textsc{Crypto}\\! &",
-        "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['crypto'] for solver in solver_names]),
-        "    {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_avg'][solver]['crypto'] for solver in solver_names]),
-        "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['crypto'] for solver in solver_names]),
-        "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['crypto'] for solver in solver_names]),
-        "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['crypto'] for solver in solver_names]),
+        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
+        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
+        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
+        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
+        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
         "\\hline",
         "  {\\bf Overall} \\! &",
         "  {{\\bf {:d}}} & {{\\bf {:d}}} & {{\\bf {:d}}} &".format(*[main_summary['solved'][solver]['overall'] for solver in solver_names]),

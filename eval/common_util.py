@@ -78,35 +78,43 @@ tbl1_rand_chosen_hd_problems = [
     "hd-07-d0-prog",
     "hd-14-d5-prog",
     "hd-19-d1-prog",
-    "hd-20-d1-prog"
+    "hd-20-d1-prog",
 ]
 tbl1_rand_chosen_deob_problems = [
     "target_9",
     "target_119",
     "target_385",
     "target_410",
-    "target_449"
+    "target_449",
 ]
 tbl1_rand_chosen_lobster_problems = [
     "hd09.eqn_sygus_iter_45_0",
     "longest_1bit-opt.eqn_sygus_iter_63_1",
     "longest_1bit-opt.eqn_sygus_iter_75_1",
     "p03.eqn_sygus_iter_38_2",
-    "p09.eqn_sygus_iter_49_1"
+    "p09.eqn_sygus_iter_49_1",
 ]
 tbl1_rand_chosen_crypto_problems = [
     "CrCy_2-P6_2-P6",
     "CrCy_5-P9-D5-sIn",
     "CrCy_8-P12-D5-sIn4",
     "CrCy_8-P12-D7-sIn5",
-    "CrCy_10-sbox2-D5-sIn11"
+    "CrCy_10-sbox2-D5-sIn11",
+]
+tbl1_rand_chosen_pbe_problems = [
+    "33_1000",
+    "6_100",
+    "78_100",
+    "icfp_gen_10.7",
+    "icfp_gen_14.1",
 ]
 
 tbl1_rand_chosen_bench = frozenset((
     *tbl1_rand_chosen_hd_problems,
     *tbl1_rand_chosen_deob_problems,
     *tbl1_rand_chosen_lobster_problems,
-    *tbl1_rand_chosen_crypto_problems
+    *tbl1_rand_chosen_crypto_problems,
+    *tbl1_rand_chosen_pbe_problems,
 ))
 
 
