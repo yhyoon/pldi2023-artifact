@@ -496,7 +496,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
 
     def lookup_analysis_time(solver_name, bench, problem) -> str:
         solver = solvers.solver_map[solver_name]
-        json_path = solver.result_path() + bench_name_to_dir[bench][len(bench_root_path):] + os.sep + problem + "." + solver_name + ".json"
+        json_path = solver.result_path() + bench_name_to_dir[bench][len(bench_root_path):] + os.sep + problem + ".json"
         try:
             with open(json_path) as json_file:
                 report_root = json.load(json_file)
