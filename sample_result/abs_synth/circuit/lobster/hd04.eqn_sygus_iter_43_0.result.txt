@@ -1,1 +1,0 @@
-abs_synth,hd04.eqn_sygus_iter_43_0,0.385388152,16,(define-fun skel ( (n142 Bool) (n129 Bool) (n135 Bool) (n133 Bool) (n108 Bool) (n125 Bool)) Bool (and (or (not n135) (not (and n129 n133))) (not (or (not n142) (xor n108 (not n125))))))

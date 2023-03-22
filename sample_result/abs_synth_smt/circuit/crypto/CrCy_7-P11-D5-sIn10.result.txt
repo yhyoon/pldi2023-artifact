@@ -1,1 +1,0 @@
-abs_synth_smt,CrCy_7-P11-D5-sIn10,0.565933373,9,(define-fun skel ( (LN85 Bool) (LN86 Bool)) Bool (xor (not (or LN85 LN85)) (not (not (not LN86)))))

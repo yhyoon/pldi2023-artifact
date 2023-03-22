@@ -1,1 +1,0 @@
-duet,p19.eqn_sygus_iter_98_0,0.362038102,11,(define-fun skel ( (n194 Bool) (n237 Bool) (n243 Bool) (n231 Bool)) Bool (and (and n231 (and n243 n237)) (xor n243 (xor n237 n194))))

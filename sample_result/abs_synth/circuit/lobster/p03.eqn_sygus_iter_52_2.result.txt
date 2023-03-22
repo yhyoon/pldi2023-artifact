@@ -1,1 +1,0 @@
-abs_synth,p03.eqn_sygus_iter_52_2,0.07850543,9,(define-fun skel ( (i18 Bool) (i17 Bool) (i16 Bool) (i19 Bool)) Bool (and (not (or i18 i17)) (not (or i16 i19))))

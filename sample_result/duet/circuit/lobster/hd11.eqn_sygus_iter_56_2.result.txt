@@ -1,1 +1,0 @@
-duet,hd11.eqn_sygus_iter_56_2,0.235576945,9,(define-fun skel ( (i_13 Bool) (i_16 Bool) (i_15 Bool) (i_14 Bool)) Bool (or (not (or i_16 i_13)) (not (and i_14 i_15))))

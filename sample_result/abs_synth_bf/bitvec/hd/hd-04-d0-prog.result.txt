@@ -1,1 +1,0 @@
-abs_synth_bf,hd-04-d0-prog,0.047867722,5,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvxor x (bvsub x #x0000000000000001)))

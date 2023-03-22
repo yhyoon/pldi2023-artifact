@@ -1,1 +1,0 @@
-duet,p19.eqn_sygus_iter_14_0,0.983896407,9,(define-fun skel ( (n200 Bool) (n215 Bool) (n209 Bool) (i22 Bool)) Bool (xor (and n200 (and n209 (and i22 n215))) i22))

@@ -1,1 +1,0 @@
-abs_synth,target_32,timeout,timeout,timeout

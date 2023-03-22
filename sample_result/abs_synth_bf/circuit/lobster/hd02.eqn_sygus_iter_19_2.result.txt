@@ -1,1 +1,0 @@
-abs_synth_bf,hd02.eqn_sygus_iter_19_2,6.364352812,15,(define-fun skel ( (n187 Bool) (n142 Bool) (n173 Bool) (n114 Bool) (n86 Bool) (n74 Bool)) Bool (and (and n142 (xor n173 (xor n114 n74))) (and (and n187 n86) (and n173 n114))))

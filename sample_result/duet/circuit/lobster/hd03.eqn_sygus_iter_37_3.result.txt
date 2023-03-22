@@ -1,1 +1,0 @@
-duet,hd03.eqn_sygus_iter_37_3,0.89852899,11,(define-fun skel ( (i38 Bool) (i6 Bool) (i5 Bool) (i37 Bool) (i36 Bool) (i4 Bool)) Bool (and (and i4 (xor i37 i5)) (and i36 (xor i6 i38))))

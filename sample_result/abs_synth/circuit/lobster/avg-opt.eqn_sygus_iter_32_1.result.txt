@@ -1,1 +1,0 @@
-abs_synth,avg-opt.eqn_sygus_iter_32_1,6.823565338,22,(define-fun skel ( (n149 Bool) (n142 Bool) (n129 Bool) (n136 Bool) (n126 Bool)) Bool (xor (and (and n126 (not n142)) (or (not n129) (not n136))) (and (not n149) (or (not n126) (and n136 (not (not n129)))))))

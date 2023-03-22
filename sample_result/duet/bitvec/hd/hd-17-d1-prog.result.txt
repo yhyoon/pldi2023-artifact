@@ -1,1 +1,0 @@
-duet,hd-17-d1-prog,0.274226455,18,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvsub (bvand x (bvsub x #x0000000000000001)) (bvand (bvsub (bvxor x (bvneg x)) x) (bvand x (bvadd x x)))))

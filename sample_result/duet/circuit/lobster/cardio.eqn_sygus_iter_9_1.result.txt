@@ -1,1 +1,0 @@
-duet,cardio.eqn_sygus_iter_9_1,0.326085068,13,(define-fun skel ( (n265 Bool) (n260 Bool) (n256 Bool) (n252 Bool)) Bool (xor (and n256 (not (or n260 n265))) (and (not n265) (or n252 n260))))

@@ -1,1 +1,0 @@
-abs_synth,hd-07-d1-prog,0.079436524,6,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvand (bvnot x) (bvneg (bvnot x))))

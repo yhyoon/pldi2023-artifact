@@ -1,1 +1,0 @@
-abs_synth_smt,CrCy_10-sbox2-D5-sIn59,0.729526045,7,(define-fun skel ( (LN33 Bool) (LN92 Bool)) Bool (and (not (not (or LN33 LN33))) LN92))

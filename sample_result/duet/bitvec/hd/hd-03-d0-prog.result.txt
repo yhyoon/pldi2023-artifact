@@ -1,1 +1,0 @@
-duet,hd-03-d0-prog,11.139009947,failure,failure

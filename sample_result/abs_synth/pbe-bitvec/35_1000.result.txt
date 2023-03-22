@@ -1,1 +1,0 @@
-abs_synth,35_1000,timeout,timeout,timeout

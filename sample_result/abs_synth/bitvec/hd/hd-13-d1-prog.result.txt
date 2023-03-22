@@ -1,1 +1,0 @@
-abs_synth,hd-13-d1-prog,0.085287962,8,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvor (bvlshr (bvneg x) #x000000000000003f) (bvashr x x)))

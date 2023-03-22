@@ -1,1 +1,0 @@
-probe,target_447,4.855739454,9,(bvadd (bvor c d) (bvand (bvadd c c) d))

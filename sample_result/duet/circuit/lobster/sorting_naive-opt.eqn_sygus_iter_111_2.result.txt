@@ -1,1 +1,0 @@
-duet,sorting_naive-opt.eqn_sygus_iter_111_2,0.551063373,10,(define-fun skel ( (n386 Bool) (n389 Bool) (n393 Bool) (n388 Bool) (i_3 Bool)) Bool (and (and n393 (xor n389 n386)) (and i_3 (not n388))))

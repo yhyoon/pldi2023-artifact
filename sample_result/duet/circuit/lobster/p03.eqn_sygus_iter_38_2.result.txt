@@ -1,1 +1,0 @@
-duet,p03.eqn_sygus_iter_38_2,0.219765648,9,(define-fun skel ( (i22 Bool) (i21 Bool) (i20 Bool) (i23 Bool)) Bool (and (not (or i20 i22)) (not (or i23 i21))))

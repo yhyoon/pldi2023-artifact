@@ -1,1 +1,0 @@
-duet,longest_1bit-opt.eqn_sygus_iter_109_0,0.593430643,11,(define-fun skel ( (n74 Bool) (n85 Bool) (n78 Bool) (n94 Bool) (n63 Bool)) Bool (and (not (or n63 n94)) (not (and n78 (and n85 n74)))))

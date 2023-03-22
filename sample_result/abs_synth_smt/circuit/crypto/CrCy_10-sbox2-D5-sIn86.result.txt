@@ -1,1 +1,0 @@
-abs_synth_smt,CrCy_10-sbox2-D5-sIn86,45.648269707,fail_with_max_size,fail_with_max_size

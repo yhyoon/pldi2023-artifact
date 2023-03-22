@@ -1,1 +1,0 @@
-abs_synth,CrCy_8-P12-D7-sIn25,0.073063498,5,(define-fun skel ( (LN155 Bool) (LN162 Bool) (LN165 Bool)) Bool (xor LN155 (xor LN162 LN165)))

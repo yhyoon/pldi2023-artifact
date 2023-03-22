@@ -1,1 +1,0 @@
-probe,target_177,34.182668521,10,(bvor (bvneg (bvnot c)) (bvor (bvsub d e) (bvneg e)))

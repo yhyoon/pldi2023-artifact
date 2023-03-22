@@ -1,1 +1,0 @@
-abs_synth_fonly,sorting_naive.eqn_sygus_iter_13_2,1779.637342916,16,(define-fun skel ( (n162 Bool) (n166 Bool) (n214 Bool) (n210 Bool) (n118 Bool) (n113 Bool)) Bool (and (not (xor n162 (not n166))) (not (or (xor n210 (not n214)) (xor n113 (not n118))))))

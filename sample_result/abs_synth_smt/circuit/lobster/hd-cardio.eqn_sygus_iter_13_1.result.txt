@@ -1,1 +1,0 @@
-abs_synth_smt,hd-cardio.eqn_sygus_iter_13_1,18.825267888,11,(define-fun skel ( (n201 Bool) (n203 Bool) (n202 Bool) (n188 Bool)) Bool (xor (and n202 (and n203 n188)) (not (or n201 (not n188)))))

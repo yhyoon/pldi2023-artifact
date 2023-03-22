@@ -1,1 +1,0 @@
-duet,CrCy_7-P11-D5-sIn11,0.091424181,9,(define-fun skel ( (LN70 Bool) (LN81 Bool)) Bool (xor (not (not (not LN81))) (not (or LN70 LN70))))

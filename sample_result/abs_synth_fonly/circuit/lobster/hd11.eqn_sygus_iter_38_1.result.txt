@@ -1,1 +1,0 @@
-abs_synth_fonly,hd11.eqn_sygus_iter_38_1,0.112193413,8,(define-fun skel ( (n694 Bool) (n691 Bool) (n516 Bool) (n493 Bool)) Bool (and (not (and n516 n493)) (and n694 n691)))

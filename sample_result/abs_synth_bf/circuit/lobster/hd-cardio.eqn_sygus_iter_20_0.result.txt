@@ -1,1 +1,0 @@
-abs_synth_bf,hd-cardio.eqn_sygus_iter_20_0,5.796642904,11,(define-fun skel ( (n263 Bool) (n271 Bool) (n218 Bool) (n251 Bool) (n248 Bool) (n215 Bool)) Bool (xor (xor n263 n271) (and (and n218 n251) (and n248 n215))))

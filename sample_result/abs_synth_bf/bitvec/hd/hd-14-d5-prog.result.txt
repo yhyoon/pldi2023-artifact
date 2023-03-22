@@ -1,1 +1,0 @@
-abs_synth_bf,hd-14-d5-prog,56.099784334,9,(define-fun f ( (x (BitVec 64)) (y (BitVec 64))) (BitVec 64) (bvadd (bvlshr (bvxor x y) #x0000000000000001) (bvand x y)))

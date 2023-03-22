@@ -1,1 +1,0 @@
-abs_synth,sorting_naive.eqn_sygus_iter_130_0,0.15895975,9,(define-fun skel ( (n567 Bool) (n225 Bool) (n509 Bool) (i_9 Bool)) Bool (xor (not (not n567)) (and n509 (and n225 i_9))))

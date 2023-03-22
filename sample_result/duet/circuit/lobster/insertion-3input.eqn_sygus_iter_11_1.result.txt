@@ -1,1 +1,0 @@
-duet,insertion-3input.eqn_sygus_iter_11_1,0.265819332,9,(define-fun skel ( (n141 Bool) (n107 Bool) (i_17 Bool) (n140 Bool)) Bool (xor (and n107 (and n140 i_17)) (and n140 n141)))

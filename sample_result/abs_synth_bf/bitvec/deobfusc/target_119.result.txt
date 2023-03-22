@@ -1,1 +1,0 @@
-abs_synth_bf,target_119,0.056602879,9,(define-fun deobfucated ( (c (BitVec 64)) (d (BitVec 64))) (BitVec 64) (bvsub (bvneg (bvnot (bvneg d))) (bvmul d (bvnot d))))

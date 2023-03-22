@@ -1,1 +1,0 @@
-abs_synth_smt,p19.eqn_sygus_iter_42_1,4.589879499,7,(define-fun skel ( (n243 Bool) (n237 Bool) (n231 Bool) (n194 Bool)) Bool (and (and n243 n237) (and n231 n194)))

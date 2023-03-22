@@ -1,1 +1,0 @@
-duet,hd-15-d1-prog,timeout,timeout,timeout

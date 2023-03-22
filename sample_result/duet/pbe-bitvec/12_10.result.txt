@@ -1,1 +1,0 @@
-duet,12_10,30.180364374,17,(define-fun f ( (x (BitVec 64))) (BitVec 64) (ite (= #x0000000000000002 (bvand #x0000000000000002 x)) (bvxor x (bvneg x)) (bvsub (bvlshr (bvnot #x0000000000000000) #x0000000000000010) (bvneg x))))

@@ -1,1 +1,0 @@
-duet,longest_1bit-opt.eqn_sygus_iter_85_2,1.356458553,14,(define-fun skel ( (i_7 Bool) (i_8 Bool) (i_6 Bool) (i_4 Bool)) Bool (xor (and (or i_4 i_6) (and i_8 i_7)) (or (not i_4) (and i_8 i_7))))

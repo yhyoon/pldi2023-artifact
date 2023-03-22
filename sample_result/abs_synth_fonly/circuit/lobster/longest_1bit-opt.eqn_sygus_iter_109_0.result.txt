@@ -1,1 +1,0 @@
-abs_synth_fonly,longest_1bit-opt.eqn_sygus_iter_109_0,0.355372961,12,(define-fun skel ( (n74 Bool) (n85 Bool) (n78 Bool) (n94 Bool) (n63 Bool)) Bool (and (or (not n74) (not (and n85 n78))) (not (or n94 n63))))

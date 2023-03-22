@@ -1,1 +1,0 @@
-abs_synth_bf,CrCy_5-P9-D5-sIn,0.108773005,11,(define-fun skel ( (k1 Bool) (LN4 Bool) (k3 Bool)) Bool (xor (not (or LN4 (not k3))) (not (not (xor k1 k3)))))

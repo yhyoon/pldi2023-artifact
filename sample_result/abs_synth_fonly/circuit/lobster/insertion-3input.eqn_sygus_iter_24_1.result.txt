@@ -1,1 +1,0 @@
-abs_synth_fonly,insertion-3input.eqn_sygus_iter_24_1,13.169663026,18,(define-fun skel ( (n251 Bool) (n143 Bool) (n152 Bool) (n176 Bool) (i_25 Bool)) Bool (xor (and (xor n152 n176) (and n251 (not i_25))) (not (or (xor n152 n176) (or n143 (not n251))))))

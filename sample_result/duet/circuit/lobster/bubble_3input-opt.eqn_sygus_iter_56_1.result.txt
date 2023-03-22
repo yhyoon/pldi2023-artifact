@@ -1,1 +1,0 @@
-duet,bubble_3input-opt.eqn_sygus_iter_56_1,10.761410263,17,(define-fun skel ( (n261 Bool) (n132 Bool) (n152 Bool) (n176 Bool) (i_23 Bool)) Bool (xor (and (xor n176 n152) (or i_23 (not n261))) (or (xor n176 n152) (and n261 (not n132)))))

@@ -1,1 +1,0 @@
-duet,icfp_gen_11.6,0.146108187,2,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvnot x))

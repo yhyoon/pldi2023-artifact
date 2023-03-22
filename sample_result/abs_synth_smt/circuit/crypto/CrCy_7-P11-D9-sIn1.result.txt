@@ -1,1 +1,0 @@
-abs_synth_smt,CrCy_7-P11-D9-sIn1,33.857347187,21,(define-fun skel ( (LN1 Bool) (LN25 Bool) (k6 Bool) (LN30 Bool) (LN32 Bool)) Bool (xor (not (not (not (not (xor (not LN25) (xor LN30 LN32)))))) (not (not (not (not (not (and LN1 (or k6 k6)))))))))

@@ -1,1 +1,0 @@
-abs_synth_fonly,p19.eqn_sygus_iter_114_0,0.111081658,7,(define-fun skel ( (i0 Bool) (i2 Bool) (i1 Bool)) Bool (xor (and i2 i1) (or i0 i1)))

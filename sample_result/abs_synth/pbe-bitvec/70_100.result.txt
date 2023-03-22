@@ -1,1 +1,0 @@
-abs_synth,70_100,0.134329808,21,(define-fun f ( (x (BitVec 64))) (BitVec 64) (ite (= #x0000000000000000 (bvurem x #x0000000000000002)) (bvlshr x #x0000000000000010) (ite (= x (bvor x #x0000000000000003)) (bvshl x #x0000000000000001) (bvlshr x #x0000000000000010))))

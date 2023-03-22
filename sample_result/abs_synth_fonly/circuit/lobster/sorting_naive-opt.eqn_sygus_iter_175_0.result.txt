@@ -1,1 +1,0 @@
-abs_synth_fonly,sorting_naive-opt.eqn_sygus_iter_175_0,0.188070995,9,(define-fun skel ( (n376 Bool) (n378 Bool) (n371 Bool) (n373 Bool) (i_17 Bool)) Bool (and (xor n371 n373) (and n378 (and n376 i_17))))

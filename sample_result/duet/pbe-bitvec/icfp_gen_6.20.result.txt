@@ -1,1 +1,0 @@
-duet,icfp_gen_6.20,0.110820824,1,(define-fun f ( (x (BitVec 64))) (BitVec 64) #x0000000000000000)

@@ -1,1 +1,0 @@
-abs_synth_fonly,hd04.eqn_sygus_iter_38_2,1.752666316,12,(define-fun skel ( (n127 Bool) (n69 Bool) (n76 Bool) (n63 Bool)) Bool (xor (and n127 (not n63)) (and (and n127 n69) (and n76 n63))))

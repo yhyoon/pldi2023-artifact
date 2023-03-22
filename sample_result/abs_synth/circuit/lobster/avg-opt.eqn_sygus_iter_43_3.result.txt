@@ -1,1 +1,0 @@
-abs_synth,avg-opt.eqn_sygus_iter_43_3,0.267174766,16,(define-fun skel ( (n84 Bool) (n69 Bool) (n76 Bool) (n63 Bool)) Bool (xor (or (and n69 n76) (or n63 (not n84))) (or (not n84) (not (and n69 n76)))))

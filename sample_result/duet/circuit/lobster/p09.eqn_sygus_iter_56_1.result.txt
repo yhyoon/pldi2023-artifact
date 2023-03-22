@@ -1,1 +1,0 @@
-duet,p09.eqn_sygus_iter_56_1,0.241373757,7,(define-fun skel ( (n234 Bool) (n174 Bool) (n114 Bool) (n87 Bool)) Bool (and (and n174 n234) (and n87 n114)))

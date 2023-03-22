@@ -1,1 +1,0 @@
-abs_synth,longest_1bit-opt.eqn_sygus_iter_129_0,0.389072024,13,(define-fun skel ( (n34 Bool) (n115 Bool) (n121 Bool) (n111 Bool) (i_3 Bool)) Bool (and (or n115 (not n34)) (not (or n111 (or (not n121) (not i_3))))))

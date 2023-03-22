@@ -1,1 +1,0 @@
-duet,avg-opt-old.eqn_sygus_iter_42_0,1.332086706,12,(define-fun skel ( (n142 Bool) (n129 Bool) (n135 Bool) (n133 Bool) (n108 Bool) (n125 Bool)) Bool (and (and n142 (xor n125 n108)) (not (and n133 (and n135 n129)))))

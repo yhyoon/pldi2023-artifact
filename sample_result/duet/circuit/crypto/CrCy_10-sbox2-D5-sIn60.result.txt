@@ -1,1 +1,0 @@
-duet,CrCy_10-sbox2-D5-sIn60,0.107165808,7,(define-fun skel ( (LN49 Bool) (LN95 Bool)) Bool (and LN95 (not (not (or LN49 LN49)))))

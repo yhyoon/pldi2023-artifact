@@ -1,1 +1,0 @@
-abs_synth_smt,CrCy_6-P10-D7-sIn3,6.969667588,17,(define-fun skel ( (LN56 Bool) (k3 Bool) (LN60 Bool) (k4 Bool) (LN64 Bool) (LN67 Bool)) Bool (xor (not (not (xor (not LN60) (xor LN64 LN67)))) (not (not (not (xor LN56 (xor k3 k4)))))))

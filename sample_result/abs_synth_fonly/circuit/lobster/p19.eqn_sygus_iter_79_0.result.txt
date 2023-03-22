@@ -1,1 +1,0 @@
-abs_synth_fonly,p19.eqn_sygus_iter_79_0,0.122521868,8,(define-fun skel ( (i22 Bool) (i21 Bool) (i20 Bool)) Bool (xor (and i22 i21) (not (or i21 i20))))

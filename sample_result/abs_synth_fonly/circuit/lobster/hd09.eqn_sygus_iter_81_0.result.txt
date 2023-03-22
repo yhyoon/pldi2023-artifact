@@ -1,1 +1,0 @@
-abs_synth_fonly,hd09.eqn_sygus_iter_81_0,0.420818939,13,(define-fun skel ( (n109 Bool) (i22 Bool) (n233 Bool) (n111 Bool)) Bool (xor (and n233 (or n111 (not n109))) (or n233 (and n109 (not i22)))))

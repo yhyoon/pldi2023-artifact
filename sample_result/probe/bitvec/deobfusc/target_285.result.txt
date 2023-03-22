@@ -1,1 +1,0 @@
-probe,target_285,0.883818245,5,(bvor (bvmul e d) e)

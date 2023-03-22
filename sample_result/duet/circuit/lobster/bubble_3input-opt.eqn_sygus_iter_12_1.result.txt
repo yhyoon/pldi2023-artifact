@@ -1,1 +1,0 @@
-duet,bubble_3input-opt.eqn_sygus_iter_12_1,0.268573731,9,(define-fun skel ( (i_9 Bool) (n105 Bool) (n142 Bool) (n140 Bool)) Bool (xor (and n105 (and n140 i_9)) (and n140 n142)))

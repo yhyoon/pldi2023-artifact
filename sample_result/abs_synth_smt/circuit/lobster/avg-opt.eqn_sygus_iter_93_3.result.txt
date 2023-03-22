@@ -1,1 +1,0 @@
-abs_synth_smt,avg-opt.eqn_sygus_iter_93_3,18.80118112,11,(define-fun skel ( (i_7 Bool) (i_15 Bool) (i_9 Bool) (i_17 Bool) (i_16 Bool) (i_8 Bool)) Bool (and (and i_9 (xor i_7 i_15)) (and i_17 (xor i_16 i_8))))

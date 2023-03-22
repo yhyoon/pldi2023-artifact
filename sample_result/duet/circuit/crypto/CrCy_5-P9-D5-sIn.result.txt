@@ -1,1 +1,0 @@
-duet,CrCy_5-P9-D5-sIn,0.134449463,11,(define-fun skel ( (k1 Bool) (LN4 Bool) (k3 Bool)) Bool (xor (not (or LN4 (not k3))) (not (not (xor k3 k1)))))

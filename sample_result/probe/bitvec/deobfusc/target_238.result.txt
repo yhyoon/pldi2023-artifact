@@ -1,1 +1,0 @@
-probe,target_238,470.741517782,13,(bvand (bvnot (bvadd b (bvmul c c))) (bvmul b (bvxor (bvneg c) c)))

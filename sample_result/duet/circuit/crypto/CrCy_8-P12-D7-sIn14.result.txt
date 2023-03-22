@@ -1,1 +1,0 @@
-duet,CrCy_8-P12-D7-sIn14,0.157379921,15,(define-fun skel ( (LN87 Bool) (k8 Bool) (LN312 Bool) (LN315 Bool)) Bool (xor (not (not (not (and LN87 (not k8))))) (not (xor LN315 (xor LN312 (not LN87))))))

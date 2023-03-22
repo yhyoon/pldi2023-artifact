@@ -1,1 +1,0 @@
-abs_synth,CrCy_6-P10-D9-sIn8,0.200275921,19,(define-fun skel ( (LN32 Bool) (LN39 Bool) (k4 Bool) (LN43 Bool) (LN46 Bool)) Bool (xor (not (not (not (not (xor LN32 (xor LN39 LN43)))))) (not (not (not (not (not (xor LN46 (not k4)))))))))

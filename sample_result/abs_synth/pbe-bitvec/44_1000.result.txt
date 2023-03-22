@@ -1,1 +1,0 @@
-abs_synth,44_1000,0.059768734,3,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvudiv x #x0000000000000002))

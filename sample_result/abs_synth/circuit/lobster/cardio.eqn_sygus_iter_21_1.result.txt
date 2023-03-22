@@ -1,1 +1,0 @@
-abs_synth,cardio.eqn_sygus_iter_21_1,0.159793712,11,(define-fun skel ( (n292 Bool) (n335 Bool) (n298 Bool) (n307 Bool)) Bool (xor (and n335 (and n292 (not (not n298)))) (not (not n307))))

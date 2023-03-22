@@ -1,1 +1,0 @@
-abs_synth,hd07.eqn_sygus_iter_19_2,0.101993215,8,(define-fun skel ( (i16 Bool) (i15 Bool) (i14 Bool)) Bool (xor (and i16 i15) (not (or i15 i14))))

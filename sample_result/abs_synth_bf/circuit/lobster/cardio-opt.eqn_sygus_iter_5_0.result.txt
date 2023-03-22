@@ -1,1 +1,0 @@
-abs_synth_bf,cardio-opt.eqn_sygus_iter_5_0,7.603996916,15,(define-fun skel ( (n224 Bool) (n228 Bool) (n231 Bool) (n235 Bool) (n222 Bool)) Bool (xor (and (and n224 n235) (and n228 n222)) (and (and n231 n222) (not (not n235)))))

@@ -1,1 +1,0 @@
-abs_synth_smt,hd09.eqn_sygus_iter_9_1,139.378647528,14,(define-fun skel ( (n97 Bool) (n65 Bool) (n66 Bool) (i18 Bool)) Bool (xor (or n97 (not (not i18))) (and n97 (or (not i18) (and n65 n66)))))

@@ -1,1 +1,0 @@
-abs_synth,sorting_naive-opt.eqn_sygus_iter_254_2,0.227432651,13,(define-fun skel ( (n386 Bool) (n389 Bool) (n392 Bool) (n385 Bool) (n387 Bool) (i_7 Bool)) Bool (and (and n392 (not (not i_7))) (and (xor n386 n389) (xor n385 n387))))

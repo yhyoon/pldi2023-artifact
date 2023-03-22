@@ -1,1 +1,0 @@
-abs_synth,first_0bit-opt.eqn_sygus_iter_8_0,0.150160763,9,(define-fun skel ( (n108 Bool) (n161 Bool) (n109 Bool) (n125 Bool)) Bool (xor (and n108 n125) (and n161 (and n109 n125))))

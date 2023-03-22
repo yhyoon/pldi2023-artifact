@@ -1,1 +1,0 @@
-duet,hd-cardio.eqn_sygus_iter_8_2,4.393641426,14,(define-fun skel ( (n199 Bool) (n195 Bool) (n190 Bool) (n191 Bool) (n189 Bool)) Bool (xor (and (not n199) (or n189 n195)) (or (or n195 n199) (and n191 n190))))

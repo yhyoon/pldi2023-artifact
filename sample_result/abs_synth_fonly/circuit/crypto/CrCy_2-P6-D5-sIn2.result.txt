@@ -1,1 +1,0 @@
-abs_synth_fonly,CrCy_2-P6-D5-sIn2,0.0678316,7,(define-fun skel ( (LN13 Bool) (LN33 Bool)) Bool (xor LN33 (not (not (or LN13 LN13)))))

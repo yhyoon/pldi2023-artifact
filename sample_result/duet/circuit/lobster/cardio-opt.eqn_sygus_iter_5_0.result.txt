@@ -1,1 +1,0 @@
-duet,cardio-opt.eqn_sygus_iter_5_0,0.639661925,9,(define-fun skel ( (n224 Bool) (n228 Bool) (n231 Bool) (n235 Bool) (n222 Bool)) Bool (and (and n222 n235) (xor n231 (and n228 n224))))

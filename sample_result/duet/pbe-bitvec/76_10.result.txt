@@ -1,1 +1,0 @@
-duet,76_10,4.366678425,14,(define-fun f ( (x (BitVec 64))) (BitVec 64) (ite (= #x0000000000000002 (bvand #x0000000000000002 x)) (bvneg (bvudiv x #x0000000000000002)) (bvnot (bvudiv x #x0000000000000002))))

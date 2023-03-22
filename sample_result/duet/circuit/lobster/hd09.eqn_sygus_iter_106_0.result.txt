@@ -1,1 +1,0 @@
-duet,hd09.eqn_sygus_iter_106_0,88.165007547,17,(define-fun skel ( (n133 Bool) (n105 Bool) (n127 Bool) (n116 Bool) (n148 Bool)) Bool (and (xor n133 (and n105 (and n116 (xor n127 n133)))) (xor n148 (or n105 (or n127 n133)))))

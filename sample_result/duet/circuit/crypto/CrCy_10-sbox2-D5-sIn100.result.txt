@@ -1,1 +1,0 @@
-duet,CrCy_10-sbox2-D5-sIn100,0.253738328,10,(define-fun skel ( (LN218 Bool) (LN231 Bool) (LN240 Bool) (LN336 Bool)) Bool (or (not (xor LN240 (xor LN231 LN218))) (or LN336 LN336)))

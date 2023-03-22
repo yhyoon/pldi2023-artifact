@@ -1,1 +1,0 @@
-abs_synth,avg-opt.eqn_sygus_iter_72_1,0.264761673,12,(define-fun skel ( (n107 Bool) (n69 Bool) (n76 Bool) (n63 Bool)) Bool (xor (and n107 (not n63)) (and (and n107 n69) (and n76 n63))))

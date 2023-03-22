@@ -1,1 +1,0 @@
-duet,target_170,timeout,timeout,timeout

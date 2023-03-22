@@ -1,1 +1,0 @@
-abs_synth_smt,odd_even_3input-opt.eqn_sygus_iter_90_0,72.34680273,15,(define-fun skel ( (n71 Bool) (n102 Bool) (n87 Bool) (n59 Bool) (i_7 Bool)) Bool (xor (and n87 (and n59 (not (not i_7)))) (and (xor n71 n102) (not (not i_7)))))

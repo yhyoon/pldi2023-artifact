@@ -1,1 +1,0 @@
-probe,target_249,1.169954236,8,(bvand (bvnot (bvneg (bvand b (bvnot d)))) b)

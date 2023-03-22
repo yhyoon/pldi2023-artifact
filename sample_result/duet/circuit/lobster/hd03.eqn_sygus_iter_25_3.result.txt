@@ -1,1 +1,0 @@
-duet,hd03.eqn_sygus_iter_25_3,0.890456924,11,(define-fun skel ( (i42 Bool) (i10 Bool) (i9 Bool) (i41 Bool) (i40 Bool) (i8 Bool)) Bool (and (and i8 (xor i41 i9)) (and i40 (xor i10 i42))))

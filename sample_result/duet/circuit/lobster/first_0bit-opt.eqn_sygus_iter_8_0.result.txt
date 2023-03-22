@@ -1,1 +1,0 @@
-duet,first_0bit-opt.eqn_sygus_iter_8_0,0.244802543,9,(define-fun skel ( (n108 Bool) (n161 Bool) (n109 Bool) (n125 Bool)) Bool (xor (and n125 n108) (and n161 (and n125 n109))))

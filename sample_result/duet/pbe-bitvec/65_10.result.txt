@@ -1,1 +1,0 @@
-duet,65_10,timeout,timeout,timeout

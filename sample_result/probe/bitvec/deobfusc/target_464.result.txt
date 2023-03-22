@@ -1,1 +1,0 @@
-probe,target_464,0.979048441,7,(bvadd (bvor a b) (bvadd a b))

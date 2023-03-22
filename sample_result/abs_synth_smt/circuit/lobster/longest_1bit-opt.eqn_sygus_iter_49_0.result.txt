@@ -1,1 +1,0 @@
-abs_synth_smt,longest_1bit-opt.eqn_sygus_iter_49_0,87.292666672,15,(define-fun skel ( (n211 Bool) (n196 Bool) (n204 Bool) (n199 Bool) (n187 Bool)) Bool (and (or n187 (and n204 (and n211 n199))) (xor (not n211) (or n187 (not n196)))))

@@ -1,1 +1,0 @@
-duet,hd-15-d0-prog,40.922950862,9,(define-fun f ( (x (BitVec 64)) (y (BitVec 64))) (BitVec 64) (bvsub (bvor y x) (bvlshr (bvxor y x) #x0000000000000001)))

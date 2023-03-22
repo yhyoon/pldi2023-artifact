@@ -1,1 +1,0 @@
-duet,129_10,1.192326009,6,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvsub (bvshl x #x0000000000000001) (bvnot #x0000000000000000)))

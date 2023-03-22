@@ -1,1 +1,0 @@
-abs_synth,hd08.eqn_sygus_iter_6_1,0.383076137,11,(define-fun skel ( (n253 Bool) (n48 Bool) (n182 Bool) (n177 Bool) (n85 Bool)) Bool (and (and n48 n177) (and n85 (and n182 (not (not n253))))))

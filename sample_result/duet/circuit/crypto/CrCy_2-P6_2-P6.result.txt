@@ -1,1 +1,0 @@
-duet,CrCy_2-P6_2-P6,193.684842779,20,(define-fun Imp ( (k1 Bool) (k2 Bool) (k3 Bool) (r1 Bool) (r2 Bool) (r3 Bool) (r4 Bool)) Bool (xor (not (xor (not (xor r4 r2)) (not (and k3 k2)))) (not (not (xor (xor k3 k1) (and r3 r2))))))

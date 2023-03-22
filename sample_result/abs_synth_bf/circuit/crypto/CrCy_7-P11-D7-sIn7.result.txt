@@ -1,1 +1,0 @@
-abs_synth_bf,CrCy_7-P11-D7-sIn7,0.08279827,6,(define-fun skel ( (LN52 Bool) (LN59 Bool) (LN104 Bool)) Bool (xor LN104 (xor LN52 (not LN59))))

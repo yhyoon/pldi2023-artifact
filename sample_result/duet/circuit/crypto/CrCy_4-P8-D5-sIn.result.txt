@@ -1,1 +1,0 @@
-duet,CrCy_4-P8-D5-sIn,0.173075248,9,(define-fun skel ( (LN38 Bool) (LN44 Bool) (LN45 Bool) (r4 Bool)) Bool (xor r4 (xor LN45 (xor LN44 (or LN38 LN38)))))

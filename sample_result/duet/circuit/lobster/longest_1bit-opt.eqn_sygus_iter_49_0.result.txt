@@ -1,1 +1,0 @@
-duet,longest_1bit-opt.eqn_sygus_iter_49_0,8.515774924,14,(define-fun skel ( (n211 Bool) (n196 Bool) (n204 Bool) (n199 Bool) (n187 Bool)) Bool (and (xor n211 (and n196 (not n187))) (or n187 (and n204 (and n199 n211)))))

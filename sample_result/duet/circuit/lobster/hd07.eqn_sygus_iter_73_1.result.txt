@@ -1,1 +1,0 @@
-duet,hd07.eqn_sygus_iter_73_1,5.750109728,15,(define-fun skel ( (n232 Bool) (n237 Bool) (n261 Bool) (n255 Bool) (i28 Bool)) Bool (or (xor i28 (and n255 (and i28 n261))) (xor i28 (and n232 (and i28 n237)))))

@@ -1,1 +1,0 @@
-abs_synth_fonly,hd09.eqn_sygus_iter_45_0,1008.742676823,13,(define-fun skel ( (n96 Bool) (n104 Bool) (n106 Bool) (n131 Bool) (n115 Bool) (n118 Bool)) Bool (and (and n96 (and (and n106 n131) (and n106 n118))) (and n104 n115)))

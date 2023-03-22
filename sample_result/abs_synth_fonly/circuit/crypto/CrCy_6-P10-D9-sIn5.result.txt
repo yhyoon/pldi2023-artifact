@@ -1,1 +1,0 @@
-abs_synth_fonly,CrCy_6-P10-D9-sIn5,6.32775009,23,(define-fun skel ( (LN3 Bool) (k4 Bool) (LN7 Bool) (k1 Bool) (LN17 Bool) (LN20 Bool) (LN23 Bool)) Bool (xor (not (not (not (not (xor (xor LN3 LN7) (xor LN17 LN20)))))) (not (not (not (not (xor (not LN23) (not (xor k4 k1)))))))))

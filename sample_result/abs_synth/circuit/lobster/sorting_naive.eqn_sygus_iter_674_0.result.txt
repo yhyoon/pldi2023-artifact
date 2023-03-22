@@ -1,1 +1,0 @@
-abs_synth,sorting_naive.eqn_sygus_iter_674_0,0.807862552,15,(define-fun skel ( (n325 Bool) (n365 Bool) (n268 Bool) (n167 Bool) (n450 Bool) (i_21 Bool)) Bool (and (not (or (not n450) (and n325 n365))) (not (or (not i_21) (and n268 n167)))))

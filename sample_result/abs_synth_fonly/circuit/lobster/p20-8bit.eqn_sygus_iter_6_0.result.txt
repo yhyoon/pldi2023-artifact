@@ -1,1 +1,0 @@
-abs_synth_fonly,p20-8bit.eqn_sygus_iter_6_0,0.195442984,9,(define-fun skel ( (n28 Bool) (n43 Bool) (n32 Bool) (n24 Bool)) Bool (and (and n28 (not (not n32))) (and n43 n24)))
