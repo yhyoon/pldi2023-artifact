@@ -1,0 +1,60 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/deobfusc/target_32.sl",
+  "problem_name": "target_32",
+  "start_time": "23.03.22.17:23:30",
+  "total_time": 104.03735399246216,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 773861 ], [ 1, 78 ] ],
+      "created_components": 61523
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 21658210 ], [ 1, 86619 ] ],
+      "created_components": 61210
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 14529430 ], [ 1, 29612 ] ],
+      "created_components": 13989
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 429 ], [ 1, 168 ] ],
+      "created_components": 66
+    }
+  ],
+  "final_io_pairs": 4,
+  "final_max_component_size": 9,
+  "final_component_count": 61523,
+  "found_solution": "(define-fun deobfucated ( (a (BitVec 64)) (d (BitVec 64))) (BitVec 64) (bvand (bvsub a (bvsub (bvxor d (bvsub d a)) d)) (bvand a (bvneg (bvnot d)))))",
+  "solution_size": 15,
+  "total_composed": [ [ 0, 36961938 ], [ 1, 116485 ], [ 2, 24 ] ],
+  "component_generation_time": 2.918203592300415,
+  "component_search_table_build_time": 1.1151642799377441,
+  "prune": {
+    "method": "abstsem",
+    "count": 116509,
+    "time": 4.770751953125,
+    "infeasible": 47227,
+    "search_infeasible": 66346,
+    "search_useful": 19,
+    "approx_reduced_incomplete": 47227,
+    "approx_reduced_complete": 1391255328
+  }
+}

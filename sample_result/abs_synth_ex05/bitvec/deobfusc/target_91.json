@@ -1,0 +1,60 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/deobfusc/target_91.sl",
+  "problem_name": "target_91",
+  "start_time": "23.03.22.18:27:02",
+  "total_time": 1280.9493401050568,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 4397442 ] ],
+      "created_components": 2618057
+    },
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 8541794 ] ],
+      "created_components": 2442468
+    },
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 1270759 ], [ 1, 1402042 ] ],
+      "created_components": 423586
+    },
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 33266678 ], [ 1, 299339 ] ],
+      "created_components": 58277
+    }
+  ],
+  "final_io_pairs": 4,
+  "final_max_component_size": 10,
+  "final_component_count": 2618057,
+  "found_solution": "(define-fun deobfucated ( (e (BitVec 64)) (d (BitVec 64)) (b (BitVec 64))) (BitVec 64) (bvsub (bvneg (bvmul e d)) (bvmul e (bvxor (bvneg b) (bvneg (bvmul d (bvnot b)))))))",
+  "solution_size": 15,
+  "total_composed": [ [ 0, 34537451 ], [ 1, 14640625 ], [ 2, 24 ] ],
+  "component_generation_time": 193.17791295051575,
+  "component_search_table_build_time": 86.42677426338196,
+  "prune": {
+    "method": "abstsem",
+    "count": 14640649,
+    "time": 967.2876477241516,
+    "infeasible": 5020816,
+    "search_infeasible": 9617109,
+    "search_useful": 4,
+    "approx_reduced_incomplete": 5020816,
+    "approx_reduced_complete": 30181947988277
+  }
+}

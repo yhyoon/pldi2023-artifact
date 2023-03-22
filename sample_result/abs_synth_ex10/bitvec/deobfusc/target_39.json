@@ -1,0 +1,50 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/deobfusc/target_39.sl",
+  "problem_name": "target_39",
+  "start_time": "23.03.22.20:43:37",
+  "total_time": 0.018823862075805664,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 64 ], [ 1, 4 ] ],
+      "created_components": 143
+    },
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 160 ], [ 1, 286 ] ],
+      "created_components": 138
+    }
+  ],
+  "final_io_pairs": 2,
+  "final_max_component_size": 4,
+  "final_component_count": 143,
+  "found_solution": "(define-fun deobfucated ( (a (BitVec 64)) (b (BitVec 64)) (d (BitVec 64))) (BitVec 64) (bvand (bvor b (bvneg d)) (bvnot a)))",
+  "solution_size": 7,
+  "total_composed": [ [ 0, 230 ], [ 1, 294 ], [ 2, 12 ] ],
+  "component_generation_time": 0.0015058517456054688,
+  "component_search_table_build_time": 0.0003139972686767578,
+  "prune": {
+    "method": "abstsem",
+    "count": 306,
+    "time": 0.012616395950317383,
+    "infeasible": 101,
+    "search_infeasible": 190,
+    "search_useful": 0,
+    "approx_reduced_incomplete": 101,
+    "approx_reduced_complete": 11903
+  }
+}

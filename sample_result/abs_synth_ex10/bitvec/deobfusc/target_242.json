@@ -1,0 +1,60 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/deobfusc/target_242.sl",
+  "problem_name": "target_242",
+  "start_time": "23.03.22.19:31:53",
+  "total_time": 1942.635239124298,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 2124629 ], [ 1, 22 ] ],
+      "created_components": 2616829
+    },
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 511860402 ], [ 1, 3059572 ] ],
+      "created_components": 2483030
+    },
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 2051523 ], [ 1, 100977 ] ],
+      "created_components": 77667
+    },
+    {
+      "created_top": [ [ 0, 3 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 1035824 ], [ 1, 17384 ] ],
+      "created_components": 12865
+    }
+  ],
+  "final_io_pairs": 4,
+  "final_max_component_size": 10,
+  "final_component_count": 2616829,
+  "found_solution": "(define-fun deobfucated ( (e (BitVec 64)) (d (BitVec 64)) (b (BitVec 64))) (BitVec 64) (bvand (bvnot (bvxor e (bvor (bvmul e d) (bvmul d b)))) (bvadd d d)))",
+  "solution_size": 14,
+  "total_composed": [ [ 0, 517072390 ], [ 1, 3177963 ], [ 2, 24 ] ],
+  "component_generation_time": 197.501478433609,
+  "component_search_table_build_time": 91.44254064559937,
+  "prune": {
+    "method": "abstsem",
+    "count": 3177987,
+    "time": 137.3670723438263,
+    "infeasible": 1327799,
+    "search_infeasible": 1848170,
+    "search_useful": 49,
+    "approx_reduced_incomplete": 1327799,
+    "approx_reduced_complete": 1547262140264
+  }
+}

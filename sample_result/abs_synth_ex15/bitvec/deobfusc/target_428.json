@@ -1,0 +1,75 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/deobfusc/target_428.sl",
+  "problem_name": "target_428",
+  "start_time": "23.03.23.00:26:14",
+  "total_time": 0.11083698272705078,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 312 ] ],
+      "created_components": 260
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 4697 ], [ 1, 276 ] ],
+      "created_components": 260
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 3641 ], [ 1, 333 ] ],
+      "created_components": 260
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 354 ], [ 1, 107 ] ],
+      "created_components": 70
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 187 ], [ 1, 123 ] ],
+      "created_components": 70
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 25 ], [ 1, 46 ] ],
+      "created_components": 22
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 2 ], [ 1, 1 ] ],
+      "created_components": 2
+    }
+  ],
+  "final_io_pairs": 7,
+  "final_max_component_size": 5,
+  "final_component_count": 260,
+  "found_solution": "(define-fun deobfucated ( (a (BitVec 64)) (d (BitVec 64))) (BitVec 64) (bvadd (bvand d (bvneg (bvnot a))) (bvnot (bvsub a a))))",
+  "solution_size": 10,
+  "total_composed": [ [ 0, 8921 ], [ 1, 1212 ], [ 2, 42 ] ],
+  "component_generation_time": 0.006193399429321289,
+  "component_search_table_build_time": 0.00260162353515625,
+  "prune": {
+    "method": "abstsem",
+    "count": 1254,
+    "time": 0.07874846458435059,
+    "infeasible": 465,
+    "search_infeasible": 688,
+    "search_useful": 11,
+    "approx_reduced_incomplete": 813,
+    "approx_reduced_complete": 259332
+  }
+}

@@ -901,7 +901,7 @@ def prepare_df() -> AllDfs:
     # table of each solver
     solver_to_df: Dict[str, pd.DataFrame] = {
         solver: main_df[main_df["solver"] == solver].set_index("problem").sort_index()
-        for solver in [*solver_names, *ablation_names]
+        for solver in [*solver_names, *ablation_names, *ex_cut_names]
     }
 
     solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]] = {
@@ -909,7 +909,7 @@ def prepare_df() -> AllDfs:
             bench: solver_to_df[solver][solver_to_df[solver]["bench"] == bench]
             for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
         }
-        for solver in [*solver_names, *ablation_names]
+        for solver in [*solver_names, *ablation_names, *ex_cut_names]
     }
 
     abs_synth_df, duet_df, probe_df = solver_to_df["abs_synth"], solver_to_df["duet"], solver_to_df["probe"]
@@ -930,12 +930,7 @@ def prepare_df() -> AllDfs:
     return AllDfs(main_df, solver_to_df, solver_bench_to_df, bench_to_cmp_df)
 
 
-def draw_main_table(dfs: AllDfs, table_out):
-    solver_to_all_bench_df = {
-        solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in bench_names])
-        for solver in solver_names
-    }
-
+def show_abs_probe_size_numbers(dfs: AllDfs):
     a_p_both_solved_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['abs_size', 'probe_size'])
     a_both_mean = a_p_both_solved_hd['abs_size'].mean()
     p_both_mean = a_p_both_solved_hd['probe_size'].mean()
@@ -961,6 +956,37 @@ def draw_main_table(dfs: AllDfs, table_out):
     p_only_mean, p_only_cnt = p_only_deobfusc['probe_size'].mean(), p_only_deobfusc['probe_size'].count()
     log_write_with_time(f"For Deobfusc, 'abssynth probe both solved' problems avg size = [{a_both_mean:.1f}, {p_both_mean:.1f}]")
     log_write_with_time(f"abssynth only avg size = {a_only_mean:.1f} for {a_only_cnt:d}, probe only avg size = {p_only_mean:.1f} for {p_only_cnt:d}")
+
+
+def show_example_gradient_test(dfs: AllDfs):
+    ex05df = dfs.solver_bench_to_df["abs_synth_ex05"]["deobfusc"]
+    ex10df = dfs.solver_bench_to_df["abs_synth_ex10"]["deobfusc"]
+    ex15df = dfs.solver_bench_to_df["abs_synth_ex15"]["deobfusc"]
+    fulldf = dfs.solver_bench_to_df["abs_synth"]["deobfusc"]
+
+    log_write_with_time("Example count 5, 10, 15, 20 ->")
+    log_write_with_time("average time {:5.2f}, {:5.2f}, {:5.2f}, {:5.2f} ->".format(
+        ex05df["time"].mean(),
+        ex10df["time"].mean(),
+        ex15df["time"].mean(),
+        fulldf["time"].mean(),
+    ))
+    log_write_with_time("average size {:5.2f}, {:5.2f}, {:5.2f}, {:5.2f} ->".format(
+        ex05df["size"].mean(),
+        ex10df["size"].mean(),
+        ex15df["size"].mean(),
+        fulldf["size"].mean(),
+    ))
+
+
+def draw_main_table(dfs: AllDfs, table_out):
+    solver_to_all_bench_df = {
+        solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in bench_names])
+        for solver in solver_names
+    }
+
+    show_abs_probe_size_numbers(dfs)
+    show_example_gradient_test(dfs)
 
     # figure 3.(c): main summary table raw data
     # item(solved|time_avg|time_med|size_avg|size_med) |->

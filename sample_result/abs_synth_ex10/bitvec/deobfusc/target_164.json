@@ -1,0 +1,65 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/deobfusc/target_164.sl",
+  "problem_name": "target_164",
+  "start_time": "23.03.22.19:25:53",
+  "total_time": 32.93884015083313,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 3253682 ], [ 1, 10455 ] ],
+      "created_components": 17887
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 3980173 ], [ 1, 10259 ] ],
+      "created_components": 17619
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 416877 ], [ 1, 910 ] ],
+      "created_components": 16961
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 3642879 ], [ 1, 24698 ] ],
+      "created_components": 13652
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 350 ], [ 1, 162 ] ],
+      "created_components": 65
+    }
+  ],
+  "final_io_pairs": 5,
+  "final_max_component_size": 8,
+  "final_component_count": 17887,
+  "found_solution": "(define-fun deobfucated ( (e (BitVec 64)) (d (BitVec 64))) (BitVec 64) (bvand (bvneg (bvor e (bvor d (bvnot (bvneg d))))) (bvsub e (bvnot (bvsub e (bvadd d d))))))",
+  "solution_size": 17,
+  "total_composed": [ [ 0, 11293971 ], [ 1, 46494 ], [ 2, 30 ] ],
+  "component_generation_time": 1.0480985641479492,
+  "component_search_table_build_time": 0.4169642925262451,
+  "prune": {
+    "method": "abstsem",
+    "count": 46524,
+    "time": 0.7977027893066406,
+    "infeasible": 33232,
+    "search_infeasible": 12439,
+    "search_useful": 14,
+    "approx_reduced_incomplete": 33232,
+    "approx_reduced_complete": 473337932
+  }
+}

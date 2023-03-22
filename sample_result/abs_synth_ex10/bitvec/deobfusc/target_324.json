@@ -1,0 +1,60 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/deobfusc/target_324.sl",
+  "problem_name": "target_324",
+  "start_time": "23.03.22.20:31:59",
+  "total_time": 0.13027000427246094,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 3763 ], [ 1, 48 ] ],
+      "created_components": 1000
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 4201 ], [ 1, 35 ] ],
+      "created_components": 928
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 14790 ], [ 1, 1693 ] ],
+      "created_components": 905
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 2 ], [ 2, 6 ] ],
+      "created_sub": [ [ 0, 2441 ], [ 1, 467 ] ],
+      "created_components": 215
+    }
+  ],
+  "final_io_pairs": 4,
+  "final_max_component_size": 6,
+  "final_component_count": 1000,
+  "found_solution": "(define-fun deobfucated ( (e (BitVec 64)) (d (BitVec 64))) (BitVec 64) (bvand (bvnot (bvxor e (bvsub e d))) (bvnot (bvxor e d))))",
+  "solution_size": 11,
+  "total_composed": [ [ 0, 25203 ], [ 1, 2251 ], [ 2, 24 ] ],
+  "component_generation_time": 0.02143716812133789,
+  "component_search_table_build_time": 0.006434917449951172,
+  "prune": {
+    "method": "abstsem",
+    "count": 2275,
+    "time": 0.05599856376647949,
+    "infeasible": 923,
+    "search_infeasible": 1278,
+    "search_useful": 0,
+    "approx_reduced_incomplete": 923,
+    "approx_reduced_complete": 634101
+  }
+}
