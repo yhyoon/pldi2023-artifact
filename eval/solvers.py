@@ -62,6 +62,9 @@ class SolverAbsSynthBF(SolverAbsSynth):
     def name(self) -> str:
         return "abs_synth_bf"
 
+    def solvable(self, bench: str) -> bool:
+        return bench != "pbe-bitvec"
+
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
         return ["-pruning", "bruteforce", "-report_json", json_path, target]
@@ -71,6 +74,9 @@ class SolverAbsSynthSMT(SolverAbsSynth):
     # command: ./abs_synth.exe -pruning solver [target_name]
     def name(self) -> str:
         return "abs_synth_smt"
+
+    def solvable(self, bench: str) -> bool:
+        return bench != "pbe-bitvec"
 
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
@@ -82,6 +88,9 @@ class SolverAbsSynthForwardOnly(SolverAbsSynth):
     def name(self) -> str:
         return "abs_synth_fonly"
 
+    def solvable(self, bench: str) -> bool:
+        return bench != "pbe-bitvec"
+
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
         return ["-no_backward", "-report_json", json_path, target]
@@ -91,6 +100,9 @@ class SolverAbsSynthEx05(SolverAbsSynth):
     # command: ./abs_synth.exe -ex_cut 5 [target_name]
     def name(self) -> str:
         return "abs_synth_ex05"
+
+    def solvable(self, bench: str) -> bool:
+        return bench == "deobfusc"
 
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
@@ -102,6 +114,9 @@ class SolverAbsSynthEx10(SolverAbsSynth):
     def name(self) -> str:
         return "abs_synth_ex10"
 
+    def solvable(self, bench: str) -> bool:
+        return bench == "deobfusc"
+
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
         return ["-ex_cut", "10", "-report_json", json_path, target]
@@ -111,6 +126,9 @@ class SolverAbsSynthEx15(SolverAbsSynth):
     # command: ./abs_synth.exe -ex_cut 15 [target_name]
     def name(self) -> str:
         return "abs_synth_ex15"
+
+    def solvable(self, bench: str) -> bool:
+        return bench == "deobfusc"
 
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
@@ -212,3 +230,69 @@ solver_map: Dict[str, Solver] = {
     "duet": SolverDuet(),
     "probe": SolverProbe(),
 }
+
+
+# no_result, timeout, failure, success
+def result_status(solver_name: str, problem_name: str) -> str:
+    problem_path = os.path.join(bench_name_to_dir[problem_bench_map[problem_name]], problem_name + ".sl")
+    result_file_path = result_path(solver_name) + os.sep + os.path.splitext(problem_path[len(bench_root_path):])[0] + ".result.txt"
+    try:
+        with open(result_file_path, "rt") as fin:
+            line = fin.readline()
+            solver, problem, sol_time_str, sol_size_str, sol = line.strip().split(sep=",")
+
+            if sol == "timeout":
+                return "timeout"
+            elif sol == "fail_with_max_size":
+                return "success"
+            elif sol == "failure" or sol_size_str.endswith(")"):
+                return "failure"
+            else:
+                return "success"
+    except FileNotFoundError:
+        return "no_result"
+
+
+# solver |-> bench |-> (success|timeout|failure|no_result) |-> count
+def all_result_status_tbl() -> Dict[str, Dict[str, Dict[str, int]]]:
+    tbl = dict()
+    counter_items = ["success", "timeout", "failure", "no_result"]
+
+    for solver in [*solver_names, *ablation_names, *ex_cut_names]:
+        tbl[solver] = dict()
+        for bench in bench_names:
+            bench_counters = {ci: 0 for ci in counter_items}
+            for problem in problem_map[bench][0]:
+                bench_counters[result_status(solver, problem)] += 1
+            tbl[solver][bench] = bench_counters
+
+    return tbl
+
+
+def all_result_status_str() -> List[str]:
+    lines = list()
+    counter_items = ["success", "timeout", "failure", "no_result"]
+
+    tbl = all_result_status_tbl()
+    for solver_name in [*solver_names, *ablation_names, *ex_cut_names]:
+        solver = solver_map[solver_name]
+        if all(not solver.solvable(bench) or tbl[solver_name][bench]["no_result"] == 0 for bench in bench_names):
+            lines.append(f"{solver_name}: DONE")
+        elif all(tbl[solver_name][bench]["no_result"] == len(problem_map[bench][1]) for bench in bench_names):
+            lines.append(f"{solver_name}: NO_RESULT")
+        else:
+            lines.append(f"{solver_name}:")
+            for bench in bench_names:
+                if not solver.solvable(bench):
+                    continue
+                elif tbl[solver_name][bench]["no_result"] == 0:
+                    lines.append(f"  {bench}:[{len(problem_map[bench][1])}/{len(problem_map[bench][1])}] DONE")
+                elif tbl[solver_name][bench]["no_result"] == len(problem_map[bench][1]):
+                    lines.append(f"  {bench}: NO_RESULT")
+                else:
+                    lines.append(f"  {bench}:[{len(problem_map[bench][1]) - tbl[solver_name][bench]['no_result']}/{len(problem_map[bench][1])}]")
+                    for ci in counter_items:
+                        if tbl[solver_name][bench][ci] > 0:
+                            lines.append(f"    {ci}: {tbl[solver_name][bench][ci]}")
+
+    return lines

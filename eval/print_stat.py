@@ -121,7 +121,7 @@ def build_time_cmp_table(problem_df, abs_df, duet_df, probe_df=None) -> pd.DataF
 
 def health_check_solver_bench(s, b) -> List[Tuple[str, str]]:
     # health check
-    status_tbl = all_result_status_tbl()
+    status_tbl = solvers.all_result_status_tbl()
     required_pairs = list()
     for solver in s:
         for bench in b:
@@ -134,7 +134,7 @@ def health_check_solver_problem(s, p) -> List[Tuple[str, str]]:
     required_pairs = list()
     for solver_name in s:
         for problem in p:
-            if result_status(solver_name, problem) == "no_result" and solvers.solver_map[solver_name].solvable(problem_bench_map[problem]):
+            if solvers.result_status(solver_name, problem) == "no_result" and solvers.solver_map[solver_name].solvable(problem_bench_map[problem]):
                 required_pairs.append((solver_name, problem))
     return required_pairs
 
@@ -1198,7 +1198,7 @@ def draw_all(print_main_table: bool,
         print_ablation_table = True
         print_plot = True
 
-    for line in all_result_status_str():
+    for line in solvers.all_result_status_str():
         log_write_with_time(line)
 
     if print_main_table:
