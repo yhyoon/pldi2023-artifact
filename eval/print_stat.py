@@ -623,7 +623,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
-    table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n"
+    table_out.write("Table 1. Results for 25 randomly chosen benchmark problems (5 for each domain).\n"
                     "Analysis times are not included in this table. You can see them by manually running\n"
                     " abs_synth with option '-log'.\n")
     table_out.write("\n".join(txt_detail_lines))
@@ -633,7 +633,8 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "\\begin{table}",
         "  \\small",
         "  \\centering",
-        "  \\caption{Results for 20 randomly chosen benchmark problems (5 for each domain), where \\textbf{Time} gives synthesis time,",
+        "  \\caption{Results for 25 randomly chosen benchmark problems (5 for each domain), ",
+        "  where \\textbf{Time} gives synthesis time,",
         "  $T_{A}$ gives time spent for forward and backward analysis,",
         "  and $|P|$ shows the size of the synthesized program (measured by number of AST nodes).}",
         "  \\label{tbl:compare_detail}",
