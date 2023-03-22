@@ -1,0 +1,1 @@
+abs_synth,p09.eqn_sygus_iter_56_1,0.190744173,9,(define-fun skel ( (n234 Bool) (n174 Bool) (n114 Bool) (n87 Bool)) Bool (and (and n234 n174) (and n87 (not (not n114)))))

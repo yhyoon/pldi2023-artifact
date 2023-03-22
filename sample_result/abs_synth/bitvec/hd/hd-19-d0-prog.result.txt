@@ -1,0 +1,1 @@
+abs_synth,hd-19-d0-prog,0.393060927,19,(define-fun f ( (x (BitVec 64)) (m (BitVec 64)) (k (BitVec 64))) (BitVec 64) (bvxor (bvshl (bvand m (bvxor x (bvlshr x k))) k) (bvxor x (bvand m (bvxor x (bvlshr x k))))))

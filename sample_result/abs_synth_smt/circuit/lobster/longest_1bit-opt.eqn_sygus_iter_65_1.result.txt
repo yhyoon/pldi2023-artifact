@@ -1,0 +1,1 @@
+abs_synth_smt,longest_1bit-opt.eqn_sygus_iter_65_1,442.966761023,15,(define-fun skel ( (i_4 Bool) (i_3 Bool) (i_2 Bool) (i_6 Bool) (i_7 Bool)) Bool (or (and (and i_4 i_3) (xor i_2 i_6)) (and (and i_4 i_6) (xor i_3 i_7))))

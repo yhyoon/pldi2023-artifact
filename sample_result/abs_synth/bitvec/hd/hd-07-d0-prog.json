@@ -1,0 +1,55 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/hd/hd-07-d0-prog.sl",
+  "problem_name": "hd-07-d0-prog",
+  "start_time": "23.03.21.21:53:32",
+  "total_time": 0.05923008918762207,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 4,
+  "cegis_solver_call_time": 0.053487999999999994,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 1 ], [ 2, 2 ] ],
+      "created_sub": [ [ 0, 3 ], [ 1, 9 ] ],
+      "created_components": 8
+    },
+    {
+      "created_top": [ [ 0, 2 ], [ 1, 1 ], [ 2, 2 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 3 ] ],
+      "created_components": 2
+    },
+    {
+      "created_top": [ [ 0, 2 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 3,
+  "final_max_component_size": 3,
+  "final_component_count": 8,
+  "found_solution": "(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvand (bvnot x) (bvadd x #x0000000000000001)))",
+  "solution_size": 6,
+  "total_composed": [ [ 0, 10 ], [ 1, 14 ], [ 2, 4 ] ],
+  "component_generation_time": 0.0003771781921386719,
+  "component_search_table_build_time": 0.0003352165222167969,
+  "prune": {
+    "method": "abstsem",
+    "count": 18,
+    "time": 0.001260519027709961,
+    "infeasible": 5,
+    "search_infeasible": 7,
+    "search_useful": 1,
+    "approx_reduced_incomplete": 5,
+    "approx_reduced_complete": 45
+  }
+}

@@ -1,0 +1,1 @@
+abs_synth,p15.eqn_sygus_iter_34_1,0.165035251,13,(define-fun skel ( (n274 Bool) (n261 Bool) (n253 Bool) (n170 Bool)) Bool (xor (and n170 (and n253 (not (not n274)))) (and n261 (not (not n274)))))

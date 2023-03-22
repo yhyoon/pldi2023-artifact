@@ -1,0 +1,1 @@
+duet,CrCy_10-sbox2-D5-sIn74,0.111183735,7,(define-fun skel ( (LN88 Bool) (LN187 Bool)) Bool (and LN88 (not (not (or LN187 LN187)))))

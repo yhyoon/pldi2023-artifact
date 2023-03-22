@@ -1,0 +1,1 @@
+duet,hd-cardio.eqn_sygus_iter_20_0,5.769599614,11,(define-fun skel ( (n263 Bool) (n271 Bool) (n218 Bool) (n251 Bool) (n248 Bool) (n215 Bool)) Bool (xor (and n215 (and n248 (and n251 n218))) (xor n271 n263)))

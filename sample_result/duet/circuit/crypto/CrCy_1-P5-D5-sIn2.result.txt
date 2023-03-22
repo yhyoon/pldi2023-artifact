@@ -1,0 +1,1 @@
+duet,CrCy_1-P5-D5-sIn2,0.091903929,7,(define-fun skel ( (LN13 Bool) (LN32 Bool)) Bool (xor LN32 (not (not (or LN13 LN13)))))

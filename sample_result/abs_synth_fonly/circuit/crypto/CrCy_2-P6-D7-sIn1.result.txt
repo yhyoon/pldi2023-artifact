@@ -1,0 +1,1 @@
+abs_synth_fonly,CrCy_2-P6-D7-sIn1,0.170185745,14,(define-fun skel ( (LN3 Bool) (LN13 Bool) (LN19 Bool) (LN20 Bool) (LN30 Bool)) Bool (xor LN3 (not (xor LN30 (xor (and LN19 (not LN20)) (xor LN19 (not LN13)))))))

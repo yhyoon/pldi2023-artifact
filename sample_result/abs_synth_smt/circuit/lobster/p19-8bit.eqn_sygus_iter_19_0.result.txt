@@ -1,0 +1,1 @@
+abs_synth_smt,p19-8bit.eqn_sygus_iter_19_0,180.518895497,16,(define-fun skel ( (n35 Bool) (n26 Bool) (n46 Bool) (i6 Bool)) Bool (xor (and (and n35 n26) (or n46 (not i6))) (or (and n35 n26) (not (not i6)))))

@@ -1,0 +1,1 @@
+abs_synth,CrCy_8-P12-D7-sIn17,0.211286181,16,(define-fun skel ( (LN150 Bool) (LN171 Bool) (k7 Bool) (LN331 Bool) (LN335 Bool)) Bool (xor (not (xor LN335 (not (xor LN150 LN171)))) (not (not (xor LN331 (and LN150 (not k7)))))))

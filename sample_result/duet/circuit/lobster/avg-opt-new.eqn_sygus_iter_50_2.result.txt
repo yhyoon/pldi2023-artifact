@@ -1,0 +1,1 @@
+duet,avg-opt-new.eqn_sygus_iter_50_2,103.970043767,12,(define-fun skel ( (n80 Bool) (i_10 Bool) (n45 Bool) (n48 Bool) (i_2 Bool) (n53 Bool)) Bool (and (xor i_2 (xor n48 (xor n45 (not i_10)))) (and n53 n80)))

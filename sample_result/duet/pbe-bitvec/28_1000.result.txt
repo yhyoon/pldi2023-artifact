@@ -1,0 +1,1 @@
+duet,28_1000,9.191687811,3,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvlshr x #x0000000000000010))

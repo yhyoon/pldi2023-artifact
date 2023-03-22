@@ -1,0 +1,1 @@
+duet,14_1000,timeout,timeout,timeout

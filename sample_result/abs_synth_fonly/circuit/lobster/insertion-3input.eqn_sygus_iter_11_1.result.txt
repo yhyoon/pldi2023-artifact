@@ -1,0 +1,1 @@
+abs_synth_fonly,insertion-3input.eqn_sygus_iter_11_1,0.145250942,11,(define-fun skel ( (n141 Bool) (n107 Bool) (i_17 Bool) (n140 Bool)) Bool (xor (and n141 (not (not n140))) (and n107 (and i_17 n140))))

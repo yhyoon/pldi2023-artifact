@@ -1,0 +1,1 @@
+abs_synth_smt,hd-06-d5-prog,197.77754306,7,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvor (bvneg (bvnot x)) (bvor x #x0000000000000001)))

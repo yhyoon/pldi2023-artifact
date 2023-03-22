@@ -1,0 +1,1 @@
+duet,hd09.eqn_sygus_iter_35_1,0.172903226,7,(define-fun skel ( (n177 Bool) (n171 Bool) (n166 Bool)) Bool (or (not n166) (not (and n171 n177))))

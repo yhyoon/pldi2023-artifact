@@ -1,0 +1,1 @@
+abs_synth_fonly,hd09.eqn_sygus_iter_5_0,0.240384757,9,(define-fun skel ( (n72 Bool) (n79 Bool) (n94 Bool) (n87 Bool) (n69 Bool)) Bool (and (and n79 (and n72 n69)) (and n94 n87)))

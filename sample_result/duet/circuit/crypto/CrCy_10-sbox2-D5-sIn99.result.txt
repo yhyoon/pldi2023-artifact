@@ -1,0 +1,1 @@
+duet,CrCy_10-sbox2-D5-sIn99,0.343877121,fail_with_max_size,fail_with_max_size

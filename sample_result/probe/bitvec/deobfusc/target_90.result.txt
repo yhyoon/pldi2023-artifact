@@ -1,0 +1,1 @@
+probe,target_90,170.225469791,12,(bvor (bvadd a d) (bvxor (bvmul a a) (bvneg (bvand a d))))

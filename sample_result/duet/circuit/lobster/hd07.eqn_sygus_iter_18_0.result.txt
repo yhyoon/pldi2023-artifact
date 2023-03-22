@@ -1,0 +1,1 @@
+duet,hd07.eqn_sygus_iter_18_0,0.155583436,9,(define-fun skel ( (i18 Bool) (i17 Bool) (i16 Bool)) Bool (xor (and i16 (not i17)) (or i18 (not i17))))

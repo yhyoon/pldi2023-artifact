@@ -1,0 +1,1 @@
+abs_synth,p20.eqn_sygus_iter_23_0,0.228107807,14,(define-fun skel ( (n183 Bool) (n253 Bool) (n250 Bool) (n178 Bool)) Bool (or (and (not n183) (not n250)) (not (and n178 (or n250 (not (not n253)))))))

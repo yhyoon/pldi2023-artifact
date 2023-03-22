@@ -1,0 +1,1 @@
+duet,icfp_gen_1.19,4.735046784,23,(define-fun f ( (x (BitVec 64))) (BitVec 64) (ite (= x (bvor #x0000000000000001 x)) (ite (= #x0000000000000000 (bvand #x0000000000000010 x)) (bvadd (bvudiv x #x0000000000000010) #x0000000000000001) (bvudiv x #x0000000000000010)) (bvadd #x0000000000000002 x)))

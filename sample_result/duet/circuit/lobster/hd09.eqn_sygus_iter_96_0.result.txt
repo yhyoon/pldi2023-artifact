@@ -1,0 +1,1 @@
+duet,hd09.eqn_sygus_iter_96_0,0.418263614,11,(define-fun skel ( (n134 Bool) (n213 Bool) (i25 Bool) (n163 Bool) (n211 Bool)) Bool (and (xor n211 (and n163 i25)) (and n134 (and n211 n213))))

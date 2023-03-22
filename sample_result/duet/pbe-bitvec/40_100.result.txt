@@ -1,0 +1,1 @@
+duet,40_100,timeout,timeout,timeout

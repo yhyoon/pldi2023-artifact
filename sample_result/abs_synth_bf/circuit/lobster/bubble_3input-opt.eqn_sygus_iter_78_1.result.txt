@@ -1,0 +1,1 @@
+abs_synth_bf,bubble_3input-opt.eqn_sygus_iter_78_1,0.149709371,11,(define-fun skel ( (i_5 Bool) (n105 Bool) (n119 Bool) (n117 Bool)) Bool (xor (and n105 (and i_5 n117)) (and n119 (not (not n117)))))

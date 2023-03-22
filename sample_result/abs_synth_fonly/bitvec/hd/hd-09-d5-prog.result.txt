@@ -1,0 +1,1 @@
+abs_synth_fonly,hd-09-d5-prog,6.174165428,11,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvor (bvshl x (bvashr x x)) (bvmul x (bvashr x x))))

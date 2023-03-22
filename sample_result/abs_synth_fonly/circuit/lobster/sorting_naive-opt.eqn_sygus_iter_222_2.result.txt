@@ -1,0 +1,1 @@
+abs_synth_fonly,sorting_naive-opt.eqn_sygus_iter_222_2,0.150806202,12,(define-fun skel ( (n386 Bool) (n389 Bool) (n393 Bool) (n388 Bool) (i_8 Bool)) Bool (and (and (not n388) (xor n386 n389)) (and n393 (not (not i_8)))))

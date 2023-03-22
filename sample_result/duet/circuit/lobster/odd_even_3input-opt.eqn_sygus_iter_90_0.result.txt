@@ -1,0 +1,1 @@
+duet,odd_even_3input-opt.eqn_sygus_iter_90_0,0.344326675,11,(define-fun skel ( (n71 Bool) (n102 Bool) (n87 Bool) (n59 Bool) (i_7 Bool)) Bool (xor (and n87 (and i_7 n59)) (and i_7 (xor n102 n71))))

@@ -1,0 +1,1 @@
+duet,p20.eqn_sygus_iter_23_0,0.735159664,11,(define-fun skel ( (n183 Bool) (n253 Bool) (n250 Bool) (n178 Bool)) Bool (or (not (or n250 n183)) (not (and n178 (or n250 n253)))))

@@ -1,0 +1,1 @@
+abs_synth_smt,hd-09-d0-prog,1.19288596,9,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvsub (bvxor x (bvashr x x)) (bvashr x x)))

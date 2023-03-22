@@ -1,0 +1,1 @@
+duet,sorting_naive.eqn_sygus_iter_129_0,5.414083328,13,(define-fun skel ( (n309 Bool) (n308 Bool) (n268 Bool) (n113 Bool) (n118 Bool) (i_17 Bool)) Bool (and (and i_17 (xor n118 (xor n113 n309))) (xor n309 (or n268 n308))))

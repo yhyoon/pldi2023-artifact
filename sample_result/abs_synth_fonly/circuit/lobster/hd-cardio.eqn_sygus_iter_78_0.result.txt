@@ -1,0 +1,1 @@
+abs_synth_fonly,hd-cardio.eqn_sygus_iter_78_0,41.127573336,19,(define-fun skel ( (n150 Bool) (n333 Bool) (n326 Bool) (n345 Bool) (n336 Bool)) Bool (and (or (and n326 n345) (not (or n336 (not n150)))) (not (and (and n326 n345) (or n333 (not n150))))))

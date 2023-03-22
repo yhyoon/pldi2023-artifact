@@ -1,0 +1,1 @@
+abs_synth_fonly,p19.eqn_sygus_iter_50_1,0.187707266,7,(define-fun skel ( (n204 Bool) (n191 Bool) (n177 Bool) (n171 Bool)) Bool (and (and n204 n191) (and n177 n171)))

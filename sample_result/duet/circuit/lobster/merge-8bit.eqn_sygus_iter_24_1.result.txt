@@ -1,0 +1,1 @@
+duet,merge-8bit.eqn_sygus_iter_24_1,10.717572524,17,(define-fun skel ( (n251 Bool) (n143 Bool) (n152 Bool) (n176 Bool) (i_25 Bool)) Bool (xor (and (xor n176 n152) (or i_25 (not n251))) (or (xor n176 n152) (and n251 (not n143)))))

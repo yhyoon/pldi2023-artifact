@@ -1,0 +1,1 @@
+abs_synth_fonly,longest_1bit-opt.eqn_sygus_iter_129_0,7.060375371,17,(define-fun skel ( (n34 Bool) (n115 Bool) (n121 Bool) (n111 Bool) (i_3 Bool)) Bool (and (and (not n111) (and n121 (or n34 i_3))) (xor (not n34) (and n115 (and n34 i_3)))))

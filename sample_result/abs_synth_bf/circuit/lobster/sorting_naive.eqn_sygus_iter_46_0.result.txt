@@ -1,0 +1,1 @@
+abs_synth_bf,sorting_naive.eqn_sygus_iter_46_0,0.339554429,10,(define-fun skel ( (n268 Bool) (n308 Bool) (n309 Bool) (n118 Bool) (n113 Bool)) Bool (and (and n309 (xor n113 (not n118))) (or n268 n308)))

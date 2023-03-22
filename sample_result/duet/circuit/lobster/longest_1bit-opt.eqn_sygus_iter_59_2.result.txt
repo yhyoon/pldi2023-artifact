@@ -1,0 +1,1 @@
+duet,longest_1bit-opt.eqn_sygus_iter_59_2,7.075013102,13,(define-fun skel ( (n23 Bool) (n30 Bool) (n26 Bool) (n52 Bool) (n47 Bool) (n22 Bool)) Bool (and (and (not n47) (and n22 n52)) (not (and n26 (and n30 n23)))))

@@ -1,0 +1,1 @@
+abs_synth_fonly,hd07.eqn_sygus_iter_85_0,6.428527147,15,(define-fun skel ( (n184 Bool) (n152 Bool) (n116 Bool) (n178 Bool) (n103 Bool) (n165 Bool)) Bool (and (and n152 (xor n116 (xor n103 n165))) (and (and n184 n178) (and n116 n103))))

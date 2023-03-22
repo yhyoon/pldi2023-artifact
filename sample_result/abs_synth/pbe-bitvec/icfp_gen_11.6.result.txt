@@ -1,0 +1,1 @@
+abs_synth,icfp_gen_11.6,0.024022309,2,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvnot x))

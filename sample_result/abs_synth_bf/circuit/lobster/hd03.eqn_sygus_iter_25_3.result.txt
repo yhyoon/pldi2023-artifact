@@ -1,0 +1,1 @@
+abs_synth_bf,hd03.eqn_sygus_iter_25_3,0.794999094,11,(define-fun skel ( (i42 Bool) (i10 Bool) (i9 Bool) (i41 Bool) (i40 Bool) (i8 Bool)) Bool (and (and i40 (xor i42 i10)) (and i8 (xor i9 i41))))

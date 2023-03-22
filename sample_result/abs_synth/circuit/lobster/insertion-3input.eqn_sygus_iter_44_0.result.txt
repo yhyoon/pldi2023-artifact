@@ -1,0 +1,1 @@
+abs_synth,insertion-3input.eqn_sygus_iter_44_0,0.182095245,15,(define-fun skel ( (n72 Bool) (n103 Bool) (n88 Bool) (n60 Bool) (i_5 Bool)) Bool (xor (and n88 (and n60 (not (not i_5)))) (and (xor n72 n103) (not (not i_5)))))

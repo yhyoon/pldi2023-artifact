@@ -1,0 +1,1 @@
+duet,hd-03-d5-prog,1.189958685,4,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvand x (bvneg x)))

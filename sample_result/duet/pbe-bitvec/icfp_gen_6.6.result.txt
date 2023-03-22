@@ -1,0 +1,1 @@
+duet,icfp_gen_6.6,timeout,timeout,timeout

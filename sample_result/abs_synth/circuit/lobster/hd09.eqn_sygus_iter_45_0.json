@@ -1,0 +1,315 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/lobster/hd09.eqn_sygus_iter_45_0.sl",
+  "problem_name": "hd09.eqn_sygus_iter_45_0",
+  "start_time": "23.03.21.21:56:20",
+  "total_time": 11.06706690788269,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 56,
+  "cegis_solver_call_time": 0.5237899999999998,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 8301 ] ],
+      "created_components": 44454
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 187 ] ],
+      "created_components": 17492
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 186 ] ],
+      "created_components": 17490
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 185 ] ],
+      "created_components": 17488
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 169 ] ],
+      "created_components": 17480
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 168 ] ],
+      "created_components": 17456
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 167 ] ],
+      "created_components": 17420
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 167 ] ],
+      "created_components": 17420
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 167 ] ],
+      "created_components": 17412
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 154 ] ],
+      "created_components": 17409
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 154 ] ],
+      "created_components": 17374
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 153 ] ],
+      "created_components": 17366
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 152 ] ],
+      "created_components": 17336
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 151 ] ],
+      "created_components": 17290
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 151 ] ],
+      "created_components": 17287
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2870 ] ],
+      "created_components": 17234
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 392 ] ],
+      "created_components": 6217
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 381 ] ],
+      "created_components": 6097
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1251 ] ],
+      "created_components": 6097
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 64 ] ],
+      "created_components": 1021
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 56 ] ],
+      "created_components": 1021
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 56 ] ],
+      "created_components": 1021
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 4 ] ],
+      "created_components": 1021
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 4 ] ],
+      "created_components": 1021
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 4 ] ],
+      "created_components": 1021
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 3 ] ],
+      "created_components": 1021
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2 ] ],
+      "created_components": 1018
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 1012
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 1012
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 1012
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 178 ] ],
+      "created_components": 1012
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 4 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 3 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 3 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 3 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 7 ] ],
+      "created_components": 184
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 6 ] ],
+      "created_components": 117
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 6 ] ],
+      "created_components": 116
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 6 ] ],
+      "created_components": 115
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 6 ] ],
+      "created_components": 57
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 6 ] ],
+      "created_components": 56
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 6 ] ],
+      "created_components": 55
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 7
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 6
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 5
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 4
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 3
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 2
+    },
+    {
+      "created_top": [ [ 1, 3 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 1
+    }
+  ],
+  "final_io_pairs": 55,
+  "final_max_component_size": 9,
+  "final_component_count": 44454,
+  "found_solution": "(define-fun skel ( (n96 Bool) (n104 Bool) (n106 Bool) (n131 Bool) (n115 Bool) (n118 Bool)) Bool (and (and n96 n104) (and n115 (and (and n106 n131) (and n106 n118)))))",
+  "solution_size": 13,
+  "total_composed": [ [ 0, 42 ], [ 1, 16110 ], [ 2, 165 ] ],
+  "component_generation_time": 2.746184825897217,
+  "component_search_table_build_time": 1.083695411682129,
+  "prune": {
+    "method": "abstsem",
+    "count": 16275,
+    "time": 0.3192331790924072,
+    "infeasible": 0,
+    "search_infeasible": 15944,
+    "search_useful": 96,
+    "approx_reduced_incomplete": 46566,
+    "approx_reduced_complete": 255369031
+  }
+}

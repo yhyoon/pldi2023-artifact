@@ -1,0 +1,1 @@
+abs_synth_bf,CrCy_1-P5_1-P5,2.668604002,13,(define-fun Imp ( (k1 Bool) (k2 Bool) (k3 Bool) (r1 Bool) (r2 Bool) (r3 Bool) (r4 Bool)) Bool (xor (not (not (and k2 k3))) (not (xor (not k1) (xor k3 r4)))))

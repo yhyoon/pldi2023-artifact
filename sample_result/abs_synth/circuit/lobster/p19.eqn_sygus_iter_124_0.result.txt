@@ -1,0 +1,1 @@
+abs_synth,p19.eqn_sygus_iter_124_0,0.130805254,12,(define-fun skel ( (n179 Bool) (n184 Bool) (i18 Bool)) Bool (xor (and n179 (or n184 (not i18))) (or n179 (not (not i18)))))

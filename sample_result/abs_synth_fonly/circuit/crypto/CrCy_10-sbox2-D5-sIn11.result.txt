@@ -1,0 +1,1 @@
+abs_synth_fonly,CrCy_10-sbox2-D5-sIn11,0.134683483,9,(define-fun skel ( (LN17 Bool) (k7 Bool) (LN34 Bool) (LN87 Bool)) Bool (and LN87 (xor LN34 (xor LN17 (or k7 k7)))))

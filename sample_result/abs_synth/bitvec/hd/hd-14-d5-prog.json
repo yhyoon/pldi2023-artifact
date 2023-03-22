@@ -1,0 +1,70 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/hd/hd-14-d5-prog.sl",
+  "problem_name": "hd-14-d5-prog",
+  "start_time": "23.03.21.21:53:32",
+  "total_time": 0.573512077331543,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 7,
+  "cegis_solver_call_time": 0.20511099999999993,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 6 ], [ 1, 2 ], [ 2, 13 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2268 ] ],
+      "created_components": 2232
+    },
+    {
+      "created_top": [ [ 0, 6 ], [ 1, 2 ], [ 2, 13 ] ],
+      "created_sub": [ [ 0, 2 ], [ 1, 25 ] ],
+      "created_components": 2148
+    },
+    {
+      "created_top": [ [ 0, 6 ], [ 1, 2 ], [ 2, 13 ] ],
+      "created_sub": [ [ 0, 8 ], [ 1, 3300 ] ],
+      "created_components": 2888
+    },
+    {
+      "created_top": [ [ 0, 6 ], [ 1, 2 ], [ 2, 13 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 184 ] ],
+      "created_components": 311
+    },
+    {
+      "created_top": [ [ 0, 6 ], [ 1, 2 ], [ 2, 13 ] ],
+      "created_sub": [ [ 0, 2562 ], [ 1, 1100 ] ],
+      "created_components": 255
+    },
+    {
+      "created_top": [ [ 0, 6 ], [ 1, 2 ], [ 2, 13 ] ],
+      "created_sub": [ [ 0, 7 ], [ 1, 41 ] ],
+      "created_components": 6
+    }
+  ],
+  "final_io_pairs": 6,
+  "final_max_component_size": 5,
+  "final_component_count": 2232,
+  "found_solution": "(define-fun f ( (x (BitVec 64)) (y (BitVec 64))) (BitVec 64) (bvadd (bvlshr (bvxor x y) #x0000000000000001) (bvand x y)))",
+  "solution_size": 9,
+  "total_composed": [ [ 0, 2617 ], [ 1, 6930 ], [ 2, 78 ] ],
+  "component_generation_time": 0.08371162414550781,
+  "component_search_table_build_time": 0.026146650314331055,
+  "prune": {
+    "method": "abstsem",
+    "count": 7008,
+    "time": 0.26017284393310547,
+    "infeasible": 3082,
+    "search_infeasible": 3814,
+    "search_useful": 48,
+    "approx_reduced_incomplete": 13089,
+    "approx_reduced_complete": 31494092
+  }
+}

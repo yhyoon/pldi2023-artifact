@@ -1,0 +1,1 @@
+abs_synth,longest_1bit-opt.eqn_sygus_iter_59_2,0.792263259,17,(define-fun skel ( (n23 Bool) (n30 Bool) (n26 Bool) (n52 Bool) (n47 Bool) (n22 Bool)) Bool (and (not (and n30 (and n26 (not (not n23))))) (not (or n47 (or (not n52) (not n22))))))

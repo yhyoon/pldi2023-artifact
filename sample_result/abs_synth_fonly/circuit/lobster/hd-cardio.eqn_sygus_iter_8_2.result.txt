@@ -1,0 +1,1 @@
+abs_synth_fonly,hd-cardio.eqn_sygus_iter_8_2,2.867580011,14,(define-fun skel ( (n199 Bool) (n195 Bool) (n190 Bool) (n191 Bool) (n189 Bool)) Bool (xor (and (not n199) (or n195 n189)) (or (and n190 n191) (or n199 n195))))

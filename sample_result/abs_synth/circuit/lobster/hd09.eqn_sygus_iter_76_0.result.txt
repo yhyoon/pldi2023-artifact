@@ -1,0 +1,1 @@
+abs_synth,hd09.eqn_sygus_iter_76_0,13.462417107,13,(define-fun skel ( (n80 Bool) (n95 Bool) (n99 Bool) (n108 Bool) (n103 Bool) (n110 Bool)) Bool (and (and n80 n95) (and n103 (and (and n99 n108) (and n99 n110)))))

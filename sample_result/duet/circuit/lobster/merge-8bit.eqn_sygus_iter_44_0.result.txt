@@ -1,0 +1,1 @@
+duet,merge-8bit.eqn_sygus_iter_44_0,0.345395955,11,(define-fun skel ( (n72 Bool) (n103 Bool) (n88 Bool) (n60 Bool) (i_5 Bool)) Bool (xor (and n88 (and i_5 n60)) (and i_5 (xor n103 n72))))

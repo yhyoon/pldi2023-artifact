@@ -1,0 +1,1 @@
+abs_synth,hd-20-d1-prog,98.220857802,15,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvor (bvsdiv (bvlshr x #x0000000000000002) (bvand x (bvneg x))) (bvneg (bvand (bvnot x) (bvneg x)))))

@@ -1,0 +1,1 @@
+abs_synth_bf,merge-8bit.eqn_sygus_iter_46_1,0.147402816,11,(define-fun skel ( (n118 Bool) (n107 Bool) (i_13 Bool) (n117 Bool)) Bool (xor (and n118 (not (not n117))) (and n107 (and i_13 n117))))

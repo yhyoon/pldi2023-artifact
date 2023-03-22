@@ -1,0 +1,1 @@
+duet,nlz-opt.eqn_sygus_iter_189_1,2.648423081,11,(define-fun skel ( (n226 Bool) (n240 Bool) (n230 Bool) (n245 Bool) (n236 Bool)) Bool (xor (and n240 (and n226 (and n236 n230))) (and n236 n245)))

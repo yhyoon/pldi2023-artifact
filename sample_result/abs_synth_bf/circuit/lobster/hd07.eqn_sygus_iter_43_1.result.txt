@@ -1,0 +1,1 @@
+abs_synth_bf,hd07.eqn_sygus_iter_43_1,0.166455892,9,(define-fun skel ( (n277 Bool) (n254 Bool) (n270 Bool) (n232 Bool)) Bool (and (and n254 n232) (and n270 (not (not n277)))))

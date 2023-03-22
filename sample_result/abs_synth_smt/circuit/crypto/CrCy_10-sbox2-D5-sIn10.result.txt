@@ -1,0 +1,1 @@
+abs_synth_smt,CrCy_10-sbox2-D5-sIn10,0.732862219,7,(define-fun skel ( (LN89 Bool) (k7 Bool)) Bool (and (not (not (or k7 k7))) LN89))

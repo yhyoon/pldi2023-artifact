@@ -1,0 +1,1 @@
+probe,target_440,5.414193221,8,(bvneg (bvadd (bvor e c) (bvmul b c)))

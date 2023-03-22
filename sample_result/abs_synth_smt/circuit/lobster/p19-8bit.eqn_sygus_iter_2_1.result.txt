@@ -1,0 +1,1 @@
+abs_synth_smt,p19-8bit.eqn_sygus_iter_2_1,3.627718788,7,(define-fun skel ( (i2 Bool) (i4 Bool) (i3 Bool)) Bool (xor (and i4 i3) (or i2 i3)))

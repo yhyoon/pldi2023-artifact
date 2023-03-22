@@ -1,0 +1,1 @@
+duet,hd07.eqn_sygus_iter_56_1,1.102406932,10,(define-fun skel ( (n162 Bool) (n205 Bool) (n250 Bool) (n247 Bool)) Bool (xor (and n250 (and n162 (and n247 n205))) (not n247)))

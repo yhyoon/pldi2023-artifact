@@ -1,0 +1,1 @@
+duet,sorting_naive-opt.eqn_sygus_iter_375_2,95.919141731,18,(define-fun skel ( (n273 Bool) (n313 Bool) (n216 Bool) (n192 Bool) (n322 Bool)) Bool (and (xor n273 (and n313 (xor n192 (not n216)))) (and n322 (xor n192 (xor n216 (xor n313 n273))))))

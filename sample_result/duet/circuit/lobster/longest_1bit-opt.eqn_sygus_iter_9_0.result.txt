@@ -1,0 +1,1 @@
+duet,longest_1bit-opt.eqn_sygus_iter_9_0,0.772937915,9,(define-fun skel ( (n101 Bool) (n78 Bool) (n85 Bool) (n74 Bool)) Bool (xor (and (and n74 n85) (and n78 n101)) n101))

@@ -1,0 +1,1 @@
+abs_synth,bubble_3input-opt.eqn_sygus_iter_56_1,0.446532649,18,(define-fun skel ( (n261 Bool) (n132 Bool) (n152 Bool) (n176 Bool) (i_23 Bool)) Bool (xor (and (xor n152 n176) (and n261 (not i_23))) (not (or (xor n152 n176) (or n132 (not n261))))))

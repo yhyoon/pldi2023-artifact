@@ -1,0 +1,1 @@
+abs_synth,icfp_gen_14.12,0.587532921,9,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvand (bvneg (bvurem x #x0000000000000002)) (bvnot (bvlshr x #x0000000000000001))))

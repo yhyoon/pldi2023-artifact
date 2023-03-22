@@ -1,0 +1,1 @@
+abs_synth_smt,hd06.eqn_sygus_iter_102_0,127.719513347,15,(define-fun skel ( (n208 Bool) (n325 Bool) (n254 Bool) (n207 Bool) (i62 Bool)) Bool (xor (and n207 (and n254 (not (not n208)))) (xor (not i62) (or n325 (not n208)))))

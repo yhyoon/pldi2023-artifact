@@ -1,0 +1,1 @@
+abs_synth,33_100,0.085951282,5,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvand (bvlshr x #x000000000000000f) #x0000000000000002))

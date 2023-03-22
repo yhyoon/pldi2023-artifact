@@ -1,0 +1,1 @@
+abs_synth_smt,hd11.eqn_sygus_iter_2_2,14.168896549,7,(define-fun skel ( (i_14 Bool) (i_15 Bool) (i_13 Bool) (i_12 Bool)) Bool (and (and i_14 i_15) (and i_13 i_12)))

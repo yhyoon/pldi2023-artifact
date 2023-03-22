@@ -1,0 +1,1 @@
+duet,CrCy_7-P11-D5-sIn5,0.291452303,fail_with_max_size,fail_with_max_size

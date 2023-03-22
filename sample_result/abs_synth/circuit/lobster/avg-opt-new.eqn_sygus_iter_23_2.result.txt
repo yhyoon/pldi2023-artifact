@@ -1,0 +1,1 @@
+abs_synth,avg-opt-new.eqn_sygus_iter_23_2,0.433115352,12,(define-fun skel ( (n77 Bool) (i_10 Bool) (n45 Bool) (n48 Bool) (i_2 Bool) (n53 Bool)) Bool (and (and n77 n53) (not (xor n48 (xor n45 (xor i_10 i_2))))))

@@ -1,0 +1,1 @@
+abs_synth,28_100,0.012369932,3,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvlshr x #x0000000000000010))

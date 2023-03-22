@@ -1,0 +1,1 @@
+abs_synth_fonly,sorting_naive-opt.eqn_sygus_iter_477_1,0.171612326,9,(define-fun skel ( (n322 Bool) (n325 Bool) (n315 Bool) (n319 Bool) (i_25 Bool)) Bool (and (xor n315 n319) (and n325 (and n322 i_25))))

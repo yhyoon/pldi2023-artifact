@@ -1,0 +1,1 @@
+abs_synth,129_100,0.024261824,4,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvsub x (bvnot x)))

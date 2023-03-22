@@ -1,0 +1,1 @@
+abs_synth,CrCy_10-sbox2-D5-sIn82,0.505652752,fail_with_max_size,fail_with_max_size

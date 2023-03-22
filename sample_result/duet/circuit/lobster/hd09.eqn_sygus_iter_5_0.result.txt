@@ -1,0 +1,1 @@
+duet,hd09.eqn_sygus_iter_5_0,0.88805167,9,(define-fun skel ( (n72 Bool) (n79 Bool) (n94 Bool) (n87 Bool) (n69 Bool)) Bool (and (and n87 (and n69 n72)) (and n94 n79)))

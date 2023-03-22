@@ -1,0 +1,1 @@
+abs_synth_bf,CrCy_8-P12-D7-sIn21,0.103293727,7,(define-fun skel ( (LN147 Bool) (LN197 Bool) (k8 Bool)) Bool (xor LN197 (and LN147 (or k8 k8))))

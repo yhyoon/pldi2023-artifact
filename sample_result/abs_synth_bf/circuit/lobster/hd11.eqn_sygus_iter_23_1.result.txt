@@ -1,0 +1,1 @@
+abs_synth_bf,hd11.eqn_sygus_iter_23_1,0.326795616,12,(define-fun skel ( (n719 Bool) (n721 Bool) (n727 Bool) (n715 Bool) (n708 Bool)) Bool (and (and (not n708) (or n721 (not n719))) (or n715 (not n727))))

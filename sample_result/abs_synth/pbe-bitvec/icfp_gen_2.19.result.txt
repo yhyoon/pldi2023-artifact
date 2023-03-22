@@ -1,0 +1,1 @@
+abs_synth,icfp_gen_2.19,10.449756718,10,(define-fun f ( (x (BitVec 64))) (BitVec 64) (ite (= x (bvor x #x0000000000000010)) (bvxor x #x0000000000000002) #x0000000000000002))

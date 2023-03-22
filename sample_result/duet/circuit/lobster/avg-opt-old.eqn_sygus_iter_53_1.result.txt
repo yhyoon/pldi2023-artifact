@@ -1,0 +1,1 @@
+duet,avg-opt-old.eqn_sygus_iter_53_1,0.724979196,12,(define-fun skel ( (n107 Bool) (n69 Bool) (n76 Bool) (n63 Bool)) Bool (xor (and (and n63 n76) (and n69 n107)) (and n107 (not n63))))

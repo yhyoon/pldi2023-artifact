@@ -1,0 +1,1 @@
+duet,CrCy_10-sbox2-D5-sIn13,0.295824261,9,(define-fun skel ( (LN4 Bool) (LN16 Bool) (LN17 Bool) (LN55 Bool) (LN65 Bool)) Bool (xor (xor LN65 (xor LN16 (xor LN17 LN4))) LN55))

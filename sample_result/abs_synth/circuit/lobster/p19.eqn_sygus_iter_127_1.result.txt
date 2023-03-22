@@ -1,0 +1,1 @@
+abs_synth,p19.eqn_sygus_iter_127_1,0.101879602,8,(define-fun skel ( (i25 Bool) (i24 Bool) (i23 Bool)) Bool (xor (and i25 i24) (not (or i24 i23))))

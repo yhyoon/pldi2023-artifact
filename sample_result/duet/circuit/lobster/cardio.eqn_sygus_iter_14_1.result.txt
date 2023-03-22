@@ -1,0 +1,1 @@
+duet,cardio.eqn_sygus_iter_14_1,0.316990439,11,(define-fun skel ( (n267 Bool) (n270 Bool) (n275 Bool) (n250 Bool)) Bool (xor (xor n250 (or n275 n270)) (or n267 (or n275 n270))))

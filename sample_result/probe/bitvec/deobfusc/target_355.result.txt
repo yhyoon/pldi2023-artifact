@@ -1,0 +1,1 @@
+probe,target_355,5.515549785,8,(bvneg (bvmul (bvmul a a) (bvmul d d)))

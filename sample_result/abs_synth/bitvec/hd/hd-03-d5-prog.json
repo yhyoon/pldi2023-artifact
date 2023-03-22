@@ -1,0 +1,50 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/bitvec/hd/hd-03-d5-prog.sl",
+  "problem_name": "hd-03-d5-prog",
+  "start_time": "23.03.21.21:53:32",
+  "total_time": 0.04256701469421387,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 3,
+  "cegis_solver_call_time": 0.037007000000000005,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 4 ], [ 1, 2 ], [ 2, 13 ] ],
+      "created_sub": [ [ 0, 11 ], [ 1, 41 ] ],
+      "created_components": 7
+    },
+    {
+      "created_top": [ [ 0, 1 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 2,
+  "final_max_component_size": 2,
+  "final_component_count": 7,
+  "found_solution": "(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvand x (bvneg x)))",
+  "solution_size": 4,
+  "total_composed": [ [ 0, 16 ], [ 1, 43 ], [ 2, 13 ] ],
+  "component_generation_time": 3.504753112792969e-05,
+  "component_search_table_build_time": 5.0067901611328125e-06,
+  "prune": {
+    "method": "abstsem",
+    "count": 56,
+    "time": 0.0041692256927490234,
+    "infeasible": 12,
+    "search_infeasible": 26,
+    "search_useful": 8,
+    "approx_reduced_incomplete": 26,
+    "approx_reduced_complete": 220
+  }
+}

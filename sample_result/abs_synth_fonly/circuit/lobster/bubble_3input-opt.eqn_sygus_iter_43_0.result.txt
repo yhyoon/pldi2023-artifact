@@ -1,0 +1,1 @@
+abs_synth_fonly,bubble_3input-opt.eqn_sygus_iter_43_0,0.429191511,15,(define-fun skel ( (n72 Bool) (n103 Bool) (n88 Bool) (n60 Bool) (i_7 Bool)) Bool (xor (and n88 (and n60 (not (not i_7)))) (and (xor n72 n103) (not (not i_7)))))

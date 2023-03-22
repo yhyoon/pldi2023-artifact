@@ -1,0 +1,65 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/pbe-bitvec/33_1000.sl",
+  "problem_name": "33_1000",
+  "start_time": "23.03.21.21:56:32",
+  "total_time": 0.14552783966064453,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 18 ], [ 1, 2 ], [ 2, 13 ], [ 3, 1 ] ],
+      "created_sub": [ [ 0, 233 ], [ 1, 4 ] ],
+      "created_components": 444
+    },
+    {
+      "created_top": [ [ 0, 18 ], [ 1, 2 ], [ 2, 13 ], [ 3, 1 ] ],
+      "created_sub": [ [ 0, 211 ], [ 1, 4 ] ],
+      "created_components": 440
+    },
+    {
+      "created_top": [ [ 0, 18 ], [ 1, 2 ], [ 2, 13 ], [ 3, 1 ] ],
+      "created_sub": [ [ 0, 8125 ], [ 1, 444 ] ],
+      "created_components": 433
+    },
+    {
+      "created_top": [ [ 0, 18 ], [ 1, 2 ], [ 2, 13 ], [ 3, 1 ] ],
+      "created_sub": [ [ 0, 1257 ], [ 1, 202 ] ],
+      "created_components": 39
+    },
+    {
+      "created_top": [ [ 0, 4 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 5,
+  "final_max_component_size": 3,
+  "final_component_count": 444,
+  "found_solution": "(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvand (bvlshr x #x000000000000000f) #x0000000000000002))",
+  "solution_size": 5,
+  "total_composed": [ [ 0, 9902 ], [ 1, 662 ], [ 2, 52 ], [ 3, 4 ] ],
+  "component_generation_time": 0.04028820991516113,
+  "component_search_table_build_time": 0.0030488967895507812,
+  "prune": {
+    "method": "abstsem",
+    "count": 718,
+    "time": 0.03443622589111328,
+    "infeasible": 178,
+    "search_infeasible": 277,
+    "search_useful": 27,
+    "approx_reduced_incomplete": 282,
+    "approx_reduced_complete": 29529
+  }
+}

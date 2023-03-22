@@ -1,0 +1,1 @@
+abs_synth,hd07.eqn_sygus_iter_84_1,0.453523842,11,(define-fun skel ( (n178 Bool) (n165 Bool) (n152 Bool) (n116 Bool) (n103 Bool)) Bool (and (and n165 n152) (and (and n116 n103) (not (not n178)))))

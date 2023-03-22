@@ -1,0 +1,1 @@
+abs_synth_smt,hd09.eqn_sygus_iter_14_3,6.335087377,10,(define-fun skel ( (n136 Bool) (n148 Bool) (n158 Bool) (n98 Bool)) Bool (and (not (or n136 n148)) (and n158 (not (not n98)))))

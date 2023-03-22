@@ -1,0 +1,1 @@
+duet,p20-8bit.eqn_sygus_iter_6_0,0.24672931,7,(define-fun skel ( (n28 Bool) (n43 Bool) (n32 Bool) (n24 Bool)) Bool (and (and n43 n28) (and n24 n32)))

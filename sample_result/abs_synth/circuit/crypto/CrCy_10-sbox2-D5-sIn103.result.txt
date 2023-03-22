@@ -1,0 +1,1 @@
+abs_synth,CrCy_10-sbox2-D5-sIn103,0.142763942,10,(define-fun skel ( (LN236 Bool) (LN252 Bool) (LN253 Bool) (LN375 Bool)) Bool (xor LN375 (xor (not LN236) (xor LN252 (or LN253 LN253)))))

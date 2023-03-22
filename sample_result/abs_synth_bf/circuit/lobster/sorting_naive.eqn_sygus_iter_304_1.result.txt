@@ -1,0 +1,1 @@
+abs_synth_bf,sorting_naive.eqn_sygus_iter_304_1,0.174278353,12,(define-fun skel ( (n218 Bool) (n220 Bool) (n168 Bool) (n441 Bool) (n225 Bool)) Bool (and (not (xor n218 (and n220 n168))) (and n441 (not (not n225)))))

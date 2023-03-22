@@ -1,0 +1,1 @@
+abs_synth,sorting_naive-opt.eqn_sygus_iter_77_3,0.215673986,13,(define-fun skel ( (n143 Bool) (n167 Bool) (n312 Bool) (n288 Bool) (n368 Bool) (n344 Bool)) Bool (and (not (xor n368 (not n344))) (xor n167 (xor n312 (xor n143 n288)))))

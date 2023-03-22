@@ -1,0 +1,1 @@
+abs_synth,odd_even_3input-opt.eqn_sygus_iter_134_1,0.132820694,11,(define-fun skel ( (n170 Bool) (n106 Bool) (i_16 Bool) (n169 Bool)) Bool (xor (and n170 (not (not n169))) (and n106 (and i_16 n169))))

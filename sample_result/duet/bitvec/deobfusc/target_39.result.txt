@@ -1,0 +1,1 @@
+duet,target_39,0.945005935,13,(define-fun deobfucated ( (a (BitVec 64)) (b (BitVec 64)) (d (BitVec 64))) (BitVec 64) (bvxor (bvor b (bvneg (bvor d a))) (bvand a (bvor b (bvneg a)))))

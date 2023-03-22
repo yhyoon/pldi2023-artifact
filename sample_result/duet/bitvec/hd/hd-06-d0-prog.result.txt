@@ -1,0 +1,1 @@
+duet,hd-06-d0-prog,0.088504143,5,(define-fun f ( (x (BitVec 64))) (BitVec 64) (bvor x (bvadd #x0000000000000001 x)))

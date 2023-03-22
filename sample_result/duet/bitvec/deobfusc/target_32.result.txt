@@ -1,0 +1,1 @@
+duet,target_32,timeout,timeout,timeout

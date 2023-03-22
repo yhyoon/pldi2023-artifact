@@ -1,0 +1,1 @@
+duet,CrCy_5-P9_5-P9,0.096913687,7,(define-fun Imp ( (k1 Bool) (k2 Bool) (k3 Bool)) Bool (xor (and k3 k2) (xor k3 k1)))

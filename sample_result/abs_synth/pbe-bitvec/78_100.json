@@ -1,0 +1,445 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/pbe-bitvec/78_100.sl",
+  "problem_name": "78_100",
+  "start_time": "23.03.21.21:56:32",
+  "total_time": 17.737582206726074,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 0,
+  "cegis_solver_call_time": 0.0,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 733
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 733
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 733
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 732
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 732
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 732
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 732
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 732
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 731
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 730
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 728
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 725
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 725
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 725
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 724
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 720
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 720
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 719
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 719
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 719
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 719
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 719
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 718
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 718
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 714
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 711
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 709
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 708
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 707
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 707
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 707
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 706
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 706
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 706
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 705
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 704
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 703
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 699
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 696
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 692
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 692
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 689
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 688
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 687
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 682
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 680
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 678
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 677
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 673
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 666
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 664
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 660
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 655
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 647
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 637
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 628
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 622
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 614
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 609
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 598
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 584
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 581
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 573
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 565
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 556
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 548
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 534
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 523
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 517
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 503
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 496
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 489
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 222 ], [ 1, 429 ] ],
+      "created_components": 482
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 221 ], [ 1, 427 ] ],
+      "created_components": 470
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 221 ], [ 1, 426 ] ],
+      "created_components": 461
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 221 ], [ 1, 426 ] ],
+      "created_components": 450
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 221 ], [ 1, 426 ] ],
+      "created_components": 442
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 363 ], [ 1, 381 ] ],
+      "created_components": 391
+    },
+    {
+      "created_top": [ [ 0, 36 ], [ 1, 4 ], [ 2, 26 ], [ 3, 2 ] ],
+      "created_sub": [ [ 0, 14025 ], [ 1, 3618 ] ],
+      "created_components": 366
+    },
+    {
+      "created_top": [ [ 0, 18 ], [ 1, 2 ], [ 2, 13 ], [ 3, 1 ] ],
+      "created_sub": [ [ 0, 344 ], [ 1, 1 ] ],
+      "created_components": 363
+    },
+    {
+      "created_top": [ [ 0, 18 ], [ 1, 2 ], [ 2, 13 ], [ 3, 1 ] ],
+      "created_sub": [ [ 0, 1288 ], [ 1, 766 ] ],
+      "created_components": 324
+    }
+  ],
+  "final_io_pairs": 81,
+  "final_max_component_size": 3,
+  "final_component_count": 733,
+  "found_solution": "(define-fun f ( (x (BitVec 64))) (BitVec 64) (ite (= #x0000000000000008 (bvsrem x #x000000000000000e)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000008 (bvsrem x #x0000000000000009)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000008 (bvsrem x #x000000000000000b)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000a (bvsrem x #x000000000000000c)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000002 (bvsrem x #x000000000000000b)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000008 (bvsrem x #x000000000000000a)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000c (bvsrem x #x000000000000000e)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000d (bvsrem x #x000000000000000e)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000006 (bvsrem x #x0000000000000010)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000005 (bvsrem x #x0000000000000010)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000007 (bvsrem x #x0000000000000009)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000006 (bvurem x #x0000000000000010)) (bvor (bvlshr x #x0000000000000004) x) (ite (= x (bvor x #x000000000000000d)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000009 (bvurem x #x000000000000000d)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000001 (bvsrem x #x000000000000000e)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000001 (bvsrem x #x000000000000000d)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000001 (bvurem x #x000000000000000e)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000009 (bvurem x #x000000000000000a)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000004 (bvurem x #x000000000000000f)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000003 (bvsrem x #x000000000000000c)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000002 (bvsrem x #x0000000000000010)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000002 (bvsrem x #x000000000000000e)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x000000000000000e (bvsrem x #x0000000000000010)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000e (bvsrem x #x000000000000000f)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000004 (bvsrem x #x000000000000000c)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000004 (bvurem x #x000000000000000b)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000c (bvurem x #x000000000000000d)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x000000000000000a (bvsrem x #x000000000000000f)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000001 (bvsrem x #x0000000000000010)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000002 (bvsrem x #x0000000000000009)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000008 (bvsrem x #x000000000000000c)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000002 (bvurem x #x000000000000000f)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000c (bvsrem x #x0000000000000010)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000a (bvsrem x #x000000000000000b)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000006 (bvsrem x #x000000000000000a)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000001 (bvsrem x #x000000000000000b)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000000 (bvsrem x #x000000000000000a)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000003 (bvurem x #x000000000000000d)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000000 (bvsrem x #x000000000000000f)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x000000000000000d (bvurem x #x000000000000000f)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000004 (bvurem x #x000000000000000d)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000a (bvurem x #x000000000000000b)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x000000000000000c (bvurem x #x0000000000000010)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000008 (bvurem x #x000000000000000c)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000008 (bvurem x #x000000000000000e)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x000000000000000e (bvurem x #x000000000000000f)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000006 (bvsrem x #x000000000000000d)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000009 (bvsrem x #x000000000000000c)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000006 (bvurem x #x000000000000000f)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000009 (bvurem x #x000000000000000c)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000005 (bvsrem x #x000000000000000f)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000003 (bvsrem x #x000000000000000e)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000008 (bvurem x #x000000000000000d)) (bvlshr x #x0000000000000010) (ite (= #x000000000000000a (bvurem x #x000000000000000c)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000006 (bvurem x #x000000000000000b)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000003 (bvsrem x #x0000000000000010)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000001 (bvurem x #x0000000000000009)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000007 (bvurem x #x000000000000000a)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000000 (bvsrem x #x0000000000000009)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000003 (bvurem x #x000000000000000b)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000004 (bvurem x #x0000000000000006)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000000 (bvsrem x #x0000000000000006)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000004 (bvurem x #x000000000000000a)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000006 (bvurem x #x0000000000000009)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000002 (bvurem x #x000000000000000b)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000004 (bvurem x #x000000000000000e)) (bvor (bvlshr x #x0000000000000004) x) (ite (= x (bvor x #x000000000000000e)) (bvlshr x #x0000000000000010) (ite (= #x0000000000000004 (bvurem x #x0000000000000007)) (bvor (bvlshr x #x0000000000000004) x) (ite (= #x0000000000000000 (bvurem x #x000000000000000b)) (bvlshr x #x0000000000000010) (bvor (bvlshr x #x0000000000000004) x)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",
+  "solution_size": 708,
+  "total_composed": [ [ 0, 35990 ], [ 1, 38108 ], [ 2, 2080 ], [ 3, 160 ] ],
+  "component_generation_time": 5.2167229652404785,
+  "component_search_table_build_time": 1.1073908805847168,
+  "prune": {
+    "method": "abstsem",
+    "count": 40348,
+    "time": 1.9606285095214844,
+    "infeasible": 35664,
+    "search_infeasible": 1989,
+    "search_useful": 9,
+    "approx_reduced_incomplete": 36874,
+    "approx_reduced_complete": 16021447
+  }
+}

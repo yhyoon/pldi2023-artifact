@@ -1,0 +1,1 @@
+abs_synth_fonly,target_436,0.48700387,12,(define-fun deobfucated ( (c (BitVec 64)) (a (BitVec 64))) (BitVec 64) (bvand (bvor a (bvsub c a)) (bvor (bvnot a) (bvadd a a))))

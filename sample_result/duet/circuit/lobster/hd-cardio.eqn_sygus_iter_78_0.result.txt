@@ -1,0 +1,1 @@
+duet,hd-cardio.eqn_sygus_iter_78_0,60.336565722,16,(define-fun skel ( (n150 Bool) (n333 Bool) (n326 Bool) (n345 Bool) (n336 Bool)) Bool (and (xor n150 (and n336 (not (and n345 n326)))) (xor n150 (and n345 (and n326 n333)))))

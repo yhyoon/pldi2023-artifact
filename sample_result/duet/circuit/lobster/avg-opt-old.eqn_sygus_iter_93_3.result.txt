@@ -1,0 +1,1 @@
+duet,avg-opt-old.eqn_sygus_iter_93_3,1.00967452,11,(define-fun skel ( (i_7 Bool) (i_15 Bool) (i_9 Bool) (i_17 Bool) (i_16 Bool) (i_8 Bool)) Bool (and (and i_9 (xor i_15 i_7)) (and i_17 (xor i_8 i_16))))

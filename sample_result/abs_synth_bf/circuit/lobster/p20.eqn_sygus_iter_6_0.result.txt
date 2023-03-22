@@ -1,0 +1,1 @@
+abs_synth_bf,p20.eqn_sygus_iter_6_0,1.026825494,11,(define-fun skel ( (n71 Bool) (n84 Bool) (n77 Bool) (n240 Bool)) Bool (xor (not (not n240)) (and (and n71 n84) (and n77 n240))))

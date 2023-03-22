@@ -1,0 +1,1 @@
+duet,p19-8bit.eqn_sygus_iter_19_0,0.610487069,9,(define-fun skel ( (n35 Bool) (n26 Bool) (n46 Bool) (i6 Bool)) Bool (xor (and (and i6 n46) (and n26 n35)) i6))
