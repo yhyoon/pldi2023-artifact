@@ -1,1 +1,1 @@
-abs_synth,CrCy_6-P10-D9-sIn2,0.290774662,20,(define-fun skel ( (LN8 Bool) (k4 Bool) (LN75 Bool) (LN88 Bool) (LN92 Bool)) Bool (xor (not (not (not (xor LN92 (not (xor LN8 LN75)))))) (not (not (not (not (xor LN88 (and LN8 (not k4)))))))))
+abs_synth,CrCy_6-P10-D9-sIn2,0.266052292,20,(define-fun skel ( (LN8 Bool) (k4 Bool) (LN75 Bool) (LN88 Bool) (LN92 Bool)) Bool (xor (not (not (not (xor LN92 (not (xor LN8 LN75)))))) (not (not (not (not (xor LN88 (and LN8 (not k4)))))))))

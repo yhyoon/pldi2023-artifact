@@ -1,1 +1,1 @@
-abs_synth,CrCy_3-P7-D5-sIn,0.108742859,9,(define-fun skel ( (LN44 Bool) (LN45 Bool) (LN46 Bool) (r4 Bool)) Bool (xor r4 (xor (not LN46) (not (xor LN44 LN45)))))
+abs_synth,CrCy_3-P7-D5-sIn,0.10242845,9,(define-fun skel ( (LN44 Bool) (LN45 Bool) (LN46 Bool) (r4 Bool)) Bool (xor r4 (xor (not LN46) (not (xor LN44 LN45)))))

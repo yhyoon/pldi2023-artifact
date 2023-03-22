@@ -1,1 +1,1 @@
-abs_synth,CrCy_7-P11-D5-sIn11,0.058429082,9,(define-fun skel ( (LN70 Bool) (LN81 Bool)) Bool (xor (not (or LN70 LN70)) (not (not (not LN81)))))
+abs_synth,CrCy_7-P11-D5-sIn11,0.074683183,9,(define-fun skel ( (LN70 Bool) (LN81 Bool)) Bool (xor (not (or LN70 LN70)) (not (not (not LN81)))))

@@ -1,1 +1,1 @@
-abs_synth,CrCy_10-sbox2-D5-sIn4,0.115415338,9,(define-fun skel ( (LN16 Bool) (k7 Bool) (LN45 Bool)) Bool (and (or LN45 LN45) (xor LN16 (not (not k7)))))
+abs_synth,CrCy_10-sbox2-D5-sIn4,0.121016397,9,(define-fun skel ( (LN16 Bool) (k7 Bool) (LN45 Bool)) Bool (and (or LN45 LN45) (xor LN16 (not (not k7)))))

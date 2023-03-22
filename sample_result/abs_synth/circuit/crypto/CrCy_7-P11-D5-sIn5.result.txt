@@ -1,1 +1,1 @@
-abs_synth,CrCy_7-P11-D5-sIn5,0.147542153,fail_with_max_size,fail_with_max_size
+abs_synth,CrCy_7-P11-D5-sIn5,0.152909738,fail_with_max_size,fail_with_max_size

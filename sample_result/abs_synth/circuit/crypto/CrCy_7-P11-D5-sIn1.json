@@ -1,0 +1,95 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_7-P11-D5-sIn1.sl",
+  "problem_name": "CrCy_7-P11-D5-sIn1",
+  "start_time": "23.03.22.15:16:51",
+  "total_time": 0.15511822700500488,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 12,
+  "cegis_solver_call_time": 0.13086599999999998,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 98 ] ],
+      "created_components": 218
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 75 ] ],
+      "created_components": 218
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 31 ] ],
+      "created_components": 117
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 3 ] ],
+      "created_components": 106
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 28 ] ],
+      "created_components": 101
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 15 ] ],
+      "created_components": 53
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 6 ] ],
+      "created_components": 43
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 15 ] ],
+      "created_components": 34
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 10
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 1
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 11,
+  "final_max_component_size": 6,
+  "final_component_count": 218,
+  "found_solution": "(define-fun skel ( (LN1 Bool) (LN25 Bool) (k6 Bool) (LN30 Bool) (LN32 Bool)) Bool (xor (xor (not LN25) (xor LN30 LN32)) (not (and LN1 (or k6 k6)))))",
+  "solution_size": 13,
+  "total_composed": [ [ 0, 8 ], [ 1, 282 ], [ 2, 33 ] ],
+  "component_generation_time": 0.003998279571533203,
+  "component_search_table_build_time": 0.0004608631134033203,
+  "prune": {
+    "method": "abstsem",
+    "count": 315,
+    "time": 0.014489889144897461,
+    "infeasible": 0,
+    "search_infeasible": 267,
+    "search_useful": 16,
+    "approx_reduced_incomplete": 366,
+    "approx_reduced_complete": 50360
+  }
+}

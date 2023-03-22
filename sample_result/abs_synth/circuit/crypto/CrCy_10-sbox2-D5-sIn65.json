@@ -1,0 +1,64 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_10-sbox2-D5-sIn65.sl",
+  "problem_name": "CrCy_10-sbox2-D5-sIn65",
+  "start_time": "23.03.22.15:16:48",
+  "total_time": 0.10184717178344727,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 5,
+  "cegis_solver_call_time": 0.055656,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 27 ] ],
+      "created_components": 0
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 5 ] ],
+      "created_components": 20
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 6 ] ],
+      "created_components": 14
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 1 ] ],
+      "created_components": 4
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2 ] ],
+      "created_components": 3
+    }
+  ],
+  "final_io_pairs": 5,
+  "final_max_component_size": 4,
+  "final_component_count": 20,
+  "not_found": "hit bottom-up limit",
+  "total_composed": [ [ 0, 3 ], [ 1, 46 ], [ 2, 15 ] ],
+  "component_generation_time": 0.03814363479614258,
+  "component_search_table_build_time": 6.699562072753906e-05,
+  "prune": {
+    "method": "abstsem",
+    "count": 61,
+    "time": 0.0008575916290283203,
+    "infeasible": 0,
+    "search_infeasible": 40,
+    "search_useful": 11,
+    "approx_reduced_incomplete": 60,
+    "approx_reduced_complete": 583
+  }
+}

@@ -1,8 +1,8 @@
 {
   "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_2-P6_2-P6.sl",
   "problem_name": "CrCy_2-P6_2-P6",
-  "start_time": "23.03.21.21:56:20",
-  "total_time": 0.5327248573303223,
+  "start_time": "23.03.22.15:16:49",
+  "total_time": 0.6311838626861572,
   "options": [
     [ "debug", "false" ],
     [ "init_comp_size", "1" ],
@@ -16,7 +16,7 @@
     [ "dt_predicate_order", "own_heuristic" ]
   ],
   "cegis_solver_count": 19,
-  "cegis_solver_call_time": 0.19540099999999996,
+  "cegis_solver_call_time": 0.22183699999999998,
   "cegis_iters": [
     {
       "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
@@ -115,12 +115,12 @@
   "found_solution": "(define-fun Imp ( (k1 Bool) (k2 Bool) (k3 Bool) (r1 Bool) (r2 Bool) (r3 Bool) (r4 Bool)) Bool (xor (not (xor (not (and k2 k3)) (not (and r2 r3)))) (not (not (xor (xor k1 k3) (xor r2 r4))))))",
   "solution_size": 20,
   "total_composed": [ [ 0, 12 ], [ 1, 4041 ], [ 2, 54 ] ],
-  "component_generation_time": 0.25049686431884766,
-  "component_search_table_build_time": 0.053850412368774414,
+  "component_generation_time": 0.30568909645080566,
+  "component_search_table_build_time": 0.06431937217712402,
   "prune": {
     "method": "abstsem",
     "count": 4095,
-    "time": 0.05871844291687012,
+    "time": 0.06807494163513184,
     "infeasible": 0,
     "search_infeasible": 4021,
     "search_useful": 27,

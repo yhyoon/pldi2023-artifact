@@ -1,0 +1,85 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_7-P11-D7-sIn4.sl",
+  "problem_name": "CrCy_7-P11-D7-sIn4",
+  "start_time": "23.03.22.15:16:52",
+  "total_time": 0.13089394569396973,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 10,
+  "cegis_solver_call_time": 0.108566,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 13 ] ],
+      "created_components": 364
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 33 ] ],
+      "created_components": 307
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 11 ] ],
+      "created_components": 149
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 14 ] ],
+      "created_components": 134
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 10 ] ],
+      "created_components": 85
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 2 ] ],
+      "created_components": 32
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 10
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 5
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 2
+    }
+  ],
+  "final_io_pairs": 9,
+  "final_max_component_size": 8,
+  "final_component_count": 364,
+  "found_solution": "(define-fun skel ( (LN1 Bool) (LN39 Bool) (k7 Bool) (LN48 Bool)) Bool (xor (not (not (xor LN39 (not LN48)))) (not (not (not (and LN1 (or k7 k7)))))))",
+  "solution_size": 15,
+  "total_composed": [ [ 0, 5 ], [ 1, 92 ], [ 2, 27 ] ],
+  "component_generation_time": 0.010683059692382812,
+  "component_search_table_build_time": 0.0004980564117431641,
+  "prune": {
+    "method": "abstsem",
+    "count": 119,
+    "time": 0.0028679370880126953,
+    "infeasible": 0,
+    "search_infeasible": 85,
+    "search_useful": 15,
+    "approx_reduced_incomplete": 223,
+    "approx_reduced_complete": 11331
+  }
+}

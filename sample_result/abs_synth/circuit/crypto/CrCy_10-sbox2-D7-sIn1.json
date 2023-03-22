@@ -1,0 +1,119 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_10-sbox2-D7-sIn1.sl",
+  "problem_name": "CrCy_10-sbox2-D7-sIn1",
+  "start_time": "23.03.22.15:16:49",
+  "total_time": 1973.997123003006,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 16,
+  "cegis_solver_call_time": 0.17792000000000027,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 69980 ] ],
+      "created_components": 0
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 31210
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 9639 ] ],
+      "created_components": 20197
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 3794
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 961 ] ],
+      "created_components": 2720
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 1251
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 1 ] ],
+      "created_components": 955
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 188 ] ],
+      "created_components": 615
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 9 ] ],
+      "created_components": 226
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 46 ] ],
+      "created_components": 176
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 40 ] ],
+      "created_components": 132
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 5 ] ],
+      "created_components": 62
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 8 ] ],
+      "created_components": 46
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 10 ] ],
+      "created_components": 26
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 2
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 1
+    }
+  ],
+  "final_io_pairs": 16,
+  "final_max_component_size": 14,
+  "final_component_count": 31210,
+  "not_found": "hit bottom-up limit",
+  "total_composed": [ [ 0, 13 ], [ 1, 80906 ], [ 2, 48 ] ],
+  "component_generation_time": 1967.8620657920837,
+  "component_search_table_build_time": 0.29081201553344727,
+  "prune": {
+    "method": "abstsem",
+    "count": 80954,
+    "time": 1.2203748226165771,
+    "infeasible": 0,
+    "search_infeasible": 73690,
+    "search_useful": 63,
+    "approx_reduced_incomplete": 632619,
+    "approx_reduced_complete": 16450343209
+  }
+}

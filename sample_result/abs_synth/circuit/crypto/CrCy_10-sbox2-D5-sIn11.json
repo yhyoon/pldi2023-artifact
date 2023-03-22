@@ -1,8 +1,8 @@
 {
   "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_10-sbox2-D5-sIn11.sl",
   "problem_name": "CrCy_10-sbox2-D5-sIn11",
-  "start_time": "23.03.21.21:56:20",
-  "total_time": 0.12897896766662598,
+  "start_time": "23.03.22.15:16:47",
+  "total_time": 0.12386608123779297,
   "options": [
     [ "debug", "false" ],
     [ "init_comp_size", "1" ],
@@ -16,7 +16,7 @@
     [ "dt_predicate_order", "own_heuristic" ]
   ],
   "cegis_solver_count": 10,
-  "cegis_solver_call_time": 0.11352400000000004,
+  "cegis_solver_call_time": 0.10837000000000002,
   "cegis_iters": [
     {
       "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
@@ -70,12 +70,12 @@
   "found_solution": "(define-fun skel ( (LN17 Bool) (k7 Bool) (LN34 Bool) (LN87 Bool)) Bool (and LN87 (xor LN34 (xor LN17 (or k7 k7)))))",
   "solution_size": 9,
   "total_composed": [ [ 0, 6 ], [ 1, 76 ], [ 2, 27 ] ],
-  "component_generation_time": 0.0052051544189453125,
-  "component_search_table_build_time": 0.0001938343048095703,
+  "component_generation_time": 0.005589962005615234,
+  "component_search_table_build_time": 0.00020051002502441406,
   "prune": {
     "method": "abstsem",
     "count": 103,
-    "time": 0.0022122859954833984,
+    "time": 0.002351045608520508,
     "infeasible": 0,
     "search_infeasible": 69,
     "search_useful": 16,

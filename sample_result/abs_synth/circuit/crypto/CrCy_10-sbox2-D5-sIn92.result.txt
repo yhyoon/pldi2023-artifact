@@ -1,1 +1,1 @@
-abs_synth,CrCy_10-sbox2-D5-sIn92,0.269653357,14,(define-fun skel ( (LN70 Bool) (LN71 Bool) (LN236 Bool) (LN252 Bool) (LN253 Bool)) Bool (xor (or (not LN70) (xor LN236 LN252)) (xor (not LN71) (and LN70 (not LN253)))))
+abs_synth,CrCy_10-sbox2-D5-sIn92,0.234087154,14,(define-fun skel ( (LN70 Bool) (LN71 Bool) (LN236 Bool) (LN252 Bool) (LN253 Bool)) Bool (xor (or (not LN70) (xor LN236 LN252)) (xor (not LN71) (and LN70 (not LN253)))))

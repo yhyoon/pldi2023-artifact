@@ -1,0 +1,70 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_6-P10-D5-sIn5.sl",
+  "problem_name": "CrCy_6-P10-D5-sIn5",
+  "start_time": "23.03.22.15:16:50",
+  "total_time": 0.09839892387390137,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 7,
+  "cegis_solver_call_time": 0.087392,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2 ] ],
+      "created_components": 60
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 24 ] ],
+      "created_components": 54
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 11 ] ],
+      "created_components": 29
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 4 ] ],
+      "created_components": 12
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 2
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 6,
+  "final_max_component_size": 7,
+  "final_component_count": 60,
+  "found_solution": "(define-fun skel ( (LN68 Bool) (k4 Bool) (LN96 Bool)) Bool (xor LN96 (and (or LN68 LN68) (not (not k4)))))",
+  "solution_size": 9,
+  "total_composed": [ [ 0, 4 ], [ 1, 47 ], [ 2, 18 ] ],
+  "component_generation_time": 0.002394437789916992,
+  "component_search_table_build_time": 0.00010204315185546875,
+  "prune": {
+    "method": "abstsem",
+    "count": 65,
+    "time": 0.0012786388397216797,
+    "infeasible": 0,
+    "search_infeasible": 44,
+    "search_useful": 14,
+    "approx_reduced_incomplete": 93,
+    "approx_reduced_complete": 1374
+  }
+}

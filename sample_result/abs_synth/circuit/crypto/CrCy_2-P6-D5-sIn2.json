@@ -1,0 +1,60 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_2-P6-D5-sIn2.sl",
+  "problem_name": "CrCy_2-P6-D5-sIn2",
+  "start_time": "23.03.22.15:16:49",
+  "total_time": 0.06624007225036621,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 5,
+  "cegis_solver_call_time": 0.062832,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 2 ] ],
+      "created_components": 16
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 7 ] ],
+      "created_components": 16
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 1
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 4,
+  "final_max_component_size": 5,
+  "final_component_count": 16,
+  "found_solution": "(define-fun skel ( (LN13 Bool) (LN33 Bool)) Bool (xor LN33 (not (not (or LN13 LN13)))))",
+  "solution_size": 7,
+  "total_composed": [ [ 0, 2 ], [ 1, 13 ], [ 2, 12 ] ],
+  "component_generation_time": 0.0005762577056884766,
+  "component_search_table_build_time": 6.4849853515625e-05,
+  "prune": {
+    "method": "abstsem",
+    "count": 25,
+    "time": 0.0003917217254638672,
+    "infeasible": 0,
+    "search_infeasible": 12,
+    "search_useful": 5,
+    "approx_reduced_incomplete": 14,
+    "approx_reduced_complete": 56
+  }
+}

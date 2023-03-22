@@ -1,1 +1,1 @@
-abs_synth,CrCy_10-sbox2-D7-sIn1,timeout,timeout,timeout
+abs_synth,CrCy_10-sbox2-D7-sIn1,1974.010389253,fail_with_max_size,fail_with_max_size

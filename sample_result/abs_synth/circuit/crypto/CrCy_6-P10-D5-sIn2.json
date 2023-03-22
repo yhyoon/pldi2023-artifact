@@ -1,0 +1,70 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_6-P10-D5-sIn2.sl",
+  "problem_name": "CrCy_6-P10-D5-sIn2",
+  "start_time": "23.03.22.15:16:50",
+  "total_time": 0.09068608283996582,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 7,
+  "cegis_solver_call_time": 0.07874399999999999,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 59 ] ],
+      "created_components": 104
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 14 ] ],
+      "created_components": 59
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 5 ] ],
+      "created_components": 30
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 8 ] ],
+      "created_components": 21
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 1
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 6,
+  "final_max_component_size": 6,
+  "final_component_count": 104,
+  "found_solution": "(define-fun skel ( (LN56 Bool) (k3 Bool) (LN60 Bool) (k4 Bool) (LN64 Bool) (LN67 Bool)) Bool (xor (xor (not LN60) (xor LN64 LN67)) (not (xor LN56 (xor k3 k4)))))",
+  "solution_size": 13,
+  "total_composed": [ [ 0, 4 ], [ 1, 92 ], [ 2, 18 ] ],
+  "component_generation_time": 0.005631446838378906,
+  "component_search_table_build_time": 0.00012063980102539062,
+  "prune": {
+    "method": "abstsem",
+    "count": 110,
+    "time": 0.002577066421508789,
+    "infeasible": 0,
+    "search_infeasible": 86,
+    "search_useful": 11,
+    "approx_reduced_incomplete": 95,
+    "approx_reduced_complete": 4092
+  }
+}

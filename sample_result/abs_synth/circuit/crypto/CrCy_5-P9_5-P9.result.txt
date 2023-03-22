@@ -1,1 +1,1 @@
-abs_synth,CrCy_5-P9_5-P9,0.117783551,7,(define-fun Imp ( (k1 Bool) (k2 Bool) (k3 Bool)) Bool (xor (and k2 k3) (xor k1 k3)))
+abs_synth,CrCy_5-P9_5-P9,0.108499823,7,(define-fun Imp ( (k1 Bool) (k2 Bool) (k3 Bool)) Bool (xor (and k2 k3) (xor k1 k3)))

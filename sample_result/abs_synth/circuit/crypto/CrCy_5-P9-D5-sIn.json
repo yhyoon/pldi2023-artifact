@@ -1,8 +1,8 @@
 {
   "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_5-P9-D5-sIn.sl",
   "problem_name": "CrCy_5-P9-D5-sIn",
-  "start_time": "23.03.21.21:56:20",
-  "total_time": 0.10394883155822754,
+  "start_time": "23.03.22.15:16:50",
+  "total_time": 0.1021580696105957,
   "options": [
     [ "debug", "false" ],
     [ "init_comp_size", "1" ],
@@ -16,7 +16,7 @@
     [ "dt_predicate_order", "own_heuristic" ]
   ],
   "cegis_solver_count": 8,
-  "cegis_solver_call_time": 0.09264000000000001,
+  "cegis_solver_call_time": 0.090493,
   "cegis_iters": [
     {
       "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
@@ -60,12 +60,12 @@
   "found_solution": "(define-fun skel ( (k1 Bool) (LN4 Bool) (k3 Bool)) Bool (xor (not (or LN4 (not k3))) (not (not (xor k1 k3)))))",
   "solution_size": 11,
   "total_composed": [ [ 0, 4 ], [ 1, 33 ], [ 2, 21 ] ],
-  "component_generation_time": 0.007217884063720703,
-  "component_search_table_build_time": 0.00010204315185546875,
+  "component_generation_time": 0.008159875869750977,
+  "component_search_table_build_time": 0.0001270771026611328,
   "prune": {
     "method": "abstsem",
     "count": 54,
-    "time": 0.0006887912750244141,
+    "time": 0.0007524490356445312,
     "infeasible": 0,
     "search_infeasible": 26,
     "search_useful": 11,

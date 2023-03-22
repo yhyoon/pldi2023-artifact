@@ -1,1 +1,1 @@
-abs_synth,CrCy_10-sbox2-D5-sIn67,0.070991191,7,(define-fun skel ( (LN44 Bool) (LN88 Bool)) Bool (and LN88 (not (not (or LN44 LN44)))))
+abs_synth,CrCy_10-sbox2-D5-sIn67,0.07777624,7,(define-fun skel ( (LN44 Bool) (LN88 Bool)) Bool (and LN88 (not (not (or LN44 LN44)))))

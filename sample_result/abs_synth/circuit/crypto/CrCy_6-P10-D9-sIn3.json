@@ -1,0 +1,80 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_6-P10-D9-sIn3.sl",
+  "problem_name": "CrCy_6-P10-D9-sIn3",
+  "start_time": "23.03.22.15:16:51",
+  "total_time": 0.14322400093078613,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 9,
+  "cegis_solver_call_time": 0.10913900000000003,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 87 ] ],
+      "created_components": 941
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 18 ] ],
+      "created_components": 359
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 16 ] ],
+      "created_components": 241
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 92
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 58
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 21
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 1
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 8,
+  "final_max_component_size": 10,
+  "final_component_count": 941,
+  "found_solution": "(define-fun skel ( (LN56 Bool) (k3 Bool) (LN60 Bool) (k4 Bool) (LN64 Bool) (LN67 Bool)) Bool (xor (not (not (not (not (xor (not LN56) (xor LN60 LN64)))))) (not (not (not (not (not (xor LN67 (xor k3 k4)))))))))",
+  "solution_size": 21,
+  "total_composed": [ [ 0, 1 ], [ 1, 129 ], [ 2, 24 ] ],
+  "component_generation_time": 0.023518085479736328,
+  "component_search_table_build_time": 0.00115966796875,
+  "prune": {
+    "method": "abstsem",
+    "count": 153,
+    "time": 0.0020902156829833984,
+    "infeasible": 0,
+    "search_infeasible": 130,
+    "search_useful": 13,
+    "approx_reduced_incomplete": 257,
+    "approx_reduced_complete": 14611
+  }
+}

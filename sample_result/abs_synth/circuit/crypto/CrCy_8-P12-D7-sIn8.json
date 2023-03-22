@@ -1,0 +1,75 @@
+{
+  "input_path": "/home/yhyoon/experiment/pldi2023_final/pldi2023-artifact/bench/circuit/crypto/CrCy_8-P12-D7-sIn8.sl",
+  "problem_name": "CrCy_8-P12-D7-sIn8",
+  "start_time": "23.03.22.15:16:53",
+  "total_time": 0.10518479347229004,
+  "options": [
+    [ "debug", "false" ],
+    [ "init_comp_size", "1" ],
+    [ "max_comp_size", "128" ],
+    [ "gamma_size", "8" ],
+    [ "topdown", "hole2" ],
+    [ "pruning", "abstsem" ],
+    [ "cegis_jump", "true" ],
+    [ "no_backward", "false" ],
+    [ "force_full_analysis", "false" ],
+    [ "dt_predicate_order", "own_heuristic" ]
+  ],
+  "cegis_solver_count": 8,
+  "cegis_solver_call_time": 0.08948299999999999,
+  "cegis_iters": [
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 26 ] ],
+      "created_components": 202
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 4 ] ],
+      "created_components": 140
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 18 ] ],
+      "created_components": 110
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 0, 1 ], [ 1, 15 ] ],
+      "created_components": 57
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [ [ 1, 2 ] ],
+      "created_components": 21
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 1
+    },
+    {
+      "created_top": [ [ 1, 1 ], [ 2, 3 ] ],
+      "created_sub": [],
+      "created_components": 0
+    }
+  ],
+  "final_io_pairs": 7,
+  "final_max_component_size": 7,
+  "final_component_count": 202,
+  "found_solution": "(define-fun skel ( (LN32 Bool) (LN39 Bool) (k4 Bool) (LN43 Bool) (LN46 Bool)) Bool (xor (not (not (xor LN32 (xor LN39 LN43)))) (not (not (not (xor LN46 (not k4)))))))",
+  "solution_size": 15,
+  "total_composed": [ [ 0, 4 ], [ 1, 72 ], [ 2, 21 ] ],
+  "component_generation_time": 0.009897947311401367,
+  "component_search_table_build_time": 0.0011050701141357422,
+  "prune": {
+    "method": "abstsem",
+    "count": 93,
+    "time": 0.002081155776977539,
+    "infeasible": 0,
+    "search_infeasible": 67,
+    "search_useful": 12,
+    "approx_reduced_incomplete": 87,
+    "approx_reduced_complete": 3063
+  }
+}
