@@ -1186,7 +1186,7 @@ def draw_main_table(dfs: AllDfs, table_out):
         "      {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['time_med'][solver]['deobfusc'] for solver in solver_names]),
         "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names]),
         "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names]),
-        "\\textsc{PBE-BitVec} \\! &",
+        "\\textsc{BitVec-Cond} \\! &",
         "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
         "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
         "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
