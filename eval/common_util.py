@@ -102,9 +102,9 @@ tbl1_rand_chosen_crypto_problems = [
     "CrCy_10-sbox2-D5-sIn11",
 ]
 tbl1_rand_chosen_pbe_problems = [
-    "33_1000",
-    "6_100",
-    "78_100",
+    "133_1000",
+    "23_10",
+    "60_100",
     "icfp_gen_10.7",
     "icfp_gen_14.1",
 ]

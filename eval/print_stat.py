@@ -171,7 +171,9 @@ def draw_cactus(bench_name: str, file_name: str, all_problem_count, tds, *, mark
         ax.tick_params(axis='both', which='major', labelsize=16)
 
     ax.legend(loc='upper left')
-    figure.savefig(os.path.join(artifact_root_path, "figures", f"cactus_{file_name}.png"), transparent=True)
+    figure.tight_layout()
+    figure.savefig(os.path.join(artifact_root_path, "figures", f"cactus_{file_name}.png"),
+                   transparent=True)
     log_write_with_time(f"created figures/cactus_{file_name}.png")
 
 
@@ -229,7 +231,9 @@ def draw_stack_bar(kind: str, ylabel: str, tool_lbls: List[str], bench_lbls: Lis
                 fontsize=16, weight='heavy', ha='center',
                 bbox={'boxstyle': 'square', 'facecolor': 'white', 'edgecolor': 'black'})
     figure.legend(loc='upper center', ncol=2, frameon=False)
-    figure.savefig(os.path.join(artifact_root_path, "figures", f"bar_{kind}.png"), transparent=True)
+    figure.tight_layout()
+    figure.savefig(os.path.join(artifact_root_path, "figures", f"bar_{kind}.png"),
+                   transparent=True)
     log_write_with_time(f"created figures/bar_{kind}.png")
 
 
@@ -623,7 +627,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
-    table_out.write("Table 1. Results for 25 randomly chosen benchmark problems (5 for each domain).\n"
+    table_out.write("Table 1. Results for 25 randomly chosen benchmark problems (5 for each category).\n"
                     "Analysis times are not included in this table. You can see them by manually running\n"
                     " abs_synth with option '-log'.\n")
     table_out.write("\n".join(txt_detail_lines))
@@ -633,20 +637,26 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "\\begin{table}",
         "  \\small",
         "  \\centering",
-        "  \\caption{Results for 25 randomly chosen benchmark problems (5 for each domain), ",
+        "  \\caption{Results for 25 randomly chosen benchmark problems (5 for each category), ",
         "  where \\textbf{Time} gives synthesis time,",
         "  $T_{A}$ gives time spent for forward and backward analysis,",
         "  and $|P|$ shows the size of the synthesized program (measured by number of AST nodes).}",
         "  \\label{tbl:compare_detail}",
-        "  \\begin{tabular}{l|rr|rr|rrr}",
+        "  \\begin{tabular}{c|l|rr|rr|rrr}",
         "    \\toprule",
-        "    \\multirow{2}{*}{Benchmark} &",
-        "      \\multicolumn{2}{c|}{ \\probe } & \\multicolumn{2}{c|}{ \\duet } &",
-        "      \\multicolumn{3}{c}{ \\tool } \\\\",
-        "    & \\textbf{Time} & $|P|$ & \\textbf{Time} & $|P|$ & \\textbf{Time} & $T_{A}$ & $|P|$  \\\\",
+        "    Benchmark &",
+        "      \\multirow{2}{*}{Benchmark} &",
+        "        \\multicolumn{2}{c|}{ \\probe } & \\multicolumn{2}{c|}{ \\duet } &",
+        "        \\multicolumn{3}{c}{ \\tool } \\\\",
+        "    category\\! &  ",
+        "      & ",
+        "        \\textbf{Time} & $|P|$ & ",
+        "        \\textbf{Time} & $|P|$ & ",
+        "        \\textbf{Time} & $T_{A}$ & $|P|$  \\\\",
         "    \\hline",
+        "    \\multirow{5}{*}{\\textsc{HD}}",
         *[
-            "    {:25s} &  {:s} & {:s} &  {:s} & {:s} &  {:s} & {:s} & {:s} \\\\".format(
+            "      & {:25s} &  {:s} & {:s} &  {:s} & {:s} &  {:s} & {:s} & {:s} \\\\".format(
                 problem.replace("_", "\\_"),
                 lookup_time_and_format("probe", "hd", problem),
                 lookup_size_and_format("probe", "hd", problem),
@@ -658,8 +668,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
             ) for problem in tbl1_rand_chosen_hd_problems
         ],
         "    \\hline",
+        "    \\multirow{5}{*}{\\textsc{Deobfusc}}",
         *[
-            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+            "      & {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
                 problem.replace("_", "\\_"),
                 lookup_time_and_format("probe", "deobfusc", problem),
                 lookup_size_and_format("probe", "deobfusc", problem),
@@ -671,8 +682,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
             ) for problem in tbl1_rand_chosen_deob_problems
         ],
         "    \\hline",
+        "    \\multirow{5}{*}{\\textsc{BitVec-Cond}}",
         *[
-            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+            "      & {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
                 problem.replace("_", "\\_"),
                 lookup_time_and_format("probe", "pbe-bitvec", problem),
                 lookup_size_and_format("probe", "pbe-bitvec", problem),
@@ -684,8 +696,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
             ) for problem in tbl1_rand_chosen_pbe_problems
         ],
         "    \\hline",
+        "    \\multirow{5}{*}{\\textsc{Lobster}}",
         *[
-            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+            "      & {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
                 problem.replace("sygus_iter_", "").replace("_", "\\_"),
                 lookup_time_and_format("probe", "lobster", problem),
                 lookup_size_and_format("probe", "lobster", problem),
@@ -697,8 +710,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
             ) for problem in tbl1_rand_chosen_lobster_problems
         ],
         "    \\hline",
+        "    \\multirow{5}{*}{\\textsc{Crypto}}",
         *[
-            "    {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
+            "      & {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
                 problem.replace("_", "\\_"),
                 lookup_time_and_format("probe", "crypto", problem),
                 lookup_size_and_format("probe", "crypto", problem),
@@ -1241,14 +1255,14 @@ def draw_all(print_main_table: bool,
 
     if print_plot:
         plt.rcParams.update({
-            "legend.fontsize": "16",
+            "legend.fontsize": "20",
             "figure.figsize": (9, 6),
             "figure.dpi": 150,
-            "axes.labelsize": "16",
-            "axes.titlesize": "30",
+            "axes.labelsize": "20",
+            "axes.titlesize": "36",
             "lines.linewidth": "2",
-            "xtick.labelsize": "14",
-            "ytick.labelsize": "14"
+            "xtick.labelsize": "18",
+            "ytick.labelsize": "18"
         })
 
         draw_bar_plots(dfs.solver_bench_to_df, dfs.bench_to_cmp_df)
