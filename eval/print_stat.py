@@ -171,7 +171,6 @@ def draw_cactus(bench_name: str, file_name: str, all_problem_count, tds, *, mark
         ax.tick_params(axis='both', which='major', labelsize=16)
 
     ax.legend(loc='upper left')
-    figure.tight_layout()
     figure.savefig(os.path.join(artifact_root_path, "figures", f"cactus_{file_name}.png"),
                    transparent=True)
     log_write_with_time(f"created figures/cactus_{file_name}.png")
@@ -214,24 +213,23 @@ def draw_stack_bar(kind: str, ylabel: str, tool_lbls: List[str], bench_lbls: Lis
                 if cnt < 25:
                     next_smalls.append(i)
                     if i in prev_smalls:
-                        ax.text(i, accum_cnt + 40, s=str(cnt),
-                                fontsize=18, weight='heavy', ha='center', va='top')
+                        ax.text(i, accum_cnt + 64, s=str(cnt),
+                                fontsize=24, weight='heavy', ha='center', va='top')
                     else:
-                        ax.text(i, accum_cnt + 20, s=str(cnt),
-                                fontsize=18, weight='heavy', ha='center', va='top')
+                        ax.text(i, accum_cnt + 25, s=str(cnt),
+                                fontsize=24, weight='heavy', ha='center', va='top')
                 else:
                     ax.text(i, (accum_cnt - cnt) + cnt // 2, s=str(cnt),
-                            fontsize=18, weight='heavy', ha='center', va='center')
+                            fontsize=24, weight='heavy', ha='center', va='center')
         else:
-            ax.bar_label(cur_br, fontsize=18, weight='heavy', label_type='center')
+            ax.bar_label(cur_br, fontsize=24, weight='heavy', label_type='center')
         prev_smalls = next_smalls
 
     for i, sum_cnt in enumerate(sum_cnts):
         ax.text(i, max(sum_cnts) + 50, s=str(sum_cnt),
-                fontsize=16, weight='heavy', ha='center',
+                fontsize=24, weight='heavy', ha='center',
                 bbox={'boxstyle': 'square', 'facecolor': 'white', 'edgecolor': 'black'})
     figure.legend(loc='upper center', ncol=2, frameon=False)
-    figure.tight_layout()
     figure.savefig(os.path.join(artifact_root_path, "figures", f"bar_{kind}.png"),
                    transparent=True)
     log_write_with_time(f"created figures/bar_{kind}.png")
@@ -1259,7 +1257,7 @@ def draw_all(print_main_table: bool,
             "figure.figsize": (9, 6),
             "figure.dpi": 150,
             "axes.labelsize": "20",
-            "axes.titlesize": "36",
+            "axes.titlesize": "34",
             "lines.linewidth": "2",
             "xtick.labelsize": "18",
             "ytick.labelsize": "18"
