@@ -11,29 +11,29 @@ def build_clean_dest_dirs(target: str):
 
     if target == "all":
         dest_dirs.append(result_root_path)
-    elif target == "abs_synth":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth"))
+    elif target == "simba":
+        dest_dirs.append(os.path.join(result_root_path, "simba"))
     elif target == "duet":
         dest_dirs.append(os.path.join(result_root_path, "duet"))
     elif target == "probe":
         dest_dirs.append(os.path.join(result_root_path, "probe"))
     elif target == "deobfusc":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "bitvec", "deobfusc"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "bitvec", "deobfusc"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec", "deobfusc"))
         dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec", "deobfusc"))
     elif target == "hd":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "bitvec", "hd"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec", "hd"))
     elif target == "pbe-bitvec":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "pbe-bitvec"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "pbe-bitvec"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "pbe-bitvec"))
         dest_dirs.append(os.path.join(result_root_path, "probe", "pbe-bitvec"))
     elif target == "crypto":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "circuit", "crypto"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "circuit", "crypto"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "circuit", "crypto"))
     elif target == "lobster":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "circuit", "lobster"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "circuit", "lobster"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "circuit", "lobster"))
     else:
         print(f"unknown clean target {target}", file=sys.stderr)
@@ -154,7 +154,7 @@ def main():
     subparser.add_argument('-chosen', action='store_true',
                            help='run chosen subset of benchmarks (Table 1 in paper)')
     subparser.add_argument('-ablation', action='store_true',
-                           help='run variation solvers of abs_synth for ablation study too (Figure 4 in paper)')
+                           help='run variation solvers of simba for ablation study too (Figure 4 in paper)')
     subparser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,
                            dest='thread_count',
                            help='run in parallel process using NUM threads (default: 1)')

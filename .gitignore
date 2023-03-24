@@ -2,7 +2,7 @@
 /.idea/
 **/__pycache__/
 /duet
-/abs_synth
+/simba
 /probe
 /figures
 /result

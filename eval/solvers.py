@@ -28,14 +28,14 @@ class Solver:
         return True
 
 
-class SolverAbsSynth(Solver):
-    # command: ./abs_synth.exe [target_name]
+class SolverSimba(Solver):
+    # command: ./simba.exe [target_name]
 
     def name(self) -> str:
-        return "abs_synth"
+        return "simba"
 
     def executable(self) -> str:
-        return os.path.join(artifact_root_path, "abs_synth", "abs_synth.exe")
+        return os.path.join(artifact_root_path, "simba", "simba.exe")
 
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
@@ -57,10 +57,10 @@ class SolverAbsSynth(Solver):
         return str(result_time_ms), str(result_size), result_definition
 
 
-class SolverAbsSynthBF(SolverAbsSynth):
-    # command: ./abs_synth.exe -pruning bruteforce [target_name]
+class SolverSimbaBF(SolverSimba):
+    # command: ./simba.exe -pruning bruteforce [target_name]
     def name(self) -> str:
-        return "abs_synth_bf"
+        return "simba_bf"
 
     def solvable(self, bench: str) -> bool:
         return bench != "pbe-bitvec"
@@ -70,10 +70,10 @@ class SolverAbsSynthBF(SolverAbsSynth):
         return ["-pruning", "bruteforce", "-report_json", json_path, target]
 
 
-class SolverAbsSynthSMT(SolverAbsSynth):
-    # command: ./abs_synth.exe -pruning solver [target_name]
+class SolverSimbaSMT(SolverSimba):
+    # command: ./simba.exe -pruning solver [target_name]
     def name(self) -> str:
-        return "abs_synth_smt"
+        return "simba_smt"
 
     def solvable(self, bench: str) -> bool:
         return bench != "pbe-bitvec"
@@ -83,10 +83,10 @@ class SolverAbsSynthSMT(SolverAbsSynth):
         return ["-pruning", "solver", "-report_json", json_path, target]
 
 
-class SolverAbsSynthForwardOnly(SolverAbsSynth):
-    # command: ./abs_synth.exe -pruning solver [target_name]
+class SolverSimbaForwardOnly(SolverSimba):
+    # command: ./simba.exe -pruning solver [target_name]
     def name(self) -> str:
-        return "abs_synth_fonly"
+        return "simba_fonly"
 
     def solvable(self, bench: str) -> bool:
         return bench != "pbe-bitvec"
@@ -96,10 +96,10 @@ class SolverAbsSynthForwardOnly(SolverAbsSynth):
         return ["-no_backward", "-report_json", json_path, target]
 
 
-class SolverAbsSynthEx05(SolverAbsSynth):
-    # command: ./abs_synth.exe -ex_cut 5 [target_name]
+class SolverSimbaEx05(SolverSimba):
+    # command: ./simba.exe -ex_cut 5 [target_name]
     def name(self) -> str:
-        return "abs_synth_ex05"
+        return "simba_ex05"
 
     def solvable(self, bench: str) -> bool:
         return bench == "deobfusc"
@@ -109,10 +109,10 @@ class SolverAbsSynthEx05(SolverAbsSynth):
         return ["-ex_cut", "5", "-report_json", json_path, target]
 
 
-class SolverAbsSynthEx10(SolverAbsSynth):
-    # command: ./abs_synth.exe -ex_cut 10 [target_name]
+class SolverSimbaEx10(SolverSimba):
+    # command: ./simba.exe -ex_cut 10 [target_name]
     def name(self) -> str:
-        return "abs_synth_ex10"
+        return "simba_ex10"
 
     def solvable(self, bench: str) -> bool:
         return bench == "deobfusc"
@@ -122,10 +122,10 @@ class SolverAbsSynthEx10(SolverAbsSynth):
         return ["-ex_cut", "10", "-report_json", json_path, target]
 
 
-class SolverAbsSynthEx15(SolverAbsSynth):
-    # command: ./abs_synth.exe -ex_cut 15 [target_name]
+class SolverSimbaEx15(SolverSimba):
+    # command: ./simba.exe -ex_cut 15 [target_name]
     def name(self) -> str:
-        return "abs_synth_ex15"
+        return "simba_ex15"
 
     def solvable(self, bench: str) -> bool:
         return bench == "deobfusc"
@@ -220,13 +220,13 @@ class SolverProbe(Solver):
 
 
 solver_map: Dict[str, Solver] = {
-    "abs_synth": SolverAbsSynth(),
-    "abs_synth_bf": SolverAbsSynthBF(),
-    "abs_synth_smt": SolverAbsSynthSMT(),
-    "abs_synth_fonly": SolverAbsSynthForwardOnly(),
-    "abs_synth_ex05": SolverAbsSynthEx05(),
-    "abs_synth_ex10": SolverAbsSynthEx10(),
-    "abs_synth_ex15": SolverAbsSynthEx15(),
+    "simba": SolverSimba(),
+    "simba_bf": SolverSimbaBF(),
+    "simba_smt": SolverSimbaSMT(),
+    "simba_fonly": SolverSimbaForwardOnly(),
+    "simba_ex05": SolverSimbaEx05(),
+    "simba_ex10": SolverSimbaEx10(),
+    "simba_ex15": SolverSimbaEx15(),
     "duet": SolverDuet(),
     "probe": SolverProbe(),
 }

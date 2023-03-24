@@ -100,9 +100,9 @@ def read_all() -> pd.DataFrame:
     return df
 
 
-def build_time_cmp_table(problem_df, abs_df, duet_df, probe_df=None) -> pd.DataFrame:
+def build_time_cmp_table(problem_df, simba_df, duet_df, probe_df=None) -> pd.DataFrame:
     accum_df: pd.DataFrame = problem_df.join(
-        abs_df.rename(columns={"time": "abs", "size": "abs_size"})[["abs", "abs_size"]]
+        simba_df.rename(columns={"time": "simba", "size": "simba_size"})[["simba", "simba_size"]]
     )
     accum_df: pd.DataFrame = accum_df.join(
         duet_df.rename(columns={"time": "duet", "size": "duet_size"})[["duet", "duet_size"]]
@@ -112,9 +112,9 @@ def build_time_cmp_table(problem_df, abs_df, duet_df, probe_df=None) -> pd.DataF
         accum_df: pd.DataFrame = accum_df.join(
             probe_df.rename(columns={"time": "probe", "size": "probe_size"})[["probe", "probe_size"]]
         )
-        accum_df["fastest"] = accum_df[["abs", "duet", "probe"]].idxmin(axis=1)
+        accum_df["fastest"] = accum_df[["simba", "duet", "probe"]].idxmin(axis=1)
     else:
-        accum_df["fastest"] = accum_df[["abs", "duet"]].idxmin(axis=1)
+        accum_df["fastest"] = accum_df[["simba", "duet"]].idxmin(axis=1)
 
     return accum_df.sort_index()
 
@@ -238,24 +238,24 @@ def draw_stack_bar(kind: str, ylabel: str, tool_lbls: List[str], bench_lbls: Lis
 # figure 2: overall cactus plots
 def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]],
                       solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]]):
-    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["lobster"])
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["lobster"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_cactus("Lobster", "lobster", len(problem_list["lobster"][0]), [
         {'time_df': solver_bench_to_df["duet"]["lobster"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
-        {'time_df': solver_bench_to_df["abs_synth"]["lobster"]["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+        {'time_df': solver_bench_to_df["simba"]["lobster"]["time"].sort_values(ignore_index=True),
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ], xtick_step=41)
 
-    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["crypto"])
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["crypto"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
     draw_cactus("Crypto", "crypto", len(problem_list["crypto"][0]), [
         {'time_df': solver_bench_to_df["duet"]["crypto"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
-        {'time_df': solver_bench_to_df["abs_synth"]["crypto"]["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+        {'time_df': solver_bench_to_df["simba"]["crypto"]["time"].sort_values(ignore_index=True),
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ])
 
     required_pairs = health_check_solver_bench(solver_names, ["hd"])
@@ -266,8 +266,8 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "DUET", 'color': 'g', 'marker': '^'},
         {'time_df': solver_bench_to_df["probe"]["hd"]["time"].sort_values(ignore_index=True),
          'label': "PROBE", 'color': 'r', 'marker': 'v'},
-        {'time_df': solver_bench_to_df["abs_synth"]["hd"]["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+        {'time_df': solver_bench_to_df["simba"]["hd"]["time"].sort_values(ignore_index=True),
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ], xtick_step=4)
 
     required_pairs = health_check_solver_bench(solver_names, ["deobfusc"])
@@ -278,8 +278,8 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "DUET", 'color': 'g', 'marker': '^'},
         {'time_df': solver_bench_to_df["probe"]["deobfusc"]["time"].sort_values(ignore_index=True),
          'label': "PROBE", 'color': 'r', 'marker': 'v'},
-        {'time_df': solver_bench_to_df["abs_synth"]["deobfusc"]["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+        {'time_df': solver_bench_to_df["simba"]["deobfusc"]["time"].sort_values(ignore_index=True),
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ], xtick_step=50)
 
     required_pairs = health_check_solver_bench(solver_names, ["hd", "deobfusc"])
@@ -300,13 +300,13 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "PROBE", 'color': 'r', 'marker': 'v'},
         {'time_df': pd.concat(
             [
-                solver_bench_to_df["abs_synth"]["hd"],
-                solver_bench_to_df["abs_synth"]["deobfusc"]
+                solver_bench_to_df["simba"]["hd"],
+                solver_bench_to_df["simba"]["deobfusc"]
             ])["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'}
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'}
     ])
 
-    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["lobster", "crypto"])
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["lobster", "crypto"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
 
@@ -319,56 +319,56 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "DUET", 'color': 'g', 'marker': '^'},
         {'time_df': pd.concat(
             [
-                solver_bench_to_df["abs_synth"]["crypto"],
-                solver_bench_to_df["abs_synth"]["lobster"]
+                solver_bench_to_df["simba"]["crypto"],
+                solver_bench_to_df["simba"]["lobster"]
             ])["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ])
 
-    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["pbe-bitvec"])
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["pbe-bitvec"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
 
     draw_cactus("PBE-BITVEC", "pbe_bitvec", len(problem_list["pbe-bitvec"][0]), [
         {'time_df': solver_bench_to_df["duet"]["pbe-bitvec"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
-        {'time_df': solver_bench_to_df["abs_synth"]["pbe-bitvec"]["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+        {'time_df': solver_bench_to_df["simba"]["pbe-bitvec"]["time"].sort_values(ignore_index=True),
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ])
 
-    required_pairs = health_check_solver_bench(["abs_synth", *ablation_names], no_cond_bench_names)
+    required_pairs = health_check_solver_bench(["simba", *ablation_names], no_cond_bench_names)
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
 
     draw_cactus("All Benchmarks", "all_ablation", len([*problem_list["hd"][0], *problem_list["deobfusc"][0], *problem_list["lobster"][0], *problem_list["crypto"][0]]), [
         {'time_df': pd.concat([
-            solver_bench_to_df["abs_synth_bf"]["hd"],
-            solver_bench_to_df["abs_synth_bf"]["deobfusc"],
-            solver_bench_to_df["abs_synth_bf"]["lobster"],
-            solver_bench_to_df["abs_synth_bf"]["crypto"],
+            solver_bench_to_df["simba_bf"]["hd"],
+            solver_bench_to_df["simba_bf"]["deobfusc"],
+            solver_bench_to_df["simba_bf"]["lobster"],
+            solver_bench_to_df["simba_bf"]["crypto"],
         ])["time"].sort_values(ignore_index=True),
          'label': "BruteForce", 'color': 'g', 'marker': '^'},
         {'time_df': pd.concat([
-            solver_bench_to_df["abs_synth_smt"]["hd"],
-            solver_bench_to_df["abs_synth_smt"]["deobfusc"],
-            solver_bench_to_df["abs_synth_smt"]["lobster"],
-            solver_bench_to_df["abs_synth_smt"]["crypto"],
+            solver_bench_to_df["simba_smt"]["hd"],
+            solver_bench_to_df["simba_smt"]["deobfusc"],
+            solver_bench_to_df["simba_smt"]["lobster"],
+            solver_bench_to_df["simba_smt"]["crypto"],
         ])["time"].sort_values(ignore_index=True),
          'label': "SMTSolver", 'color': 'm', 'marker': 'v'},
         {'time_df': pd.concat([
-            solver_bench_to_df["abs_synth_fonly"]["hd"],
-            solver_bench_to_df["abs_synth_fonly"]["deobfusc"],
-            solver_bench_to_df["abs_synth_fonly"]["lobster"],
-            solver_bench_to_df["abs_synth_fonly"]["crypto"],
+            solver_bench_to_df["simba_fonly"]["hd"],
+            solver_bench_to_df["simba_fonly"]["deobfusc"],
+            solver_bench_to_df["simba_fonly"]["lobster"],
+            solver_bench_to_df["simba_fonly"]["crypto"],
         ])["time"].sort_values(ignore_index=True),
          'label': "ForwardOnly", 'color': 'y', 'marker': '+'},
         {'time_df': pd.concat([
-            solver_bench_to_df["abs_synth"]["hd"],
-            solver_bench_to_df["abs_synth"]["deobfusc"],
-            solver_bench_to_df["abs_synth"]["lobster"],
-            solver_bench_to_df["abs_synth"]["crypto"],
+            solver_bench_to_df["simba"]["hd"],
+            solver_bench_to_df["simba"]["deobfusc"],
+            solver_bench_to_df["simba"]["lobster"],
+            solver_bench_to_df["simba"]["crypto"],
         ])["time"].sort_values(ignore_index=True),
-         'label': "ABSSYNTH", 'color': 'b', 'marker': 'o'},
+         'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ])
 
 
@@ -381,7 +381,7 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     required_pairs = health_check_solver_bench(solver_names, ["deobfusc", "hd"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
-    draw_stack_bar("bv_cnt", "# Solved Benchmarks", ["ABSSYNTH", "DUET", "PROBE"], ["DEOBUSC", "HD"], bar_colors,  [
+    draw_stack_bar("bv_cnt", "# Solved Benchmarks", ["SIMBA", "DUET", "PROBE"], ["DEOBUSC", "HD"], bar_colors,  [
         [solver_bench_to_df[solver][bench]["time"].count() for solver in solver_names]
         for bench in ["deobfusc", "hd"]
     ])
@@ -389,41 +389,41 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     # stacked bar2 - bitvec fastest
     hd_win = bench_cmp_map["hd"]["fastest"].value_counts()
     deob_win = bench_cmp_map["deobfusc"]["fastest"].value_counts()
-    draw_stack_bar("bv_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET", "PROBE"], ["DEOBFUSC", "HD"], bar_colors, [
-        [deob_win.get("abs", 0), deob_win.get("duet", 0), deob_win.get("probe", 0)],
-        [hd_win.get("abs", 0), hd_win.get("duet", 0), hd_win.get("probe", 0)],
+    draw_stack_bar("bv_fast", "# Fastest Solved Benchmarks", ["SIMBA", "DUET", "PROBE"], ["DEOBFUSC", "HD"], bar_colors, [
+        [deob_win.get("simba", 0), deob_win.get("duet", 0), deob_win.get("probe", 0)],
+        [hd_win.get("simba", 0), hd_win.get("duet", 0), hd_win.get("probe", 0)],
     ])
 
     # stacked bar3 - circuit cnt
-    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["lobster", "crypto"])
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["lobster", "crypto"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
-    draw_stack_bar("circuit_cnt", "# Solved Benchmarks", ["ABSSYNTH", "DUET"], ["LOBSTER", "CRYPTO"], bar_colors, [
-        [solver_bench_to_df[solver][bench]["time"].count() for solver in ["abs_synth", "duet"]]
+    draw_stack_bar("circuit_cnt", "# Solved Benchmarks", ["SIMBA", "DUET"], ["LOBSTER", "CRYPTO"], bar_colors, [
+        [solver_bench_to_df[solver][bench]["time"].count() for solver in ["simba", "duet"]]
         for bench in ["lobster", "crypto"]
     ])
 
     # stacked bar4 - circuit fastest
     lobster_win = bench_cmp_map["lobster"]["fastest"].value_counts()
     crypto_win = bench_cmp_map["crypto"]["fastest"].value_counts()
-    draw_stack_bar("circuit_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET"], ["LOBSTER", "CRYPTO"], bar_colors, [
-        [lobster_win.get("abs", 0), lobster_win.get("duet", 0)],
-        [crypto_win.get("abs", 0), crypto_win.get("duet", 0)],
+    draw_stack_bar("circuit_fast", "# Fastest Solved Benchmarks", ["SIMBA", "DUET"], ["LOBSTER", "CRYPTO"], bar_colors, [
+        [lobster_win.get("simba", 0), lobster_win.get("duet", 0)],
+        [crypto_win.get("simba", 0), crypto_win.get("duet", 0)],
     ])
 
     # stacked bar 5 - pbe cnt
-    required_pairs = health_check_solver_bench(["abs_synth", "duet"], ["pbe-bitvec"])
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["pbe-bitvec"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
-    draw_stack_bar("pbe_bitvec_cnt", "# Solved Benchmarks", ["ABSSYNTH", "DUET"], ["PBE_BITVEC"], ['gold'], [
-        [solver_bench_to_df[solver][bench]["time"].count() for solver in ["abs_synth", "duet"]]
+    draw_stack_bar("pbe_bitvec_cnt", "# Solved Benchmarks", ["SIMBA", "DUET"], ["PBE_BITVEC"], ['gold'], [
+        [solver_bench_to_df[solver][bench]["time"].count() for solver in ["simba", "duet"]]
         for bench in ["pbe-bitvec"]
     ])
 
     # stacked bar6 - pbe fastest
     pbe_bitvec_win = bench_cmp_map["pbe-bitvec"]["fastest"].value_counts()
-    draw_stack_bar("pbe_bitvec_fast", "# Fastest Solved Benchmarks", ["ABSSYNTH", "DUET"], ["PBE_BITVEC"], ['gold'], [
-        [pbe_bitvec_win.get("abs", 0), pbe_bitvec_win.get("duet", 0)],
+    draw_stack_bar("pbe_bitvec_fast", "# Fastest Solved Benchmarks", ["SIMBA", "DUET"], ["PBE_BITVEC"], ['gold'], [
+        [pbe_bitvec_win.get("simba", 0), pbe_bitvec_win.get("duet", 0)],
     ])
 
 
@@ -516,7 +516,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
             "Benchmark".center(25, " "),
             "Probe".center(15, " "),
             "Duet".center(15, " "),
-            "AbsSynth".center(15, " "),
+            "Simba".center(15, " "),
         ),
         "{:25s}|| {:9s}{:6s}| {:9s}{:6s}| {:9s}{:6s}|".format(
             "",
@@ -535,7 +535,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                     *[
                         lf(solver, "hd", problem)
                         for solver, lf in itertools.product(
-                            ["probe", "duet", "abs_synth"],
+                            ["probe", "duet", "simba"],
                             [lookup_time_and_format, lookup_size_and_format]
                         )
                     ]
@@ -553,7 +553,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                     *[
                         lf(solver, "deobfusc", problem)
                         for solver, lf in itertools.product(
-                            ["probe", "duet", "abs_synth"],
+                            ["probe", "duet", "simba"],
                             [lookup_time_and_format, lookup_size_and_format]
                         )
                     ]
@@ -571,7 +571,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                     *[
                         lf(solver, "pbe-bitvec", problem)
                         for solver, lf in itertools.product(
-                            ["probe", "duet", "abs_synth"],
+                            ["probe", "duet", "simba"],
                             [lookup_time_and_format, lookup_size_and_format]
                         )
                     ]
@@ -589,7 +589,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                     *[
                         lf(solver, "lobster", problem)
                         for solver, lf in itertools.product(
-                            ["probe", "duet", "abs_synth"],
+                            ["probe", "duet", "simba"],
                             [lookup_time_and_format, lookup_size_and_format]
                         )
                     ]
@@ -607,7 +607,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                     *[
                         lf(solver, "crypto", problem)
                         for solver, lf in itertools.product(
-                            ["probe", "duet", "abs_synth"],
+                            ["probe", "duet", "simba"],
                             [lookup_time_and_format, lookup_size_and_format]
                         )
                     ]
@@ -627,7 +627,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
 
     table_out.write("Table 1. Results for 25 randomly chosen benchmark problems (5 for each category).\n"
                     "Analysis times are not included in this table. You can see them by manually running\n"
-                    " abs_synth with option '-log'.\n")
+                    " simba with option '-log'.\n")
     table_out.write("\n".join(txt_detail_lines))
     table_out.write("\n\n")
 
@@ -660,9 +660,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_size_and_format("probe", "hd", problem),
                 lookup_time_and_format("duet", "hd", problem),
                 lookup_size_and_format("duet", "hd", problem),
-                lookup_time_and_format("abs_synth", "hd", problem),
-                lookup_analysis_time("abs_synth", "hd", problem),
-                lookup_size_and_format("abs_synth", "hd", problem),
+                lookup_time_and_format("simba", "hd", problem),
+                lookup_analysis_time("simba", "hd", problem),
+                lookup_size_and_format("simba", "hd", problem),
             ) for problem in tbl1_rand_chosen_hd_problems
         ],
         "    \\hline",
@@ -674,9 +674,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_size_and_format("probe", "deobfusc", problem),
                 lookup_time_and_format("duet", "deobfusc", problem),
                 lookup_size_and_format("duet", "deobfusc", problem),
-                lookup_time_and_format("abs_synth", "deobfusc", problem),
-                lookup_analysis_time("abs_synth", "deobfusc", problem),
-                lookup_size_and_format("abs_synth", "deobfusc", problem),
+                lookup_time_and_format("simba", "deobfusc", problem),
+                lookup_analysis_time("simba", "deobfusc", problem),
+                lookup_size_and_format("simba", "deobfusc", problem),
             ) for problem in tbl1_rand_chosen_deob_problems
         ],
         "    \\hline",
@@ -688,9 +688,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_size_and_format("probe", "pbe-bitvec", problem),
                 lookup_time_and_format("duet", "pbe-bitvec", problem),
                 lookup_size_and_format("duet", "pbe-bitvec", problem),
-                lookup_time_and_format("abs_synth", "pbe-bitvec", problem),
-                lookup_analysis_time("abs_synth", "pbe-bitvec", problem),
-                lookup_size_and_format("abs_synth", "pbe-bitvec", problem),
+                lookup_time_and_format("simba", "pbe-bitvec", problem),
+                lookup_analysis_time("simba", "pbe-bitvec", problem),
+                lookup_size_and_format("simba", "pbe-bitvec", problem),
             ) for problem in tbl1_rand_chosen_pbe_problems
         ],
         "    \\hline",
@@ -702,9 +702,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_size_and_format("probe", "lobster", problem),
                 lookup_time_and_format("duet", "lobster", problem),
                 lookup_size_and_format("duet", "lobster", problem),
-                lookup_time_and_format("abs_synth", "lobster", problem),
-                lookup_analysis_time("abs_synth", "lobster", problem),
-                lookup_size_and_format("abs_synth", "lobster", problem),
+                lookup_time_and_format("simba", "lobster", problem),
+                lookup_analysis_time("simba", "lobster", problem),
+                lookup_size_and_format("simba", "lobster", problem),
             ) for problem in tbl1_rand_chosen_lobster_problems
         ],
         "    \\hline",
@@ -716,9 +716,9 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_size_and_format("probe", "crypto", problem),
                 lookup_time_and_format("duet", "crypto", problem),
                 lookup_size_and_format("duet", "crypto", problem),
-                lookup_time_and_format("abs_synth", "crypto", problem),
-                lookup_analysis_time("abs_synth", "crypto", problem),
-                lookup_size_and_format("abs_synth", "crypto", problem),
+                lookup_time_and_format("simba", "crypto", problem),
+                lookup_analysis_time("simba", "crypto", problem),
+                lookup_size_and_format("simba", "crypto", problem),
             ) for problem in tbl1_rand_chosen_crypto_problems
         ],
         "    \\bottomrule",
@@ -741,7 +741,7 @@ def draw_cmp_table(dfs: AllDfs, cmp_bench_names: List[str], table_out):
 def draw_ablation_table(dfs: AllDfs, table_out):
     solver_var_to_non_ite_df = {
         solver: pd.concat([dfs.solver_bench_to_df[solver][bench] for bench in no_cond_bench_names])
-        for solver in ["abs_synth", *ablation_names]
+        for solver in ["simba", *ablation_names]
     }
 
     # figure 4.(b): ablation summary table raw data
@@ -758,7 +758,7 @@ def draw_ablation_table(dfs: AllDfs, table_out):
                 },
                 "overall": solver_var_to_non_ite_df[solver]["time"].count()
             }
-            for solver in ["abs_synth", *ablation_names]
+            for solver in ["simba", *ablation_names]
         },
         "time_avg": {
             solver: {
@@ -768,7 +768,7 @@ def draw_ablation_table(dfs: AllDfs, table_out):
                 },
                 "overall": solver_var_to_non_ite_df[solver]["time"].mean() if solver_var_to_non_ite_df[solver]["time"].count() > 0 else numpy.nan
             }
-            for solver in ["abs_synth", *ablation_names]
+            for solver in ["simba", *ablation_names]
         },
         "size_avg": {
             solver: {
@@ -778,11 +778,11 @@ def draw_ablation_table(dfs: AllDfs, table_out):
                 },
                 "overall": solver_var_to_non_ite_df[solver]["size"].mean() if solver_var_to_non_ite_df[solver]["size"].count() > 0 else numpy.nan
             }
-            for solver in ["abs_synth", *ablation_names]
+            for solver in ["simba", *ablation_names]
         },
     }
 
-    ablations_in_order = ["abs_synth", "abs_synth_fonly", "abs_synth_smt", "abs_synth_bf"]
+    ablations_in_order = ["simba", "simba_fonly", "simba_smt", "simba_bf"]
 
     txt_summary_lines = [
         "{:12s}|| {:27s}| {:27s}| {:27s}|".format(
@@ -853,7 +853,7 @@ def draw_ablation_table(dfs: AllDfs, table_out):
 
     txt_summary_lines = [line.replace("nan", "  -") for line in txt_summary_lines]
 
-    required_pairs = health_check_solver_bench(["abs_synth", *ablation_names], no_cond_bench_names)
+    required_pairs = health_check_solver_bench(["simba", *ablation_names], no_cond_bench_names)
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
@@ -924,13 +924,13 @@ def prepare_df() -> AllDfs:
         for solver in [*solver_names, *ablation_names, *ex_cut_names]
     }
 
-    abs_synth_df, duet_df, probe_df = solver_to_df["abs_synth"], solver_to_df["duet"], solver_to_df["probe"]
+    simba_df, duet_df, probe_df = solver_to_df["simba"], solver_to_df["duet"], solver_to_df["probe"]
     # comparison table for counting best solver
-    hd_cmp_df = build_time_cmp_table(problem_map["hd"][2], abs_synth_df, duet_df, probe_df)
-    deobfusc_cmp_df = build_time_cmp_table(problem_map["deobfusc"][2], abs_synth_df, duet_df, probe_df)
-    lobster_cmp_df = build_time_cmp_table(problem_map["lobster"][2], abs_synth_df, duet_df)
-    crypto_cmp_df = build_time_cmp_table(problem_map["crypto"][2], abs_synth_df, duet_df)
-    pbe_bv_cmp_df = build_time_cmp_table(problem_map["pbe-bitvec"][2], abs_synth_df, duet_df, probe_df)
+    hd_cmp_df = build_time_cmp_table(problem_map["hd"][2], simba_df, duet_df, probe_df)
+    deobfusc_cmp_df = build_time_cmp_table(problem_map["deobfusc"][2], simba_df, duet_df, probe_df)
+    lobster_cmp_df = build_time_cmp_table(problem_map["lobster"][2], simba_df, duet_df)
+    crypto_cmp_df = build_time_cmp_table(problem_map["crypto"][2], simba_df, duet_df)
+    pbe_bv_cmp_df = build_time_cmp_table(problem_map["pbe-bitvec"][2], simba_df, duet_df, probe_df)
     bench_to_cmp_df: Dict[str, pd.DataFrame] = {
         "hd": hd_cmp_df,
         "deobfusc": deobfusc_cmp_df,
@@ -942,39 +942,39 @@ def prepare_df() -> AllDfs:
     return AllDfs(main_df, solver_to_df, solver_bench_to_df, bench_to_cmp_df)
 
 
-def show_abs_probe_size_numbers(dfs: AllDfs):
-    a_p_both_solved_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['abs_size', 'probe_size'])
-    a_both_mean = a_p_both_solved_hd['abs_size'].mean()
+def show_simba_probe_size_numbers(dfs: AllDfs):
+    a_p_both_solved_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['simba_size', 'probe_size'])
+    a_both_mean = a_p_both_solved_hd['simba_size'].mean()
     p_both_mean = a_p_both_solved_hd['probe_size'].mean()
-    a_only_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['abs_size'])
+    a_only_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['simba_size'])
     a_only_hd = a_only_hd[a_only_hd["probe_size"].isna()]
     p_only_hd = dfs.bench_to_cmp_df["hd"].dropna(subset=['probe_size'])
-    p_only_hd = p_only_hd[p_only_hd["abs_size"].isna()]
-    a_only_mean, a_only_cnt = a_only_hd['abs_size'].mean(), a_only_hd['abs_size'].count()
+    p_only_hd = p_only_hd[p_only_hd["simba_size"].isna()]
+    a_only_mean, a_only_cnt = a_only_hd['simba_size'].mean(), a_only_hd['simba_size'].count()
     p_only_mean, p_only_cnt = p_only_hd['probe_size'].mean(), p_only_hd['probe_size'].count()
 
-    log_write_with_time(f"For HD, 'abssynth probe both solved' problems avg size = [{a_both_mean:.1f}, {p_both_mean:.1f}]")
-    log_write_with_time(f"abssynth only avg size = {a_only_mean:.1f} for {a_only_cnt:d}, probe only avg size = {p_only_mean:.1f} for {p_only_cnt:d}")
+    log_write_with_time(f"For HD, 'simba probe both solved' problems avg size = [{a_both_mean:.1f}, {p_both_mean:.1f}]")
+    log_write_with_time(f"simba only avg size = {a_only_mean:.1f} for {a_only_cnt:d}, probe only avg size = {p_only_mean:.1f} for {p_only_cnt:d}")
 
-    a_p_both_solved_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['abs_size', 'probe_size'])
-    a_both_mean = a_p_both_solved_deobfusc['abs_size'].mean()
+    a_p_both_solved_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['simba_size', 'probe_size'])
+    a_both_mean = a_p_both_solved_deobfusc['simba_size'].mean()
     p_both_mean = a_p_both_solved_deobfusc['probe_size'].mean()
-    a_only_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['abs_size'])
+    a_only_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['simba_size'])
     a_only_deobfusc = a_only_deobfusc[a_only_deobfusc["probe_size"].isna()]
     p_only_deobfusc = dfs.bench_to_cmp_df["deobfusc"].dropna(subset=['probe_size'])
-    p_only_deobfusc = p_only_deobfusc[p_only_deobfusc["abs_size"].isna()]
+    p_only_deobfusc = p_only_deobfusc[p_only_deobfusc["simba_size"].isna()]
 
-    a_only_mean, a_only_cnt = a_only_deobfusc['abs_size'].mean(), a_only_deobfusc['abs_size'].count()
+    a_only_mean, a_only_cnt = a_only_deobfusc['simba_size'].mean(), a_only_deobfusc['simba_size'].count()
     p_only_mean, p_only_cnt = p_only_deobfusc['probe_size'].mean(), p_only_deobfusc['probe_size'].count()
-    log_write_with_time(f"For Deobfusc, 'abssynth probe both solved' problems avg size = [{a_both_mean:.1f}, {p_both_mean:.1f}]")
-    log_write_with_time(f"abssynth only avg size = {a_only_mean:.1f} for {a_only_cnt:d}, probe only avg size = {p_only_mean:.1f} for {p_only_cnt:d}")
+    log_write_with_time(f"For Deobfusc, 'simba probe both solved' problems avg size = [{a_both_mean:.1f}, {p_both_mean:.1f}]")
+    log_write_with_time(f"simba only avg size = {a_only_mean:.1f} for {a_only_cnt:d}, probe only avg size = {p_only_mean:.1f} for {p_only_cnt:d}")
 
 
 def show_example_gradient_test(dfs: AllDfs):
-    ex05df = dfs.solver_bench_to_df["abs_synth_ex05"]["deobfusc"]
-    ex10df = dfs.solver_bench_to_df["abs_synth_ex10"]["deobfusc"]
-    ex15df = dfs.solver_bench_to_df["abs_synth_ex15"]["deobfusc"]
-    fulldf = dfs.solver_bench_to_df["abs_synth"]["deobfusc"]
+    ex05df = dfs.solver_bench_to_df["simba_ex05"]["deobfusc"]
+    ex10df = dfs.solver_bench_to_df["simba_ex10"]["deobfusc"]
+    ex15df = dfs.solver_bench_to_df["simba_ex15"]["deobfusc"]
+    fulldf = dfs.solver_bench_to_df["simba"]["deobfusc"]
 
     log_write_with_time("Example count 5, 10, 15, 20 ->")
     log_write_with_time("average time {:5.2f}, {:5.2f}, {:5.2f}, {:5.2f} ->".format(
@@ -997,7 +997,7 @@ def draw_main_table(dfs: AllDfs, table_out):
         for solver in solver_names
     }
 
-    show_abs_probe_size_numbers(dfs)
+    show_simba_probe_size_numbers(dfs)
     show_example_gradient_test(dfs)
 
     # figure 3.(c): main summary table raw data
@@ -1072,7 +1072,7 @@ def draw_main_table(dfs: AllDfs, table_out):
         ),
         "{:11s}|| {:10s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|".format(
             "category".center(12, " "),
-            "AbsSynth".center(10, " "), "Duet".center(6, " "), "Probe".center(6, " "),
+            "Simba".center(10, " "), "Duet".center(6, " "), "Probe".center(6, " "),
             "A".center(6, " "), "D".center(6, " "), "P".center(6, " "),
             "A".center(6, " "), "D".center(6, " "), "P".center(6, " "),
             "A".center(6, " "), "D".center(6, " "), "P".center(6, " "),
@@ -1185,23 +1185,23 @@ def draw_main_table(dfs: AllDfs, table_out):
         "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names]),
         "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names]),
         "\\textsc{BitVec-Cond} \\! &",
-        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
-        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
-        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
-        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
-        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['pbe-bitvec'] for solver in ["abs_synth", "duet"]]),
+        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
+        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
+        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
+        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
+        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
         "\\textsc{Lobster}\\! &",
-        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
-        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
-        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
-        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
-        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['lobster'] for solver in ["abs_synth", "duet"]]),
+        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['lobster'] for solver in ["simba", "duet"]]),
+        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['lobster'] for solver in ["simba", "duet"]]),
+        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['lobster'] for solver in ["simba", "duet"]]),
+        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['lobster'] for solver in ["simba", "duet"]]),
+        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['lobster'] for solver in ["simba", "duet"]]),
         "\\textsc{Crypto}\\! &",
-        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
-        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
-        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
-        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
-        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['crypto'] for solver in ["abs_synth", "duet"]]),
+        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['crypto'] for solver in ["simba", "duet"]]),
+        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['crypto'] for solver in ["simba", "duet"]]),
+        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['crypto'] for solver in ["simba", "duet"]]),
+        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['crypto'] for solver in ["simba", "duet"]]),
+        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['crypto'] for solver in ["simba", "duet"]]),
         "\\hline",
         "  {\\bf Overall} \\! &",
         "  {{\\bf {:d}}} & {{\\bf {:d}}} & {{\\bf {:d}}} &".format(*[main_summary['solved'][solver]['overall'] for solver in solver_names]),

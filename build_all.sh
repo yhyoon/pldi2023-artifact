@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "Build AbsSynth"
-cd abs_synth
+echo "Build Simba"
+cd simba
 ./first_build.sh
 cd ..
 

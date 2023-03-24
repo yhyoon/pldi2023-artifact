@@ -15,6 +15,7 @@ it may not achieve the performance number reported in the paper.
 * Guest OS: Ubuntu 22.04.5 LTS 64bit Server
 * Username: abssynth
 * Password: synthesis2023
+* Note: tool name is changed from abs_synth to simba
 
 The artifact is in directory `~/pldi2023-artifact`.
 
@@ -30,12 +31,12 @@ Be aware that all packages and libraries will be installed directly into your en
 
 ### Detail
 
-* `libgmp-dev`(https://gmplib.org/): for z3 solver (`abs_synth`, `duet`)
+* `libgmp-dev`(https://gmplib.org/): for z3 solver (`simba`, `duet`)
 ```sh
 $ sudo apt install libgmp-dev # for linux
 $ brew install gmp # for mac
 ```
-* `opam`(https://opam.ocaml.org/): for ocaml compiler (`abs_synth`, `duet`)
+* `opam`(https://opam.ocaml.org/): for ocaml compiler (`simba`, `duet`)
 ```sh
 $ sudo apt install opam  # for linux
 $ brew install opam  # for mac
@@ -93,9 +94,9 @@ $ git checkout 627199a80c2eaad7c7a1c287ec65bf3de664e493  # last commit available
 $ cd ..
 ```
 
-* `abs_synth`: our solver
+* `simba`: our solver
 ```sh
-git clone git@github.com:yhyoon/abs_synth.git
+git clone git@github.com:yhyoon/simba.git
 ```
 
 ## Build
@@ -116,7 +117,7 @@ $ ./build_all.sh
 The `./build_all.sh` script runs the following commands. 
 
 ```sh
-$ cd abs_synth
+$ cd simba
 $ ./first_build.sh
 $ cd ..
 $
@@ -168,7 +169,7 @@ You can evaluate your interested solvers and benchmark sets as follows:
 $ ./artifact [-log LOG_FILE_PATH] run -solvers [SOLVER_LIST] -benches [BENCH_LIST] [-timeout <sec>] [-p <num_cores>]
 ```
 
-SOLVER_LIST is a list of solver names which are one of {abs_synth, duet, probe, abs_synth_bf, abs_synth_fonly, abs_synth_smt}.  
+SOLVER_LIST is a list of solver names which are one of {simba, duet, probe, simba, simba_fonly, simba_smt}.  
 BENCH_LIST is a list of benchmark set names which are on of {hd, deobfusc, crypto, lobster}. 
 
 Each result will be stored into directory `pldi2023-artifact/result`
@@ -181,21 +182,21 @@ $ ./artifact aggregation [-csv_out CSV_FILE_PATH]
 ```
 
 
-### Running AbsSynth for other SyGuS problems
-You can run AbsSynth to solve other synthesis problems as follows:
+### Running Simba for other SyGuS problems
+You can run Simba to solve other synthesis problems as follows:
 ```sh
-$ abs_synth/abs_synth.exe <options> [a SyGuS input file]
+$ simba/simba.exe <options> [a SyGuS input file]
 ```
-The tool is also available in a separate [GitHub repository](https://github.com/yhyoon/abs_synth).
+The tool is also available in a separate [GitHub repository](https://github.com/yhyoon/simba).
 
 You may find the options available by:
 ```sh
-$ abs_synth/abs_synth.exe -help
+$ simba/simba.exe -help
 ```
 
 For example, to solve the problem described in `bench/bitvec/hd/hd-17-d5-prog.sl`,
 ```sh
-$ abs_synth/abs_synth.exe bench/bitvec/hd/hd-17-d5-prog.sl
+$ simba/simba.exe bench/bitvec/hd/hd-17-d5-prog.sl
 ````
 You will get the following output:
 ```sh
@@ -212,6 +213,6 @@ The first line shows a desirable solution (f is the target synthesis function), 
 
 For more detailed progress log and statistics, use option `-log` as follows:
 ```sh
-$ abs_synth/abs_synth.exe -log stdout bench/bitvec/hd/hd-17-d5-prog.sl
-$ abs_synth/abs_synth.exe -log solving-hd-17-d5.log bench/bitvec/hd/hd-17-d5-prog.sl
+$ simba/simba.exe -log stdout bench/bitvec/hd/hd-17-d5-prog.sl
+$ simba/simba.exe -log solving-hd-17-d5.log bench/bitvec/hd/hd-17-d5-prog.sl
 ````

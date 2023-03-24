@@ -17,9 +17,9 @@ if [ ! -d "./duet" ]; then
   cd ..
 fi
 
-if [ ! -d "./abs_synth" ]; then
-  echo "first cloning abs_synth"
-  git clone git@github.com:yhyoon/abs_synth.git
+if [ ! -d "./simba" ]; then
+  echo "first cloning simba"
+  git clone git@github.com:yhyoon/simba.git
 fi
 
 if [ "$(uname)" = "Darwin" ]; then

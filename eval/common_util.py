@@ -62,15 +62,15 @@ no_cond_bench_names = [
 ]
 
 solver_names = [
-    "abs_synth", "duet", "probe"
+    "simba", "duet", "probe"
 ]
 
 ablation_names = [
-    "abs_synth_bf", "abs_synth_smt", "abs_synth_fonly"
+    "simba_bf", "simba_smt", "simba_fonly"
 ]
 
 ex_cut_names = [
-    "abs_synth_ex05", "abs_synth_ex10", "abs_synth_ex15"
+    "simba_ex05", "simba_ex10", "simba_ex15"
 ]
 
 tbl1_rand_chosen_hd_problems = [
