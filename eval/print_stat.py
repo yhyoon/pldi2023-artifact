@@ -797,9 +797,9 @@ def draw_ablation_table(dfs: AllDfs, table_out):
         ),
         "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
             "category".center(12, " "),
-            "A".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
-            "A".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
-            "A".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
+            "S".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
+            "S".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
+            "S".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
         ),
         "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
             "".center(12, "-"),
@@ -858,7 +858,7 @@ def draw_ablation_table(dfs: AllDfs, table_out):
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
     table_out.write("Fig. 4. (b) Statistics for the solving times and solution sizes."
-                    "A(bsSynth), F(orwardOnly), S(MTSolver), B(ruteForce).\n")
+                    "S(imba), F(orwardOnly), V(SMTSolver), B(ruteForce).\n")
     table_out.write("\n".join(txt_summary_lines))
     table_out.write("\n\n")
 
@@ -871,9 +871,9 @@ def draw_ablation_table(dfs: AllDfs, table_out):
         "      \\multicolumn{4}{c}{Size (Average)} \\\\",
         "        \\cline{2-13}",
         "category\\! &",
-        "  {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} &",
-        "    {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} &",
-        "      {\\bf A} & {\\bf F} & {\\bf S} & {\\bf B} \\\\",
+        "  {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} &",
+        "    {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} &",
+        "      {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} \\\\",
         "\\hline \\hline",
         "\\textsc{HD} \\! &",
         "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['hd'] for solver in ablations_in_order]),
@@ -1073,10 +1073,10 @@ def draw_main_table(dfs: AllDfs, table_out):
         "{:11s}|| {:10s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|".format(
             "category".center(12, " "),
             "Simba".center(10, " "), "Duet".center(6, " "), "Probe".center(6, " "),
-            "A".center(6, " "), "D".center(6, " "), "P".center(6, " "),
-            "A".center(6, " "), "D".center(6, " "), "P".center(6, " "),
-            "A".center(6, " "), "D".center(6, " "), "P".center(6, " "),
-            "A".center(6, " "), "D".center(6, " "), "P".center(6, " "),
+            "S".center(6, " "), "D".center(6, " "), "P".center(6, " "),
+            "S".center(6, " "), "D".center(6, " "), "P".center(6, " "),
+            "S".center(6, " "), "D".center(6, " "), "P".center(6, " "),
+            "S".center(6, " "), "D".center(6, " "), "P".center(6, " "),
         ),
         "{:11s}|| {:24s}| {:20s}| {:20s}| {:20s}| {:20s}|".format(
             "".center(12, "-"),
@@ -1166,11 +1166,11 @@ def draw_main_table(dfs: AllDfs, table_out):
         "        \\multicolumn{3}{|c|}{Size (Average)} &",
         "          \\multicolumn{3}{c} {Size (Median)} \\\\ \\cline{2-16}",
         "category\\! &",
-        "  \\textsc{{\\bf A}bsSynth} & \\textsc{{\\bf D}uet} & \\textsc{{\\bf P}robe} &",
-        "    \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
-        "      \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
-        "        \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
-        "          \\textsc{{\\bf A}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} \\\\",
+        "  \\textsc{{\\bf S}imba} & \\textsc{{\\bf D}uet} & \\textsc{{\\bf P}robe} &",
+        "    \\textsc{{\\bf S}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "      \\textsc{{\\bf S}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "        \\textsc{{\\bf S}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} &",
+        "          \\textsc{{\\bf S}} & \\textsc{{\\bf D}} & \\textsc{{\\bf P}} \\\\",
         "\\hline \\hline",
         "\\textsc{HD} \\! &",
         "  {:d} & {:d} & {:d} &".format(*[main_summary['solved'][solver]['hd'] for solver in solver_names]),
