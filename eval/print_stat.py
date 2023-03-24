@@ -797,9 +797,9 @@ def draw_ablation_table(dfs: AllDfs, table_out):
         ),
         "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
             "category".center(12, " "),
-            "S".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
-            "S".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
-            "S".center(6, " "), "F".center(6, " "), "S".center(6, " "), "B".center(6, " "),
+            "S".center(6, " "), "F".center(6, " "), "V".center(6, " "), "B".center(6, " "),
+            "S".center(6, " "), "F".center(6, " "), "V".center(6, " "), "B".center(6, " "),
+            "S".center(6, " "), "F".center(6, " "), "V".center(6, " "), "B".center(6, " "),
         ),
         "{:12s}|| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}| {:6s}|{:6s}|{:6s}|{:6s}|".format(
             "".center(12, "-"),
