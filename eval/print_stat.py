@@ -140,8 +140,11 @@ def health_check_solver_problem(s, p) -> List[Tuple[str, str]]:
 
 
 # draw figures: cactus
-def draw_cactus(bench_name: str, file_name: str, all_problem_count, tds, *, mark_every=None, xtick_step=None):
-    figure = plt.figure()
+def draw_cactus(bench_name: str, file_name: str, all_problem_count, tds, *, mark_every=None, xtick_step=None, y_size=None):
+    if y_size is not None:
+        figure = plt.figure(figsize=(9, y_size))
+    else:
+        figure = plt.figure()
     ax: plt.axes.Axes = figure.subplots()
     ax.set_title(bench_name, fontsize=24)
     ax.set_xlabel(f"# Solved instances (total = {all_problem_count})")
@@ -369,7 +372,7 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
             solver_bench_to_df["simba"]["crypto"],
         ])["time"].sort_values(ignore_index=True),
          'label': "SIMBA", 'color': 'b', 'marker': 'o'},
-    ])
+    ], y_size=7)
 
 
 # figure 3.(a), 3.(b): solved count and fastest count
@@ -633,7 +636,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
 
     tex_detail_lines = [
         "\\begin{table}",
-        "  \\small",
+        "  \\footnotesize",
         "  \\centering",
         "  \\caption{Results for 25 randomly chosen benchmark problems (5 for each category), ",
         "  where \\textbf{Time} gives synthesis time,",
@@ -863,39 +866,42 @@ def draw_ablation_table(dfs: AllDfs, table_out):
     table_out.write("\n\n")
 
     tex_summary_lines = [
-        "\\begin{tabular}{c|r|r|r|r|r|r|r|r|r|r|r|r}",
+        "\\begin{tabular}{c|r|r|r|r|r|r|r|r}",
+        #"\\begin{tabular}{c|r|r|r|r|r|r|r|r|r|r|r|r}",
         "\\hline",
         "Benchmark &",
         "  \\multicolumn{4}{c|}{\\# Solved} &",
-        "    \\multicolumn{4}{c|}{Time (Average)} &",
-        "      \\multicolumn{4}{c}{Size (Average)} \\\\",
-        "        \\cline{2-13}",
+        "    \\multicolumn{4}{c}{Time (Average)} \\\\ % &",
+        #"    \\multicolumn{4}{c|}{Time (Average)} \\\\ % &",
+        # "      \\multicolumn{4}{c}{Size (Average)} \\\\",
+        # "        \\cline{2-13}",
+        "        \\cline{2-9}",
         "category\\! &",
         "  {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} &",
-        "    {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} &",
-        "      {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} \\\\",
+        "    {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} \\\\ % &",
+        # "      {\\bf S} & {\\bf F} & {\\bf V} & {\\bf B} \\\\",
         "\\hline \\hline",
         "\\textsc{HD} \\! &",
         "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['hd'] for solver in ablations_in_order]),
-        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['hd'] for solver in ablations_in_order]),
-        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['hd'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm] % &".format(*[ablation_summary['time_avg'][solver]['hd'] for solver in ablations_in_order]),
+        # "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['hd'] for solver in ablations_in_order]),
         "\\textsc{Deobfusc}\\! &",
         "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['deobfusc'] for solver in ablations_in_order]),
-        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['deobfusc'] for solver in ablations_in_order]),
-        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['deobfusc'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm] % &".format(*[ablation_summary['time_avg'][solver]['deobfusc'] for solver in ablations_in_order]),
+        # "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['deobfusc'] for solver in ablations_in_order]),
         "\\textsc{Lobster}\\! &",
         "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['lobster'] for solver in ablations_in_order]),
-        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['lobster'] for solver in ablations_in_order]),
-        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['lobster'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm] % &".format(*[ablation_summary['time_avg'][solver]['lobster'] for solver in ablations_in_order]),
+        # "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['lobster'] for solver in ablations_in_order]),
         "\\textsc{Crypto}\\! &",
         "  {:.0f} &  {:.0f} & {:.0f} & {:.0f} &".format(*[ablation_summary['solved'][solver]['crypto'] for solver in ablations_in_order]),
-        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} &".format(*[ablation_summary['time_avg'][solver]['crypto'] for solver in ablations_in_order]),
-        "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['crypto'] for solver in ablations_in_order]),
+        "    {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm] % &".format(*[ablation_summary['time_avg'][solver]['crypto'] for solver in ablations_in_order]),
+        # "      {:.1f} &  {:.1f} & {:.1f} & {:.1f} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['crypto'] for solver in ablations_in_order]),
         "\\hline",
         "{\\bf Overall}\\! &",
         "  {{\\bf {:.0f}}} &  {{\\bf {:.0f}}} & {{\\bf {:.0f}}} & {{\\bf {:.0f}}} &".format(*[ablation_summary['solved'][solver]['overall'] for solver in ablations_in_order]),
-        "    {{\\bf {:.1f}}} &  {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} &".format(*[ablation_summary['time_avg'][solver]['overall'] for solver in ablations_in_order]),
-        "      {{\\bf {:.1f}}} &  {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['overall'] for solver in ablations_in_order]),
+        "    {{\\bf {:.1f}}} &  {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} \\\\ [0.3mm] % &".format(*[ablation_summary['time_avg'][solver]['overall'] for solver in ablations_in_order]),
+        # "      {{\\bf {:.1f}}} &  {{\\bf {:.1f}}} & {{\\bf {:.1f}}} & {{\\bf {:.1f}}} \\\\ [0.3mm]".format(*[ablation_summary['size_avg'][solver]['overall'] for solver in ablations_in_order]),
         "\\hline",
         "\\end{tabular}"
     ]
