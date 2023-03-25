@@ -25,10 +25,10 @@ def build_clean_dest_dirs(target: str):
         dest_dirs.append(os.path.join(result_root_path, "simba", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec", "hd"))
-    elif target == "pbe-bitvec":
-        dest_dirs.append(os.path.join(result_root_path, "simba", "pbe-bitvec"))
-        dest_dirs.append(os.path.join(result_root_path, "duet", "pbe-bitvec"))
-        dest_dirs.append(os.path.join(result_root_path, "probe", "pbe-bitvec"))
+    elif target == "bitvec-cond":
+        dest_dirs.append(os.path.join(result_root_path, "simba", "bitvec-cond"))
+        dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec-cond"))
+        dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec-cond"))
     elif target == "crypto":
         dest_dirs.append(os.path.join(result_root_path, "simba", "circuit", "crypto"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "circuit", "crypto"))
@@ -85,7 +85,7 @@ def prepare_result_dirs():
         os.makedirs(os.path.join(result_root_path, solver, "bitvec", "hd"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "crypto"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "lobster"), exist_ok=True)
-        os.makedirs(os.path.join(result_root_path, solver, "pbe-bitvec"), exist_ok=True)
+        os.makedirs(os.path.join(result_root_path, solver, "bitvec-cond"), exist_ok=True)
 
     os.makedirs(os.path.join(artifact_root_path, "figures"), exist_ok=True)
 
@@ -190,7 +190,7 @@ def main():
                             all_on=args.all,
                             table_out=args.table_out)
     elif args.command == 'batch':
-        for bench in ["crypto", "lobster", "hd", "deobfusc", "pbe-bitvec"]:
+        for bench in ["crypto", "lobster", "hd", "deobfusc", "bitvec-cond"]:
             for solver in solver_names:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)

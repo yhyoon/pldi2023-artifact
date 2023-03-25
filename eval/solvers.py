@@ -63,7 +63,7 @@ class SolverSimbaBF(SolverSimba):
         return "simba_bf"
 
     def solvable(self, bench: str) -> bool:
-        return bench != "pbe-bitvec"
+        return bench != "bitvec-cond"
 
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
@@ -76,7 +76,7 @@ class SolverSimbaSMT(SolverSimba):
         return "simba_smt"
 
     def solvable(self, bench: str) -> bool:
-        return bench != "pbe-bitvec"
+        return bench != "bitvec-cond"
 
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
@@ -89,7 +89,7 @@ class SolverSimbaForwardOnly(SolverSimba):
         return "simba_fonly"
 
     def solvable(self, bench: str) -> bool:
-        return bench != "pbe-bitvec"
+        return bench != "bitvec-cond"
 
     def params(self, target: str) -> List[str]:
         json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
@@ -159,7 +159,7 @@ class SolverDuet(Solver):
             return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3")}
 
     def params(self, target: str) -> List[str]:
-        if target.startswith(bench_name_to_dir["bitvec"]) or target.startswith(bench_name_to_dir["pbe-bitvec"]):
+        if target.startswith(bench_name_to_dir["bitvec"]) or target.startswith(bench_name_to_dir["bitvec-cond"]):
             return ["-fastdt", "-ex_all", "-max_size", "10000", "-init_comp_size", "3", target]
         elif target.startswith(bench_name_to_dir["circuit"]):
             return ["-max_size", "128", "-max_height", "16", "-init_comp_size", "1", target]

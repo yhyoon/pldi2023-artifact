@@ -325,14 +325,14 @@ def draw_cactus_plots(problem_list: Dict[str, Tuple[List[str], FrozenSet[str], p
          'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ])
 
-    required_pairs = health_check_solver_bench(["simba", "duet"], ["pbe-bitvec"])
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["bitvec-cond"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
 
-    draw_cactus("PBE-BITVEC", "pbe_bitvec", len(problem_list["pbe-bitvec"][0]), [
-        {'time_df': solver_bench_to_df["duet"]["pbe-bitvec"]["time"].sort_values(ignore_index=True),
+    draw_cactus("BITVEC-COND", "bitvec_cond", len(problem_list["bitvec-cond"][0]), [
+        {'time_df': solver_bench_to_df["duet"]["bitvec-cond"]["time"].sort_values(ignore_index=True),
          'label': "DUET", 'color': 'g', 'marker': '^'},
-        {'time_df': solver_bench_to_df["simba"]["pbe-bitvec"]["time"].sort_values(ignore_index=True),
+        {'time_df': solver_bench_to_df["simba"]["bitvec-cond"]["time"].sort_values(ignore_index=True),
          'label': "SIMBA", 'color': 'b', 'marker': 'o'},
     ])
 
@@ -411,19 +411,19 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
         [crypto_win.get("simba", 0), crypto_win.get("duet", 0)],
     ])
 
-    # stacked bar 5 - pbe cnt
-    required_pairs = health_check_solver_bench(["simba", "duet"], ["pbe-bitvec"])
+    # stacked bar 5 - bvcond cnt
+    required_pairs = health_check_solver_bench(["simba", "duet"], ["bitvec-cond"])
     if len(required_pairs) > 0:
         log_write_with_time(f"WARN: incomplete plot. you need run {str(required_pairs)}")
-    draw_stack_bar("pbe_bitvec_cnt", "# Solved Benchmarks", ["SIMBA", "DUET"], ["PBE_BITVEC"], ['gold'], [
+    draw_stack_bar("bitvec_cond_cnt", "# Solved Benchmarks", ["SIMBA", "DUET"], ["BITVEC-COND"], ['gold'], [
         [solver_bench_to_df[solver][bench]["time"].count() for solver in ["simba", "duet"]]
-        for bench in ["pbe-bitvec"]
+        for bench in ["bitvec-cond"]
     ])
 
-    # stacked bar6 - pbe fastest
-    pbe_bitvec_win = bench_cmp_map["pbe-bitvec"]["fastest"].value_counts()
-    draw_stack_bar("pbe_bitvec_fast", "# Fastest Solved Benchmarks", ["SIMBA", "DUET"], ["PBE_BITVEC"], ['gold'], [
-        [pbe_bitvec_win.get("simba", 0), pbe_bitvec_win.get("duet", 0)],
+    # stacked bar6 - bvcond fastest
+    bitvec_cond_win = bench_cmp_map["bitvec-cond"]["fastest"].value_counts()
+    draw_stack_bar("bitvec_cond_fast", "# Fastest Solved Benchmarks", ["SIMBA", "DUET"], ["BITVEC-COND"], ['gold'], [
+        [bitvec_cond_win.get("simba", 0), bitvec_cond_win.get("duet", 0)],
     ])
 
 
@@ -445,7 +445,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "deobfusc": tbl1_rand_chosen_deob_problems,
         "lobster": tbl1_rand_chosen_lobster_problems,
         "crypto": tbl1_rand_chosen_crypto_problems,
-        "pbe-bitvec": tbl1_rand_chosen_pbe_problems,
+        "bitvec-cond": tbl1_rand_chosen_bvcond_problems,
     }
 
     # table 1: randomly chosen detail table raw data
@@ -569,14 +569,14 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 problem,
                 *[
                     *[
-                        lf(solver, "pbe-bitvec", problem)
+                        lf(solver, "bitvec-cond", problem)
                         for solver, lf in itertools.product(
                             ["probe", "duet", "simba"],
                             [lookup_time_and_format, lookup_size_and_format]
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_pbe_problems
+            ) for problem in tbl1_rand_chosen_bvcond_problems
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -684,14 +684,14 @@ def draw_detail_table(dfs: AllDfs, table_out):
         *[
             "      & {:25s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} & {:s} \\\\".format(
                 problem.replace("_", "\\_"),
-                lookup_time_and_format("probe", "pbe-bitvec", problem),
-                lookup_size_and_format("probe", "pbe-bitvec", problem),
-                lookup_time_and_format("duet", "pbe-bitvec", problem),
-                lookup_size_and_format("duet", "pbe-bitvec", problem),
-                lookup_time_and_format("simba", "pbe-bitvec", problem),
-                lookup_analysis_time("simba", "pbe-bitvec", problem),
-                lookup_size_and_format("simba", "pbe-bitvec", problem),
-            ) for problem in tbl1_rand_chosen_pbe_problems
+                lookup_time_and_format("probe", "bitvec-cond", problem),
+                lookup_size_and_format("probe", "bitvec-cond", problem),
+                lookup_time_and_format("duet", "bitvec-cond", problem),
+                lookup_size_and_format("duet", "bitvec-cond", problem),
+                lookup_time_and_format("simba", "bitvec-cond", problem),
+                lookup_analysis_time("simba", "bitvec-cond", problem),
+                lookup_size_and_format("simba", "bitvec-cond", problem),
+            ) for problem in tbl1_rand_chosen_bvcond_problems
         ],
         "    \\hline",
         "    \\multirow{5}{*}{\\textsc{Lobster}}",
@@ -919,7 +919,7 @@ def prepare_df() -> AllDfs:
     solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]] = {
         solver: {
             bench: solver_to_df[solver][solver_to_df[solver]["bench"] == bench]
-            for bench in ["deobfusc", "hd", "lobster", "crypto", "pbe-bitvec"]
+            for bench in ["deobfusc", "hd", "lobster", "crypto", "bitvec-cond"]
         }
         for solver in [*solver_names, *ablation_names, *ex_cut_names]
     }
@@ -930,13 +930,13 @@ def prepare_df() -> AllDfs:
     deobfusc_cmp_df = build_time_cmp_table(problem_map["deobfusc"][2], simba_df, duet_df, probe_df)
     lobster_cmp_df = build_time_cmp_table(problem_map["lobster"][2], simba_df, duet_df)
     crypto_cmp_df = build_time_cmp_table(problem_map["crypto"][2], simba_df, duet_df)
-    pbe_bv_cmp_df = build_time_cmp_table(problem_map["pbe-bitvec"][2], simba_df, duet_df, probe_df)
+    bvcond_cmp_df = build_time_cmp_table(problem_map["bitvec-cond"][2], simba_df, duet_df, probe_df)
     bench_to_cmp_df: Dict[str, pd.DataFrame] = {
         "hd": hd_cmp_df,
         "deobfusc": deobfusc_cmp_df,
         "lobster": lobster_cmp_df,
         "crypto": crypto_cmp_df,
-        "pbe-bitvec": pbe_bv_cmp_df,
+        "bitvec-cond": bvcond_cmp_df,
     }
 
     return AllDfs(main_df, solver_to_df, solver_bench_to_df, bench_to_cmp_df)
@@ -1100,12 +1100,12 @@ def draw_main_table(dfs: AllDfs, table_out):
             *[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names],
         ),
         "{:11s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
-            "PBE-BV".center(12, " "),
-            *[main_summary['solved'][solver]['pbe-bitvec'] for solver in solver_names],
-            *[main_summary['time_avg'][solver]['pbe-bitvec'] for solver in solver_names],
-            *[main_summary['time_med'][solver]['pbe-bitvec'] for solver in solver_names],
-            *[main_summary['size_avg'][solver]['pbe-bitvec'] for solver in solver_names],
-            *[main_summary['size_med'][solver]['pbe-bitvec'] for solver in solver_names],
+            "BV-COND".center(12, " "),
+            *[main_summary['solved'][solver]['bitvec-cond'] for solver in solver_names],
+            *[main_summary['time_avg'][solver]['bitvec-cond'] for solver in solver_names],
+            *[main_summary['time_med'][solver]['bitvec-cond'] for solver in solver_names],
+            *[main_summary['size_avg'][solver]['bitvec-cond'] for solver in solver_names],
+            *[main_summary['size_med'][solver]['bitvec-cond'] for solver in solver_names],
         ),
         "{:11s}|| {:>10d}|{:>6d}|{:>6d}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.1f}|{:>6.1f}|{:>6.1f}| {:>6.0f}|{:>6.0f}|{:>6.0f}|".format(
             "LOBSTER".center(12, " "),
@@ -1185,11 +1185,11 @@ def draw_main_table(dfs: AllDfs, table_out):
         "        {:.1f} & {:.1f} & {:.1f} &".format(*[main_summary['size_avg'][solver]['deobfusc'] for solver in solver_names]),
         "          {:.0f} & {:.0f} & {:.0f} \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['deobfusc'] for solver in solver_names]),
         "\\textsc{BitVec-Cond} \\! &",
-        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
-        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
-        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
-        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
-        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['pbe-bitvec'] for solver in ["simba", "duet"]]),
+        "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['bitvec-cond'] for solver in ["simba", "duet"]]),
+        "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['bitvec-cond'] for solver in ["simba", "duet"]]),
+        "      {:.1f} & {:.1f} & - &".format(*[main_summary['time_med'][solver]['bitvec-cond'] for solver in ["simba", "duet"]]),
+        "        {:.1f} & {:.1f} & - &".format(*[main_summary['size_avg'][solver]['bitvec-cond'] for solver in ["simba", "duet"]]),
+        "          {:.0f} & {:.0f} & - \\\\[0.3mm]".format(*[main_summary['size_med'][solver]['bitvec-cond'] for solver in ["simba", "duet"]]),
         "\\textsc{Lobster}\\! &",
         "  {:d} & {:d} & - &".format(*[main_summary['solved'][solver]['lobster'] for solver in ["simba", "duet"]]),
         "    {:.1f} & {:.1f} & - &".format(*[main_summary['time_avg'][solver]['lobster'] for solver in ["simba", "duet"]]),

@@ -50,11 +50,11 @@ bench_name_to_dir = {
     "circuit":      os.path.join(bench_root_path, "circuit"),
     "crypto":       os.path.join(bench_root_path, "circuit", "crypto"),
     "lobster":      os.path.join(bench_root_path, "circuit", "lobster"),
-    "pbe-bitvec":   os.path.join(bench_root_path, "pbe-bitvec"),
+    "bitvec-cond":   os.path.join(bench_root_path, "bitvec-cond"),
 }
 
 bench_names = [
-    "deobfusc", "hd", "crypto", "lobster", "pbe-bitvec",
+    "deobfusc", "hd", "crypto", "lobster", "bitvec-cond",
 ]
 
 no_cond_bench_names = [
@@ -101,7 +101,7 @@ tbl1_rand_chosen_crypto_problems = [
     "CrCy_8-P12-D7-sIn5",
     "CrCy_10-sbox2-D5-sIn11",
 ]
-tbl1_rand_chosen_pbe_problems = [
+tbl1_rand_chosen_bvcond_problems = [
     "133_1000",
     "23_10",
     "60_100",
@@ -114,7 +114,7 @@ tbl1_rand_chosen_bench = frozenset((
     *tbl1_rand_chosen_deob_problems,
     *tbl1_rand_chosen_lobster_problems,
     *tbl1_rand_chosen_crypto_problems,
-    *tbl1_rand_chosen_pbe_problems,
+    *tbl1_rand_chosen_bvcond_problems,
 ))
 
 
@@ -125,7 +125,7 @@ def _gen_problems() -> Tuple[Dict[str, Tuple[List[str], FrozenSet[str], pd.DataF
         "hd": list(),
         "crypto": list(),
         "lobster": list(),
-        "pbe-bitvec": list(),
+        "bitvec-cond": list(),
     }
 
     def add_to(bench_name: str, problem_file_path: str):

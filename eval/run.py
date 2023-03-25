@@ -103,7 +103,7 @@ def main():
     parser.add_argument('solver', type=str,
                         help='solver name(simba | duet | probe)')
     parser.add_argument('bench', type=str,
-                        help='target bench name (bitvec | deobfusc | hd | circuit | crypto | lobster | pbe-bitvec)')
+                        help='target bench name (bitvec | deobfusc | hd | circuit | crypto | lobster | bitvec-cond)')
     parser.add_argument('-chosen', action='store_true',
                         help='run randomly chosen set of benchmarks (Table 1 in paper)')
     parser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,
