@@ -18,44 +18,106 @@ it may not achieve the performance number reported in the paper.
 
 The artifact is in directory `~/pldi2023-artifact`.
 
+## Docker Image
+
+We also provide a [Docker](https://www.docker.com/products/docker-desktop/) Image as an alternative to VM image.
+
+Download zipped docker image file and run with:
+```sh
+$ gzip -d \<gzipped_docker_image_file\>.tar.gz
+$ docker load -i \<extracted_docker_image_file\>.tar
+# time-consuming process...
+
+# if you are in Intel x86_64 environment
+$ docker run -it pldi2023-artifact-23:v1
+\# ./artifact batch ... 
+
+# if you are in Apple Silicon(M1, M2, etc.) envirionment
+# NOTE: not full performance because this container will run on Apple Rosetta emulator
+$ docker run -it --platform=linux/amd64 pldi2023-artifact-23:v1
+$ 
+```
+
+* Tested on Host:
+  + macOS Ventura 13.1 with 2.3GHz QuadCore Intel Core i7
+  + macOS Ventura 13.1 with Apple M1 (MacBook Pro 2020)
+* Guest Arch: X86_64
+
+## Limitation about testing environment
+
+* Choose one of these env(in order of stability):
+  + Ubuntu-20.04 or later with arch `x86_64`
+  + MacOS with arch `x86_64`(Intel)
+  + Use provided docker image using docker desktop
+  + Use provided VM Image using VirtualBox
+  + Use provided docker image using docker.io (not tested well)
+  + MacOS with arch `arm64`(Apple Silicon) (in this case, testing `Probe` is not available)
+
+* Build and execution of `AbsSynth` is tested on:
+  + macOS Ventura arch `x86_64`
+  + macOS Ventura arch `arm64`
+  + ubuntu-20.04+ arch `x86_64`
+
+* `Probe` tightly depends on `cvc4` which is not available in `arm64`, so it cannot be tested on that environment.
+If you are not interested in comparing `AbsSynth` to `Probe`,
+you can skip the related dependencies(`java`, `coursier`, `sbt`, `cvc4`)
+and do test the other tools.
+
+* Build `Duet` maybe failed in `ubuntu-20.04` docker container on `arm64` macOS because of build failure of dependency package z3.4.8.1. You can avoid this issue by installing z3.4.8.5 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.5` ; `make`)
+
+* If you want to run this artifact manually on macOS, you need install [Xcode Command Line Tools](https://mac.install.guide/commandlinetools/4.html) and [Homebrew](https://brew.sh/index) before the following detailed steps.
+
+If you don't want to install these tools or the other dependency libraries, it's recommended to use VM Image or Docker Image we provided.
+
 ## Dependencies
 This artifact requires following tools and libraries to build and run.
 
 ### TL;DR
 In one line command:
 ```sh
-$ ./prepare_dependency.sh
+$ source prepare_dependency.sh
 ```
-Be aware that all packages and libraries will be installed directly into your environment, and may affect your existing system, therefore proceed with caution.
+You need `sudo`er permission in your envirionment for this step. Be aware that all packages and libraries will be installed directly into your environment, and may affect your existing system, therefore proceed with caution.
 
 ### Detail
 
+* `wget`, `curl`: for running some build scripts (in some linux)
+```sh
+$ sudo apt-get install -y wget curl # for linux
+```
+
 * `libgmp-dev`(https://gmplib.org/): for z3 solver (`abs_synth`, `duet`)
 ```sh
-$ sudo apt install libgmp-dev # for linux
+$ sudo apt-get install -y libgmp-dev # for linux
 $ brew install gmp # for mac
 ```
 * `opam`(https://opam.ocaml.org/): for ocaml compiler (`abs_synth`, `duet`)
 ```sh
-$ sudo apt install opam  # for linux
+$ sudo apt-get install -y opam  # for linux
 $ brew install opam  # for mac
 ```
 
-* `java 8`(https://openjdk.org/): for java compiler (`probe`)
+* `java 8`(Linux - https://openjdk.org/) (Mac - https://bell-sw.com/pages/downloads/): for java compiler (`probe`)
 ```sh
-$ sudo apt install open-jdk-8-jdk # for linux
-$ brew install openjdk@8  # for mac
+$ sudo apt-get install -y open-jdk-8-jdk # for linux
+$
+$ brew tap bell-sw/liberica # for mac
+$ brew install --cask liberica-jdk8
 ```
 
 * `scala`, `sbt`(https://www.scala-lang.org/download/): for scala compiler (`probe`)
 ```sh
-$ curl -fL https://github.com/coursier/launchers/raw/master/cs-x86_64-pc-linux.gz | gzip -d > cs && chmod +x cs && ./cs setup  # for linux
+# java must be installed before this step
+$ curl -fLo coursier https://github.com/coursier/launchers/raw/master/coursier && chmod +x coursier && ./coursier setup --yes  # for linux
 $ brew install coursier/formulas/coursier && cs setup  # for mac
 ```
 
 * `cvc4`(https://cvc4.github.io/downloads.html): solver (`probe`)
 ```sh
-$ # for linux
+$ # for linux case 1: if available
+$ sudo apt-get install cvc4
+$
+$ # for linux case 2: if apt-get install is not working
 $ cd probe
 $ wget https://github.com/CVC4/CVC4/releases/download/1.8/cvc4-1.8-x86_64-linux-opt
 $ ln -s cvc4-1.8-x86_64-linux-opt cvc4
@@ -68,8 +130,8 @@ $ brew install cvc4/cvc4/cvc4
 
 * `python3`, `pip3`, `pandas` `matplotlib`: for running evaluation scripts (all)
 ```sh
-$ sudo apt install python3  # for linux
-$ sudo apt install python3-pip
+$ sudo apt-get install python3  # for linux
+$ sudo apt-get install python3-pip
 $
 $ brew install python3  # for mac
 $
@@ -86,7 +148,7 @@ tested on :
 
 In one line command:
 ```sh
-$ ./build_all.sh
+$ source build_all.sh
 ```
 
 ### Detail
