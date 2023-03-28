@@ -1,5 +1,8 @@
 # Artifacts for "Inductive Program Synthesis via Iterative Forward-Backward Abstract Interpretation"
 
+We have changed the tool name from "AbsSynth" to "Simba" in the final version,
+but this change is not applied in this artifact. So its name is still `AbsSynth`.
+
 ## Virtual Machine Image
 
 We provide a VirtualBox VM image to address the difficulty
@@ -13,6 +16,7 @@ it may not achieve the performance number reported in the paper.
 * Tested on VM Player: [VirtualBox 7.0](https://www.virtualbox.org/wiki/Downloads)
 * Tested on Host: macOS Ventura 13.1 with 2.3GHz QuadCore Intel Core i7
 * Guest OS: Ubuntu 22.04.5 LTS 64bit Server
+* Guest arch: `x86_64`
 * Username: abssynth
 * Password: synthesis2023
 
@@ -20,52 +24,64 @@ The artifact is in directory `~/pldi2023-artifact`.
 
 ## Docker Image
 
-We also provide a [Docker](https://www.docker.com/products/docker-desktop/) Image as an alternative to VM image.
-
-Download zipped docker image file and run with:
+We also provide a [Docker](https://www.docker.com/) Image as an alternative to VM image.
+Install [Docker Desktop](https://www.docker.com/products/docker-desktop/), download zipped docker image file and run with:
 ```sh
-$ gzip -d \<gzipped_docker_image_file\>.tar.gz
-$ docker load -i \<extracted_docker_image_file\>.tar
+$ gzip -d <gzipped_docker_image_file>.tar.gz
+$ docker load -i <extracted_docker_image_file>.tar
 # time-consuming process...
 
 # if you are in Intel x86_64 environment
 $ docker run -it pldi2023-artifact-23:v1
-\# ./artifact batch ... 
+(in-container) $ ./artifact batch ... 
 
 # if you are in Apple Silicon(M1, M2, etc.) envirionment
-# NOTE: not full performance because this container will run on Apple Rosetta emulator
+# NOTE: less performance because this container will run on Apple Rosetta emulator
 $ docker run -it --platform=linux/amd64 pldi2023-artifact-23:v1
-$ 
+(in-container) $ ./artifact batch ...
 ```
 
 * Tested on Host:
   + macOS Ventura 13.1 with 2.3GHz QuadCore Intel Core i7
   + macOS Ventura 13.1 with Apple M1 (MacBook Pro 2020)
-* Guest Arch: X86_64
+* Guest Arch: `x86_64`
 
-## Limitation about testing environment
+## Limitation about test environment
 
-* Choose one of these env(in order of stability):
+### 1. OS and Architecture
+
+Choose one of these list for test environment:
+1. Best performance, but some tools and libs are installed into your environment
   + Ubuntu-20.04 or later with arch `x86_64`
   + MacOS with arch `x86_64`(Intel)
+2. Safe and (relatively)easy, but cannot show full performance
   + Use provided docker image using docker desktop
   + Use provided VM Image using VirtualBox
-  + Use provided docker image using docker.io (not tested well)
+3. If those `Best` or `Safe and Easy` items are not available
+  + Use provided docker image using docker.io or any other container engine (we hope it works, but not tested)
   + MacOS with arch `arm64`(Apple Silicon) (in this case, testing `Probe` is not available)
+  + Other Unix OS with `x86_64` (not tested, provided build scripts will not working)
 
-* Build and execution of `AbsSynth` is tested on:
+* Build and run of `AbsSynth` is tested on:
   + macOS Ventura arch `x86_64`
   + macOS Ventura arch `arm64`
   + ubuntu-20.04+ arch `x86_64`
 
-* `Probe` tightly depends on `cvc4` which is not available in `arm64`, so it cannot be tested on that environment.
+
+### 2. Probe in `arm64`
+
+`Probe` tightly depends on `cvc4` which is not available in `arm64`, so it cannot be tested on that environment.
 If you are not interested in comparing `AbsSynth` to `Probe`,
-you can skip the related dependencies(`java`, `coursier`, `sbt`, `cvc4`)
-and do test the other tools.
+you can skip the related dependencies(`java`, `coursier`, `sbt`, `cvc4`, etc.)
+and run the test for the other tools.
 
-* Build `Duet` maybe failed in `ubuntu-20.04` docker container on `arm64` macOS because of build failure of dependency package z3.4.8.1. You can avoid this issue by installing z3.4.8.5 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.5` ; `make`)
+### 3. Duet in docker container with `arm64`
 
-* If you want to run this artifact manually on macOS, you need install [Xcode Command Line Tools](https://mac.install.guide/commandlinetools/4.html) and [Homebrew](https://brew.sh/index) before the following detailed steps.
+Build `Duet` maybe failed in `ubuntu:20.04` docker container on `arm64` macOS because of build failure of dependency z3.4.8.1. You can avoid this issue by installing z3.4.8.5 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.5` ; `make`)
+
+### 4. Additional tools for Mac
+
+If you want to run this artifact manually on macOS, you need install [Xcode Command Line Tools](https://mac.install.guide/commandlinetools/4.html) and [Homebrew](https://brew.sh/index) before the following detailed steps.
 
 If you don't want to install these tools or the other dependency libraries, it's recommended to use VM Image or Docker Image we provided.
 
@@ -81,7 +97,7 @@ You need `sudo`er permission in your envirionment for this step. Be aware that a
 
 ### Detail
 
-* `wget`, `curl`: for running some build scripts (in some linux)
+* `wget`, `curl`: for running some build scripts (linux)
 ```sh
 $ sudo apt-get install -y wget curl # for linux
 ```
