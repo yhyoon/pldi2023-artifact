@@ -3,6 +3,7 @@ import sys
 import platform
 import getpass
 import subprocess
+from tempfile import NamedTemporaryFile
 import re
 
 
@@ -136,11 +137,17 @@ def install_dependencies(system_kind):
     else:
         # linux
         print('Installing sbt with coursier... (this may take a while)')
-        curl_result = subprocess.run(['curl', '-fLo', 'coursier', 'https://github.com/coursier/launchers/raw/master/coursier'], stdout=subprocess.PIPE)
-        cs_result = subprocess.run(['bash', '-s', '--', 'setup', '--yes'], input=curl_result.stdout)
+        curl_result = subprocess.run(['curl', '-fL', 'https://github.com/coursier/launchers/raw/master/coursier'], stdout=subprocess.PIPE)
+        coursier = NamedTemporaryFile(delete=False)
+        coursier.write(curl_result.stdout)
+        os.chmod(coursier.name, 0o755)
+        coursier.close()
+        cs_result = subprocess.run([coursier.name, 'setup', '--yes'], input=curl_result.stdout)
+        os.unlink(coursier.name)
         if cs_result.returncode != 0:
             print('Error: coursier failed')
             sys.exit(1)
+        os.environ['PATH'] = os.environ['PATH'] + ':' + os.path.expanduser('~/.local/share/coursier/bin')
 
     # cvc4
     if system_kind == 'mac-apple-silicon':
@@ -222,6 +229,12 @@ def build_all_solvers(system_kind):
         else:
             succeeded_solvers.append('probe')
 
+    opam_ver_seq = subprocess.run(['opam', '--version'], stdout=subprocess.PIPE).stdout.decode('utf-8').strip().split(".")
+    if int(opam_ver_seq[0]) >= 2 and int(opam_ver_seq[1]) >= 1:
+        opam_install_cmd_head = ['opam', 'install', '--confirm-level=unsafe-yes']
+    else:
+        opam_install_cmd_head = ['opam', 'install', '--yes']
+
     # Duet
     print('Building Duet...')
     subprocess.call(['opam', 'switch', 'duet'])
@@ -230,15 +243,15 @@ def build_all_solvers(system_kind):
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.14', 'core', 'batteries', 'ocamlgraph']
     else:
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
-    retcode = subprocess.call(['opam', 'install', '--confirm-level=unsafe-yes', *opam_pkgs_duet],
+    retcode = subprocess.call([*opam_install_cmd_head, *opam_pkgs_duet],
                               env=duet_env)
     if retcode != 0:
         print('Warn: install opam package for duet (maybe) failed')
         check_result = subprocess.run(['opam', 'list', '-i', 'z3'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if check_result.stdout.decode('utf-8').find("No matches") != -1 or check_result.stderr.decode('utf-8').find("No matches") != -1:
             print('retry install z3.4.8.14 instead of 4.8.1')
-            subprocess.call(['opam', 'install', '--confirm-level=unsafe-yes', 'z3.4.8.14'],
-                              env=duet_env)
+            subprocess.call([*opam_install_cmd_head, 'z3.4.8.14'],
+                            env=duet_env)
         print('Keep going...')
 
     retcode = subprocess.call(['ocamlbuild', '-use-ocamlfind', 'src/main.native'],
@@ -255,7 +268,7 @@ def build_all_solvers(system_kind):
     subprocess.call(['opam', 'switch', 'abs_synth'])
     abs_synth_env = opam_config_make_env()
     opam_pkgs_abs_synth = ['dune', 'merlin', 'ocaml-lsp-server', 'dune-build-info', 'batteries', 'ocamlgraph', 'core_kernel', 'yojson', 'containers-data', 'containers', 'z3.4.8.14']
-    retcode = subprocess.call(['opam', 'install', '--confirm-level=unsafe-yes', *opam_pkgs_abs_synth],
+    retcode = subprocess.call([*opam_install_cmd_head, *opam_pkgs_abs_synth],
                    env=abs_synth_env)
     if retcode != 0:
         print('Warn: install opam package for abs_synth (maybe) failed')
