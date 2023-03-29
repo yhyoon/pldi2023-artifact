@@ -228,9 +228,9 @@ def build_all_solvers(system_kind):
     duet_env = opam_config_make_env()
     opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
     if system_kind == 'mac-apple-silicon':
-        opam_pkgs_duet.append('z3.4.8.5')
+        opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.5', 'core', 'batteries', 'ocamlgraph']
     else:
-        opam_pkgs_duet.append('z3.4.8.1')
+        opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
     retcode = subprocess.call(['opam', 'install', '--yes', *opam_pkgs_duet],
                               env=duet_env)
     if retcode != 0:
