@@ -1,7 +1,8 @@
+.DS_Store
 /.idea/
 **/__pycache__/
-/duet/_build/
-/abs_synth/_build/
-/abs_synth/_install
-/abs_synth/**/*.exe
-/probe/target/
+/duet
+/simba
+/probe
+/figures
+/result

@@ -28,17 +28,18 @@ class Solver:
         return True
 
 
-class SolverAbsSynth(Solver):
-    # command: ./abs_synth.exe [target_name]
+class SolverSimba(Solver):
+    # command: ./simba.exe [target_name]
 
     def name(self) -> str:
-        return "abs_synth"
+        return "simba"
 
     def executable(self) -> str:
-        return os.path.join(artifact_root_path, "abs_synth", "abs_synth.exe")
+        return os.path.join(artifact_root_path, "simba", "simba.exe")
 
     def params(self, target: str) -> List[str]:
-        return [target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-report_json", json_path, target]
 
     def extract_result(self, handle: timeout_runner.TimeoutRunner) -> Tuple[str, str, str]:
         result_string = handle.captured_stderr
@@ -56,31 +57,82 @@ class SolverAbsSynth(Solver):
         return str(result_time_ms), str(result_size), result_definition
 
 
-class SolverAbsSynthBF(SolverAbsSynth):
-    # command: ./abs_synth.exe -pruning bruteforce [target_name]
+class SolverSimbaBF(SolverSimba):
+    # command: ./simba.exe -pruning bruteforce [target_name]
     def name(self) -> str:
-        return "abs_synth_bf"
+        return "simba_bf"
+
+    def solvable(self, bench: str) -> bool:
+        return bench != "bitvec-cond"
 
     def params(self, target: str) -> List[str]:
-        return ["-pruning", "bruteforce", target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-pruning", "bruteforce", "-report_json", json_path, target]
 
 
-class SolverAbsSynthSMT(SolverAbsSynth):
-    # command: ./abs_synth.exe -pruning solver [target_name]
+class SolverSimbaSMT(SolverSimba):
+    # command: ./simba.exe -pruning solver [target_name]
     def name(self) -> str:
-        return "abs_synth_smt"
+        return "simba_smt"
+
+    def solvable(self, bench: str) -> bool:
+        return bench != "bitvec-cond"
 
     def params(self, target: str) -> List[str]:
-        return ["-pruning", "solver", target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-pruning", "solver", "-report_json", json_path, target]
 
 
-class SolverAbsSynthForwardOnly(SolverAbsSynth):
-    # command: ./abs_synth.exe -pruning solver [target_name]
+class SolverSimbaForwardOnly(SolverSimba):
+    # command: ./simba.exe -pruning solver [target_name]
     def name(self) -> str:
-        return "abs_synth_fonly"
+        return "simba_fonly"
+
+    def solvable(self, bench: str) -> bool:
+        return bench != "bitvec-cond"
 
     def params(self, target: str) -> List[str]:
-        return ["-no_backward", target]
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-no_backward", "-report_json", json_path, target]
+
+
+class SolverSimbaEx05(SolverSimba):
+    # command: ./simba.exe -ex_cut 5 [target_name]
+    def name(self) -> str:
+        return "simba_ex05"
+
+    def solvable(self, bench: str) -> bool:
+        return bench == "deobfusc"
+
+    def params(self, target: str) -> List[str]:
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-ex_cut", "5", "-report_json", json_path, target]
+
+
+class SolverSimbaEx10(SolverSimba):
+    # command: ./simba.exe -ex_cut 10 [target_name]
+    def name(self) -> str:
+        return "simba_ex10"
+
+    def solvable(self, bench: str) -> bool:
+        return bench == "deobfusc"
+
+    def params(self, target: str) -> List[str]:
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-ex_cut", "10", "-report_json", json_path, target]
+
+
+class SolverSimbaEx15(SolverSimba):
+    # command: ./simba.exe -ex_cut 15 [target_name]
+    def name(self) -> str:
+        return "simba_ex15"
+
+    def solvable(self, bench: str) -> bool:
+        return bench == "deobfusc"
+
+    def params(self, target: str) -> List[str]:
+        json_path = self.result_path() + os.sep + os.path.splitext(target[len(bench_root_path):])[0] + ".json"
+        return ["-ex_cut", "15", "-report_json", json_path, target]
 
 
 class SolverDuet(Solver):
@@ -107,7 +159,7 @@ class SolverDuet(Solver):
             return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3")}
 
     def params(self, target: str) -> List[str]:
-        if target.startswith(bench_name_to_dir["bitvec"]):
+        if target.startswith(bench_name_to_dir["bitvec"]) or target.startswith(bench_name_to_dir["bitvec-cond"]):
             return ["-fastdt", "-ex_all", "-max_size", "10000", "-init_comp_size", "3", target]
         elif target.startswith(bench_name_to_dir["circuit"]):
             return ["-max_size", "128", "-max_height", "16", "-init_comp_size", "1", target]
@@ -168,10 +220,79 @@ class SolverProbe(Solver):
 
 
 solver_map: Dict[str, Solver] = {
-    "abs_synth": SolverAbsSynth(),
-    "abs_synth_bf": SolverAbsSynthBF(),
-    "abs_synth_smt": SolverAbsSynthSMT(),
-    "abs_synth_fonly": SolverAbsSynthForwardOnly(),
+    "simba": SolverSimba(),
+    "simba_bf": SolverSimbaBF(),
+    "simba_smt": SolverSimbaSMT(),
+    "simba_fonly": SolverSimbaForwardOnly(),
+    "simba_ex05": SolverSimbaEx05(),
+    "simba_ex10": SolverSimbaEx10(),
+    "simba_ex15": SolverSimbaEx15(),
     "duet": SolverDuet(),
     "probe": SolverProbe(),
 }
+
+
+# no_result, timeout, failure, success
+def result_status(solver_name: str, problem_name: str) -> str:
+    problem_path = os.path.join(bench_name_to_dir[problem_bench_map[problem_name]], problem_name + ".sl")
+    result_file_path = result_path(solver_name) + os.sep + os.path.splitext(problem_path[len(bench_root_path):])[0] + ".result.txt"
+    try:
+        with open(result_file_path, "rt") as fin:
+            line = fin.readline()
+            solver, problem, sol_time_str, sol_size_str, sol = line.strip().split(sep=",")
+
+            if sol == "timeout":
+                return "timeout"
+            elif sol == "fail_with_max_size":
+                return "success"
+            elif sol == "failure" or sol_size_str.endswith(")"):
+                return "failure"
+            else:
+                return "success"
+    except FileNotFoundError:
+        return "no_result"
+
+
+# solver |-> bench |-> (success|timeout|failure|no_result) |-> count
+def all_result_status_tbl() -> Dict[str, Dict[str, Dict[str, int]]]:
+    tbl = dict()
+    counter_items = ["success", "timeout", "failure", "no_result"]
+
+    for solver in [*solver_names, *ablation_names, *ex_cut_names]:
+        tbl[solver] = dict()
+        for bench in bench_names:
+            bench_counters = {ci: 0 for ci in counter_items}
+            for problem in problem_map[bench][0]:
+                bench_counters[result_status(solver, problem)] += 1
+            tbl[solver][bench] = bench_counters
+
+    return tbl
+
+
+def all_result_status_str() -> List[str]:
+    lines = list()
+    counter_items = ["success", "timeout", "failure", "no_result"]
+
+    tbl = all_result_status_tbl()
+    for solver_name in [*solver_names, *ablation_names, *ex_cut_names]:
+        solver = solver_map[solver_name]
+        if all(not solver.solvable(bench) or tbl[solver_name][bench]["no_result"] == 0 for bench in bench_names):
+            lines.append(f"{solver_name}: DONE")
+        elif all(tbl[solver_name][bench]["no_result"] == len(problem_map[bench][1]) for bench in bench_names):
+            lines.append(f"{solver_name}: NO_RESULT")
+        else:
+            lines.append(f"{solver_name}:")
+            for bench in bench_names:
+                if not solver.solvable(bench):
+                    continue
+                elif tbl[solver_name][bench]["no_result"] == 0:
+                    lines.append(f"  {bench}:[{len(problem_map[bench][1])}/{len(problem_map[bench][1])}] DONE")
+                elif tbl[solver_name][bench]["no_result"] == len(problem_map[bench][1]):
+                    lines.append(f"  {bench}: NO_RESULT")
+                else:
+                    lines.append(f"  {bench}:[{len(problem_map[bench][1]) - tbl[solver_name][bench]['no_result']}/{len(problem_map[bench][1])}]")
+                    for ci in counter_items:
+                        if tbl[solver_name][bench][ci] > 0:
+                            lines.append(f"    {ci}: {tbl[solver_name][bench][ci]}")
+
+    return lines

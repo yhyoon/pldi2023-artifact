@@ -11,25 +11,29 @@ def build_clean_dest_dirs(target: str):
 
     if target == "all":
         dest_dirs.append(result_root_path)
-    elif target == "abs_synth":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth"))
+    elif target == "simba":
+        dest_dirs.append(os.path.join(result_root_path, "simba"))
     elif target == "duet":
         dest_dirs.append(os.path.join(result_root_path, "duet"))
     elif target == "probe":
         dest_dirs.append(os.path.join(result_root_path, "probe"))
     elif target == "deobfusc":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "bitvec", "deobfusc"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "bitvec", "deobfusc"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec", "deobfusc"))
         dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec", "deobfusc"))
     elif target == "hd":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "bitvec", "hd"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec", "hd"))
         dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec", "hd"))
+    elif target == "bitvec-cond":
+        dest_dirs.append(os.path.join(result_root_path, "simba", "bitvec-cond"))
+        dest_dirs.append(os.path.join(result_root_path, "duet", "bitvec-cond"))
+        dest_dirs.append(os.path.join(result_root_path, "probe", "bitvec-cond"))
     elif target == "crypto":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "circuit", "crypto"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "circuit", "crypto"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "circuit", "crypto"))
     elif target == "lobster":
-        dest_dirs.append(os.path.join(result_root_path, "abs_synth", "circuit", "lobster"))
+        dest_dirs.append(os.path.join(result_root_path, "simba", "circuit", "lobster"))
         dest_dirs.append(os.path.join(result_root_path, "duet", "circuit", "lobster"))
     else:
         print(f"unknown clean target {target}", file=sys.stderr)
@@ -76,11 +80,12 @@ def do_clean(target, yes):
 
 
 def prepare_result_dirs():
-    for solver in [*solver_names, *ablation_names]:
+    for solver in [*solver_names, *ablation_names, *ex_cut_names]:
         os.makedirs(os.path.join(result_root_path, solver, "bitvec", "deobfusc"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "bitvec", "hd"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "crypto"), exist_ok=True)
         os.makedirs(os.path.join(result_root_path, solver, "circuit", "lobster"), exist_ok=True)
+        os.makedirs(os.path.join(result_root_path, solver, "bitvec-cond"), exist_ok=True)
 
     os.makedirs(os.path.join(artifact_root_path, "figures"), exist_ok=True)
 
@@ -130,10 +135,16 @@ def main():
                            help='print Figure 3.(c) (main summary table) in the paper')
     subparser.add_argument('-detail_table', action='store_true',
                            help='print Table 1 (detail results of chosen subset) in the paper')
+    subparser.add_argument('-cmp_table', type=str, metavar='NAME', nargs='+', default=[],
+                           dest='cmp_bench_names',
+                           help='list benchmark names to compare solvers'
+                                f'({" | ".join(bench_names)})')
     subparser.add_argument('-ablation_table', action='store_true',
                            help='print Figure 4.(b) (ablation summary table) in the paper')
     subparser.add_argument('-plot', action='store_true',
                            help='draw and store all the plots(Figure 2, Figure 3.(a)(b), Figure 4.(a) in the paper')
+    subparser.add_argument('-all', action='store_true', default=False,
+                           help='activate all flag options to draw all figures and tables')
     subparser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                            help='print statistics table to... (default: stdout)')
 
@@ -143,7 +154,7 @@ def main():
     subparser.add_argument('-chosen', action='store_true',
                            help='run chosen subset of benchmarks (Table 1 in paper)')
     subparser.add_argument('-ablation', action='store_true',
-                           help='run variation solvers of abs_synth for ablation study too (Figure 4 in paper)')
+                           help='run variation solvers of simba for ablation study too (Figure 4 in paper)')
     subparser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,
                            dest='thread_count',
                            help='run in parallel process using NUM threads (default: 1)')
@@ -175,9 +186,11 @@ def main():
                 log_write_with_time(f"===== run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
     elif args.command == 'stat':
-        print_stat.draw_all(args.main_table, args.detail_table, args.ablation_table, args.plot, args.table_out)
+        print_stat.draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot,
+                            all_on=args.all,
+                            table_out=args.table_out)
     elif args.command == 'batch':
-        for bench in ["crypto", "lobster", "hd", "deobfusc"]:
+        for bench in ["crypto", "lobster", "hd", "deobfusc", "bitvec-cond"]:
             for solver in solver_names:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
@@ -185,7 +198,9 @@ def main():
                 for solver in ablation_names:
                     log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
                     run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
-        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, args.ablation, not args.chosen, args.table_out)
+        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, [], args.ablation, not args.chosen,
+                            all_on=False,
+                            table_out=args.table_out)
     elif args.command == 'aggregation':
         with open(args.csv_out, "wt") as fout:
             def read_and_write(f, index):
@@ -195,14 +210,15 @@ def main():
                             pass
                         else:
                             solver_name, problem, sol_type, sol_time, sol_size, sol = print_stat.parse_csv_result(line)
+                            bench_name = problem_bench_map[problem]
                             if sol_type == "success":
-                                fout.write(f"{solver_name},{problem},{sol_type},{sol_time},{sol_size},{sol}\n")
+                                fout.write(f"{solver_name},{bench_name},{problem},{sol_type},{sol_time},{sol_size},{sol}\n")
                             elif sol_time is not None:
-                                fout.write(f"{solver_name},{problem},{sol_type},{sol_time},n/a,n/a\n")
+                                fout.write(f"{solver_name},{bench_name},{problem},{sol_type},{sol_time},n/a,n/a\n")
                             else:
-                                fout.write(f"{solver_name},{problem},{sol_type},n/a,n/a,n/a\n")
+                                fout.write(f"{solver_name},{bench_name},{problem},{sol_type},n/a,n/a,n/a\n")
 
-            fout.write("solver,problem,sol_type,time,size,sol\n")
+            fout.write("solver,bench,problem,sol_type,time,size,sol\n")
             traverse(result_root_path,
                      is_target=lambda path: os.path.split(path)[1].endswith(".result.txt"),
                      target_handler=read_and_write)

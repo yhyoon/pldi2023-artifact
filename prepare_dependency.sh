@@ -2,6 +2,28 @@
 
 set -Eeuo pipefail
 
+if [ ! -d "./probe" ]; then
+  echo "first cloning probe"
+  git clone git@github.com:shraddhabarke/probe.git
+  cd probe
+  git checkout f43ed831e0c8ac59ab68863cf6e5aaaa70ebfc3c  # last commit available at 2023-03-01
+  git apply ../probe_fix.patch  # fix build problem
+  cd ..
+fi
+
+if [ ! -d "./duet" ]; then
+  echo "first cloning duet"
+  git clone git@github.com:wslee/duet.git
+  cd duet
+  git checkout 627199a80c2eaad7c7a1c287ec65bf3de664e493  # last commit available at 2023-03-01
+  cd ..
+fi
+
+if [ ! -d "./simba" ]; then
+  echo "first cloning simba"
+  git clone git@github.com:yhyoon/simba.git
+fi
+
 if [ "$(uname)" = "Darwin" ]; then
   echo 'DO: brew install gmp opam openjdk@8 python3'
   brew install gmp opam openjdk@8 python3

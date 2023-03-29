@@ -5,8 +5,8 @@ from solvers import *
 
 
 def write_result(out_path: str, solver: Solver, problem_name: str, result_time: str, result_size: str, result_sol: str):
-    # if abs_synth solved pldi2023-artifact/bench/bitvec/hd/hd-01-d1-prog.sl
-    # -> result file: pldi2023-arrtifact/result/abs_synth/bitvec/hd/hd-01-d1-prog.result.txt
+    # if simba solved pldi2023-artifact/bench/bitvec/hd/hd-01-d1-prog.sl
+    # -> result file: pldi2023-arrtifact/result/simba/bitvec/hd/hd-01-d1-prog.result.txt
     with open(out_path, "wt") as out:
         # csv format
         # solver, problem_name, time, size, solution
@@ -101,9 +101,9 @@ def main():
     parser = argparse.ArgumentParser(description='run evaluation')
 
     parser.add_argument('solver', type=str,
-                        help='solver name(abs_synth | duet | probe)')
+                        help='solver name(simba | duet | probe)')
     parser.add_argument('bench', type=str,
-                        help='target bench name (bitvec | deobfusc | hd | circuit | crypto | lobster )')
+                        help='target bench name (bitvec | deobfusc | hd | circuit | crypto | lobster | bitvec-cond)')
     parser.add_argument('-chosen', action='store_true',
                         help='run randomly chosen set of benchmarks (Table 1 in paper)')
     parser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,

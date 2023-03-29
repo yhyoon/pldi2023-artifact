@@ -1,0 +1,261 @@
+diff --git a/build.sbt b/build.sbt
+index 786cd9c..d46d828 100644
+--- a/build.sbt
++++ b/build.sbt
+@@ -34,6 +34,8 @@ libraryDependencies += "io.spray" %% "spray-json" % "1.3.5"
+ libraryDependencies += "commons-cli" % "commons-cli" % "1.4"
+ 
+ //mainClass in (assembly) := Some("pcShell.ShellMain")
++test in assembly := {}
++
+ Project.inConfig(Test)(baseAssemblySettings)
+ assemblyJarName in (Test, assembly) := s"${name.value}-full.jar"
+ 
+diff --git a/src/main/scala/Main.scala b/src/main/scala/Main.scala
+index 0b21cc2..6f79fe4 100644
+--- a/src/main/scala/Main.scala
++++ b/src/main/scala/Main.scala
+@@ -55,10 +55,10 @@ object Main extends App {
+     }
+   }
+ 
+-  def synthesizeTask(filename: String, task: SygusFileTask, sizeBased: Boolean, probBased: Boolean, timeout: Int = 600): List[ASTNode] = {
++  def synthesizeTask(filename: String, task: SygusFileTask, sizeBased: Boolean, probBased: Boolean, timeout: Int = 6000): List[ASTNode] = {
+     val oeManager = new InputsValuesManager()
+ 
+-    val enumerator =  if (!sizeBased) new enumeration.Enumerator(filename, task.vocab, oeManager, task, task.examples.map(_.input).toList)
++    val enumerator =  if (!sizeBased) new enumeration.Enumerator(scala.io.Source.fromFile(filename), task.vocab, oeManager, task, task.examples.map(_.input).toList)
+     else new enumeration.ProbEnumerator(filename, task.vocab, oeManager, task, task.examples.map(_.input).toList, probBased)
+ 
+     val deadline = timeout.seconds.fromNow
+@@ -85,9 +85,9 @@ object Main extends App {
+     p
+   }
+ 
+-  def cegisExTask(filename: String, task: SygusFileTask, sizeBased: Boolean, probBased: Boolean, timeout: Int = 600): List[ASTNode] = {
++  def cegisExTask(filename: String, task: SygusFileTask, sizeBased: Boolean, probBased: Boolean, timeout: Int = 6000): List[ASTNode] = {
+     val oeManager = new InputsValuesManager()
+-    val enumerator =  if (!sizeBased) new enumeration.Enumerator(filename, task.vocab, oeManager, task, List())
++    val enumerator =  if (!sizeBased) new enumeration.Enumerator(scala.io.Source.fromFile(filename), task.vocab, oeManager, task, List())
+     else new enumeration.ProbEnumerator(filename, task.vocab, oeManager, task, List(), probBased)
+     val deadline = timeout.seconds.fromNow
+     var p = List[ASTNode]()
+@@ -115,7 +115,7 @@ object Main extends App {
+   def cegisTask(filename: String, sizeBased: Boolean, probBased: Boolean, timeout: Int = 6000): List[ASTNode] = {
+     val task = new SygusFileTask(scala.io.Source.fromFile(filename).mkString)
+     val oeManager = new InputsValuesManager()
+-    val enumerator = if (!sizeBased) new enumeration.Enumerator(filename, task.vocab, oeManager, task, task.examples.map(_.input).toList)
++    val enumerator = if (!sizeBased) new enumeration.Enumerator(scala.io.Source.fromFile(filename), task.vocab, oeManager, task, task.examples.map(_.input).toList)
+     else new enumeration.ProbEnumerator(filename, task.vocab, oeManager, task, task.examples.map(_.input).toList, probBased)
+ 
+     val deadline = timeout.seconds.fromNow
+diff --git a/src/main/scala/enumeration/Enumerator.scala b/src/main/scala/enumeration/Enumerator.scala
+index 170fa3b..537eebd 100644
+--- a/src/main/scala/enumeration/Enumerator.scala
++++ b/src/main/scala/enumeration/Enumerator.scala
+@@ -8,7 +8,7 @@ import trace.DebugPrints.dprintln
+ 
+ import scala.collection.mutable
+ 
+-class Enumerator(val filename: String, val vocab: VocabFactory, val oeManager: OEValuesManager, var task: SygusFileTask, var contexts: List[Map[String,Any]]) extends Iterator[ASTNode]{
++class Enumerator(val source: scala.io.Source, val vocab: VocabFactory, val oeManager: OEValuesManager, var task: SygusFileTask, var contexts: List[Map[String,Any]]) extends Iterator[ASTNode]{
+   override def toString(): String = "enumeration.Enumerator"
+ 
+   var nextProgram: Option[ASTNode] = None
+@@ -35,7 +35,6 @@ class Enumerator(val filename: String, val vocab: VocabFactory, val oeManager: O
+   }
+ 
+   var currIter = vocab.leaves
+-  val source = scala.io.Source.fromFile(filename)
+   var childrenIterator: Iterator[List[ASTNode]] = Iterator.single(Nil)
+   var rootMaker: VocabMaker = currIter.next()
+   var prevLevelProgs: mutable.ListBuffer[ASTNode] = mutable.ListBuffer()
+diff --git a/src/test/scala/EnumeratorTests.scala b/src/test/scala/EnumeratorTests.scala
+deleted file mode 100644
+index 117b28f..0000000
+--- a/src/test/scala/EnumeratorTests.scala
++++ /dev/null
+@@ -1,183 +0,0 @@
+-import ast.{ASTNode, Types}
+-import enumeration.{Enumerator, InputsValuesManager, OEValuesManager}
+-import org.antlr.v4.runtime.{BufferedTokenStream, CharStreams}
+-import org.scalatestplus.junit.JUnitSuite
+-import org.junit.Test
+-import org.junit.Assert._
+-import sygus.{SyGuSLexer, SyGuSParser, SygusFileTask}
+-
+-import collection.JavaConverters._
+-
+-class EnumeratorTests  extends JUnitSuite{
+-  @Test def enumerateVocabNoOE: Unit = {
+-    val grammar =
+-      """((ntInt Int (input))
+-        | (ntBool Bool (false))
+-        | (ntInt Int (0 1 (+ ntInt ntInt))
+-        | (ntBool Bool ((<= ntInt ntInt)))
+-        | (ntString String ((int.to.str ntInt))))
+-      """.stripMargin
+-    val parser = new SyGuSParser(new BufferedTokenStream(new SyGuSLexer(CharStreams.fromString(grammar))))
+-    val grammarDef = parser.grammarDef()
+-    val nonTerminals = grammarDef.groupedRuleList().asScala.map{nonTerminal =>
+-      nonTerminal.Symbol().getSymbol.getText -> Types.withName(nonTerminal.sort().getText)
+-    }.toMap
+-    val vocab = ast.VocabFactory(
+-      grammarDef.groupedRuleList().asScala.flatMap{nonTerminal => nonTerminal.gTerm().asScala.map(vocabElem =>
+-        SygusFileTask.makeVocabMaker(vocabElem, Types.withName(nonTerminal.sort().getText),nonTerminals))}.toList
+-    )
+-    assertEquals(4,vocab.leaves.size)
+-    assertEquals(3,vocab.nonLeaves().size)
+-    val enumerator = new Enumerator(vocab, new OEValuesManager {
+-      override def isRepresentative(program: ASTNode): Boolean = true
+-      override def clear(): Unit = {}
+-    },Map("input"->0) :: Nil)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("input",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("false",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("0",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("1",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("(+ input input)",enumerator.next().code)
+-    assertEquals("(+ input 0)",enumerator.next().code)
+-    assertEquals("(+ input 1)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("(+ 0 input)",enumerator.next().code)
+-    assertEquals("(+ 0 0)",enumerator.next().code)
+-    assertEquals("(+ 0 1)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("(+ 1 input)",enumerator.next().code)
+-    assertEquals("(+ 1 0)",enumerator.next().code)
+-    assertEquals("(+ 1 1)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("(<= input input)",enumerator.next().code)
+-    assertEquals("(<= input 0)",enumerator.next().code)
+-    assertEquals("(<= input 1)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("(<= 0 input)",enumerator.next().code)
+-    assertEquals("(<= 0 0)",enumerator.next().code)
+-    assertEquals("(<= 0 1)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("(<= 1 input)",enumerator.next().code)
+-    assertEquals("(<= 1 0)",enumerator.next().code)
+-    assertEquals("(<= 1 1)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("(int.to.str input)",enumerator.next().code)
+-    assertEquals("(int.to.str 0)",enumerator.next().code)
+-    assertEquals("(int.to.str 1)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-
+-    assertEquals("(+ input (+ input input))", enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-  }
+-
+-
+-  @Test def enumerateVocabWithOE: Unit = {
+-    val grammar =
+-      """((ntInt Int (x))
+-        | (ntBool Bool (false))
+-        | (ntInt Int (0 1 (+ ntInt ntInt)))
+-        | (ntBool Bool ((<= ntInt ntInt)))
+-        | (ntString String ((int.to.str ntInt))))""".stripMargin
+-    val parser = new SyGuSParser(new BufferedTokenStream(new SyGuSLexer(CharStreams.fromString(grammar))))
+-    val grammarDef = parser.grammarDef()
+-    val nonTerminals = grammarDef.groupedRuleList().asScala.map{nonTerminal =>
+-      nonTerminal.Symbol().getSymbol.getText -> Types.withName(nonTerminal.sort().getText)
+-    }.toMap
+-    val vocab = ast.VocabFactory(
+-      grammarDef.groupedRuleList().asScala.flatMap{nonTerminal => nonTerminal.gTerm().asScala.map(vocabElem =>
+-        SygusFileTask.makeVocabMaker(vocabElem, Types.withName(nonTerminal.sort().getText),nonTerminals))}.toList
+-    )
+-    val inputValues: Map[String,AnyRef] = Map("x" -> 1.asInstanceOf[AnyRef])
+-    val enumerator = new Enumerator(vocab, new InputsValuesManager,inputValues :: Nil)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("x",enumerator.next().code)
+-    assertEquals("false",enumerator.next().code)
+-    assertEquals("0",enumerator.next().code)
+-    assertEquals("(+ x x)",enumerator.next().code)
+-    assertEquals("(<= x x)",enumerator.next().code)
+-
+-  }
+-
+-  @Test def enumerateOEWithTwoValues: Unit = {
+-    val grammar =
+-      """((ntInt Int (x))
+-        | (ntBool Bool (false))
+-        | (ntInt Int (0 1 (+ ntInt ntInt)))
+-        | (ntBool Bool ((<= ntInt ntInt)))
+-        | (ntString String ((int.to.str ntInt))))""".stripMargin
+-    val parser = new SyGuSParser(new BufferedTokenStream(new SyGuSLexer(CharStreams.fromString(grammar))))
+-    val grammarDef = parser.grammarDef()
+-    val nonTerminals = grammarDef.groupedRuleList().asScala.map{nonTerminal =>
+-      nonTerminal.Symbol().getSymbol.getText -> Types.withName(nonTerminal.sort().getText)
+-    }.toMap
+-    val vocab = ast.VocabFactory(
+-      grammarDef.groupedRuleList().asScala.flatMap{nonTerminal => nonTerminal.gTerm().asScala.map(vocabElem =>
+-        SygusFileTask.makeVocabMaker(vocabElem, Types.withName(nonTerminal.sort().getText),nonTerminals))}.toList
+-    )
+-    val inputValues: List[Map[String,AnyRef]] = List(Map("x" -> 1.asInstanceOf[AnyRef]), Map("x" -> 0.asInstanceOf[AnyRef]))
+-    val enumerator = new Enumerator(vocab, new InputsValuesManager,inputValues)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("x",enumerator.next().code)
+-    assertEquals("false",enumerator.next().code)
+-    assertEquals("0",enumerator.next().code)
+-    assertEquals("1", enumerator.next().code)
+-    assertEquals("(+ x x)",enumerator.next().code)
+-    assertEquals("(+ x 1)",enumerator.next().code)
+-    assertEquals("(+ 1 1)",enumerator.next().code)
+-    assertEquals("(<= x x)",enumerator.next().code)
+-    assertTrue(enumerator.hasNext)
+-  }
+-
+-  @Test def runOutOfEnumeration: Unit = {
+-    val grammar =
+-      """((ntInt Int (0 (+ ntInt ntInt))))"""
+-    val parser = new SyGuSParser(new BufferedTokenStream(new SyGuSLexer(CharStreams.fromString(grammar))))
+-    val grammarDef = parser.grammarDef()
+-    val nonTerminals = grammarDef.groupedRuleList().asScala.map{nonTerminal =>
+-      nonTerminal.Symbol().getSymbol.getText -> Types.withName(nonTerminal.sort().getText)
+-    }.toMap
+-    val vocab = ast.VocabFactory(
+-      grammarDef.groupedRuleList().asScala.flatMap{nonTerminal => nonTerminal.gTerm().asScala.map(vocabElem =>
+-        SygusFileTask.makeVocabMaker(vocabElem, Types.withName(nonTerminal.sort().getText),nonTerminals))}.toList
+-    )
+-    val enumerator = new Enumerator(vocab, new InputsValuesManager, Map.empty[String,AnyRef] :: Nil)
+-    assertTrue(enumerator.hasNext)
+-    assertEquals("0", enumerator.next.code)
+-    assertFalse(enumerator.hasNext)
+-  }
+-
+-  @Test def enumerationWithTypes: Unit = {
+-    val grammar =
+-      """((ntInt Int (0 1))
+-        | (ntBool Bool (false true (<= ntInt ntInt) (= ntInt ntInt)))
+-        | (ntInt Int ((+ ntInt ntInt))))
+-      """.stripMargin
+-    val parser = new SyGuSParser(new BufferedTokenStream(new SyGuSLexer(CharStreams.fromString(grammar))))
+-    val grammarDef = parser.grammarDef()
+-    val nonTerminals = grammarDef.groupedRuleList().asScala.map{nonTerminal =>
+-      nonTerminal.Symbol().getSymbol.getText -> Types.withName(nonTerminal.sort().getText)
+-    }.toMap
+-    val vocab = ast.VocabFactory(
+-      grammarDef.groupedRuleList().asScala.flatMap{nonTerminal => nonTerminal.gTerm().asScala.map(vocabElem =>
+-        SygusFileTask.makeVocabMaker(vocabElem, Types.withName(nonTerminal.sort().getText),nonTerminals))}.toList
+-    )
+-    val enumerator = new Enumerator(vocab, new OEValuesManager {
+-      override def isRepresentative(program: ASTNode): Boolean = true
+-      override def clear(): Unit = {}
+-    },Map.empty[String,AnyRef] :: Nil)
+-    assertEquals("0",enumerator.next().code)
+-    assertEquals("1",enumerator.next().code)
+-    assertEquals("false",enumerator.next().code)
+-    assertEquals("true",enumerator.next().code)
+-    assertEquals("(<= 0 0)", enumerator.next.code)
+-    assertEquals("(<= 0 1)", enumerator.next.code)
+-    assertEquals("(<= 1 0)", enumerator.next.code)
+-    assertEquals("(<= 1 1)", enumerator.next.code)
+-    assertEquals("(= 0 0)", enumerator.next.code)
+-  }
+-
+-}

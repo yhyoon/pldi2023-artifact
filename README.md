@@ -5,7 +5,7 @@ but this change is not applied in this artifact. So its name is still `AbsSynth`
 
 ## Virtual Machine Image
 
-We provide a VirtualBox VM image to address the difficulty
+We provide a [VirtualBox VM image](https://zenodo.org/record/7710618/files/pldi2023artifact_VM.zip?download=1) to address the difficulty
 of setting up the execution environment for the artifact.
 The image includes all the necessary components to immediately run the artifact.
 You can skip the [Dependencies](#dependencies) and [Build](#build) part
@@ -19,6 +19,7 @@ it may not achieve the performance number reported in the paper.
 * Guest arch: `x86_64`
 * Username: abssynth
 * Password: synthesis2023
+* Note: tool name is changed from abs_synth to simba
 
 The artifact is in directory `~/pldi2023-artifact`.
 
@@ -102,12 +103,12 @@ You need `sudo`er permission in your envirionment for this step. Be aware that a
 $ sudo apt-get install -y wget curl # for linux
 ```
 
-* `libgmp-dev`(https://gmplib.org/): for z3 solver (`abs_synth`, `duet`)
+* `libgmp-dev`(https://gmplib.org/): for z3 solver (`simba`, `duet`)
 ```sh
 $ sudo apt-get install -y libgmp-dev # for linux
 $ brew install gmp # for mac
 ```
-* `opam`(https://opam.ocaml.org/): for ocaml compiler (`abs_synth`, `duet`)
+* `opam`(https://opam.ocaml.org/): for ocaml compiler (`simba`, `duet`)
 ```sh
 $ sudo apt-get install -y opam  # for linux
 $ brew install opam  # for mac
@@ -154,6 +155,28 @@ $
 $ pip3 install pandas matplotlib  # common
 ```
 
+* `probe`: a baseline solver
+```sh
+$ git clone git@github.com:shraddhabarke/probe.git
+$ cd probe
+$ git checkout f43ed831e0c8ac59ab68863cf6e5aaaa70ebfc3c  # last commit available at 2023-03-01
+$ git apply ../probe_fix.patch  # fix build problem
+$ cd ..
+```
+
+* `duet`: a baseline solver
+```sh
+$ git clone git@github.com:wslee/duet.git
+$ cd duet
+$ git checkout 627199a80c2eaad7c7a1c287ec65bf3de664e493  # last commit available at 2023-03-01
+$ cd ..
+```
+
+* `simba`: our solver
+```sh
+git clone git@github.com:yhyoon/simba.git
+```
+
 ## Build
 tested on :
 * Ubuntu 20.04.5 LTS 64bit Server
@@ -172,7 +195,7 @@ $ source build_all.sh
 The `./build_all.sh` script runs the following commands. 
 
 ```sh
-$ cd abs_synth
+$ cd simba
 $ ./first_build.sh
 $ cd ..
 $
@@ -207,6 +230,7 @@ in the `pldi2023-artifact/figure` directory.
 After running the above commands, you can re-draw the tables and figures without re-running solvers by the following command:
 ```sh
 $ ./artifact stat [-main_table] [-detail_table] [-ablation_table] [-plot] [-table_out TABLE_FILE_PATH
+```
 
 ## Reproducing the results for the chosen 20 benchmark problems (Table 1 in the paper)
 ```sh
@@ -223,7 +247,7 @@ You can evaluate your interested solvers and benchmark sets as follows:
 $ ./artifact [-log LOG_FILE_PATH] run -solvers [SOLVER_LIST] -benches [BENCH_LIST] [-timeout <sec>] [-p <num_cores>]
 ```
 
-SOLVER_LIST is a list of solver names which are one of {abs_synth, duet, probe, abs_synth_bf, abs_synth_fonly, abs_synth_smt}.  
+SOLVER_LIST is a list of solver names which are one of {simba, duet, probe, simba, simba_fonly, simba_smt}.  
 BENCH_LIST is a list of benchmark set names which are on of {hd, deobfusc, crypto, lobster}. 
 
 Each result will be stored into directory `pldi2023-artifact/result`
@@ -236,21 +260,21 @@ $ ./artifact aggregation [-csv_out CSV_FILE_PATH]
 ```
 
 
-### Running AbsSynth for other SyGuS problems
-You can run AbsSynth to solve other synthesis problems as follows:
+### Running Simba for other SyGuS problems
+You can run Simba to solve other synthesis problems as follows:
 ```sh
-$ abs_synth/abs_synth.exe <options> [a SyGuS input file]
+$ simba/simba.exe <options> [a SyGuS input file]
 ```
-The tool is also available in a separate GitHub repository(Anonymized).
+The tool is also available in a separate [GitHub repository](https://github.com/yhyoon/simba).
 
 You may find the options available by:
 ```sh
-$ abs_synth/abs_synth.exe -help
+$ simba/simba.exe -help
 ```
 
 For example, to solve the problem described in `bench/bitvec/hd/hd-17-d5-prog.sl`,
 ```sh
-$ abs_synth/abs_synth.exe bench/bitvec/hd/hd-17-d5-prog.sl
+$ simba/simba.exe bench/bitvec/hd/hd-17-d5-prog.sl
 ````
 You will get the following output:
 ```sh
@@ -267,6 +291,6 @@ The first line shows a desirable solution (f is the target synthesis function), 
 
 For more detailed progress log and statistics, use option `-log` as follows:
 ```sh
-$ abs_synth/abs_synth.exe -log stdout bench/bitvec/hd/hd-17-d5-prog.sl
-$ abs_synth/abs_synth.exe -log solving-hd-17-d5.log bench/bitvec/hd/hd-17-d5-prog.sl
+$ simba/simba.exe -log stdout bench/bitvec/hd/hd-17-d5-prog.sl
+$ simba/simba.exe -log solving-hd-17-d5.log bench/bitvec/hd/hd-17-d5-prog.sl
 ````
