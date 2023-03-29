@@ -25,7 +25,7 @@ The artifact is in directory `~/pldi2023-artifact`.
 
 ## Docker Image
 
-We also provide a [Docker](https://www.docker.com/) Image as an alternative to VM image.
+We also provide a [Docker Image](https://zenodo.org/record/7778928/files/pldi2023_artifact_23_docker_img_x64_v1.tar.gz?download=1) as an alternative to VM image.
 Install [Docker Desktop](https://www.docker.com/products/docker-desktop/), download zipped docker image file and run with:
 ```sh
 $ gzip -d <gzipped_docker_image_file>.tar.gz
