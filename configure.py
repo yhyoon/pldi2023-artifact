@@ -154,10 +154,20 @@ def install_dependencies(system_kind):
             sys.exit(1)
 
     # prepare opam switch - duet
-    retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.08.0', '--yes'])
-    if retcode != 0:
-        print('Error: opam switch create 4.08.0 failed')
-        sys.exit(1)
+    if system_kind == 'mac-apple-silicon':
+        print('Warn: Recommended ocaml version for Duet is 4.08.0, but it is not supported on Apple Silicon. '
+              'Use 4.12.0(the lowest version supported on Apple Silicon) instead. '
+              'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.5 instead. '
+              'The result may be different from the paper.')
+        retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.12.0', '--yes'])
+        if retcode != 0:
+            print('Error: opam switch create 4.08.0 failed')
+            sys.exit(1)
+    else:
+        retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.08.0', '--yes'])
+        if retcode != 0:
+            print('Error: opam switch create 4.08.0 failed')
+            sys.exit(1)
 
     # prepare opam switch - abssynth
     retcode = subprocess.call(['opam', 'switch', 'create', 'abs_synth', '4.12.0', '--yes'])
@@ -199,7 +209,11 @@ def build_all_solvers(system_kind):
     print('Building Duet...')
     subprocess.call(['opam', 'switch', 'duet'])
     duet_env = opam_config_make_env()
-    opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
+    opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
+    if system_kind == 'mac-apple-silicon':
+        opam_pkgs_duet.append('z3.4.8.5')
+    else:
+        opam_pkgs_duet.append('z3.4.8.1')
     retcode = subprocess.call(['opam', 'install', '--yes', *opam_pkgs_duet],
                               env=duet_env)
     if retcode != 0:
