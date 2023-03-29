@@ -5,7 +5,7 @@ but this change is not applied in this artifact. So its name is still `AbsSynth`
 
 ## Virtual Machine Image
 
-We provide a VirtualBox VM image to address the difficulty
+We provide a [VirtualBox VM image](https://zenodo.org/record/7710618/files/pldi2023artifact_VM.zip?download=1) to address the difficulty
 of setting up the execution environment for the artifact.
 The image includes all the necessary components to immediately run the artifact.
 You can skip the [Dependencies](#dependencies) and [Build](#build) part
@@ -85,21 +85,31 @@ If you want to run this artifact manually on macOS, you need install [Xcode Comm
 
 If you don't want to install these tools or the other dependency libraries, it's recommended to use VM Image or Docker Image we provided.
 
-## Dependencies
+## Dependencies and Build
 This artifact requires following tools and libraries to build and run.
 
 ### TL;DR
-In one line command:
+In short:
 ```sh
-$ source prepare_dependency.sh
+$ python3 -m pip install --user virtualenv
+$ python3 -m virtualenv .env --python=python3.11
+$ source .env/bin/activate
+$ python3 configure.py
 ```
-You need `sudo`er permission in your envirionment for this step. Be aware that all packages and libraries will be installed directly into your environment, and may affect your existing system, therefore proceed with caution.
 
-### Detail
+If you are using `linux` system, it is important that you have sudoer permission in your environment for `sudo apt-get install SOMETHING`. When you encounter this situation for the first time, you will be prompted to input your password. Therefore, please note that this process is not completely noninteractive.
 
-* `wget`, `curl`: for running some build scripts (linux)
+It is also important to keep in mind that all packages and libraries will be directly installed into your environment, which could potentially affect your existing system. Therefore, it is strongly advised that you proceed with caution.
+
+### Dependencies
+
+* `python3`: for running build and evaluation scripts
+The build and evaluation script is written in [Python3](https://www.python.org/downloads/)
+Version 3.11.x is recommended.
+
+* `curl`: for running some build commands(linux)
 ```sh
-$ sudo apt-get install -y wget curl # for linux
+$ sudo apt-get install -y curl # for linux
 ```
 
 * `libgmp-dev`(https://gmplib.org/): for z3 solver (`abs_synth`, `duet`)
@@ -144,33 +154,18 @@ $ brew tap cvc4/cvc4
 $ brew install cvc4/cvc4/cvc4
 ```
 
-* `python3`, `pip3`, `pandas` `matplotlib`: for running evaluation scripts (all)
+* `pandas` `matplotlib`: for running evaluation scripts (all)
 ```sh
-$ sudo apt-get install python3  # for linux
-$ sudo apt-get install python3-pip
-$
-$ brew install python3  # for mac
-$
-$ pip3 install pandas matplotlib  # common
+$ python3 -m pip install pandas matplotlib  # common
 ```
 
-## Build
-tested on :
+### Build
+Tested on :
 * Ubuntu 20.04.5 LTS 64bit Server
 * Ubuntu 22.04.5 LTS 64bit Server
 * macOS Ventura 13.1 (Intel Core Mac)
 
-### TL;DR
-
-In one line command:
-```sh
-$ source build_all.sh
-```
-
-### Detail
-
-The `./build_all.sh` script runs the following commands. 
-
+Run the following commands:
 ```sh
 $ cd abs_synth
 $ ./first_build.sh
@@ -207,6 +202,7 @@ in the `pldi2023-artifact/figure` directory.
 After running the above commands, you can re-draw the tables and figures without re-running solvers by the following command:
 ```sh
 $ ./artifact stat [-main_table] [-detail_table] [-ablation_table] [-plot] [-table_out TABLE_FILE_PATH
+```
 
 ## Reproducing the results for the chosen 20 benchmark problems (Table 1 in the paper)
 ```sh
