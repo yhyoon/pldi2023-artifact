@@ -26,7 +26,7 @@ def detect_system_kind():
             print('Error: Xcode is not installed')
             print('Please install Xcode from App Store and run "xcode-select --install" in terminal')
             sys.exit(1)
-        
+
         # check if brew is installed
         result_data = subprocess.run(['which', 'brew'], stdout=subprocess.PIPE)
         if result_data.returncode != 0:
@@ -44,7 +44,6 @@ def detect_system_kind():
                 if line.strip().startswith('Operating System:'):
                     ubuntu_version = re.search(r'Ubuntu (\d+.\d+)', line).group(1)
                     print('Detected Ubuntu version: ' + ubuntu_version)
-
                     if not ubuntu_version.startswith('20.') and not ubuntu_version.startswith('22.'):
                         print('Warning: Ubuntu version ' + ubuntu_version + ' is not tested')                    
         else:
@@ -221,7 +220,6 @@ def build_all_solvers(system_kind):
     print('Building Duet...')
     subprocess.call(['opam', 'switch', 'duet'])
     duet_env = opam_config_make_env()
-    opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
     if system_kind == 'mac-apple-silicon':
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.14', 'core', 'batteries', 'ocamlgraph']
     else:
@@ -230,6 +228,11 @@ def build_all_solvers(system_kind):
                               env=duet_env)
     if retcode != 0:
         print('Warn: install opam package for duet (maybe) failed')
+        check_result = subprocess.run(['opam', 'list', '-i', 'z3'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if check_result.stdout.decode('utf-8').find("No matches") != -1 or check_result.stderr.decode('utf-8').find("No matches") != -1:
+            print('retry install z3.4.8.14 instead of 4.8.1')
+            subprocess.call(['opam', 'install', '--confirm-level=unsafe-yes', 'z3.4.8.14'],
+                              env=duet_env)
         print('Keep going...')
 
     retcode = subprocess.call(['ocamlbuild', '-use-ocamlfind', 'src/main.native'],
