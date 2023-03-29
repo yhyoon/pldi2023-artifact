@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
 
 echo "Build Simba"
 cd simba
@@ -16,7 +18,7 @@ cd probe
 if ! command -v sbt &> /dev/null
 then
     # update env variable for coursier
-    export PATH="$PATH:/home/yoony/.local/share/coursier/bin"
+    export PATH="$PATH:$HOME/.local/share/coursier/bin"
 fi
 
 # re-check
