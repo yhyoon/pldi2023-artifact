@@ -112,7 +112,7 @@ def install_dependencies(system_kind):
             sys.exit(1)
     else:
         print('Installing dependencies(curl, gmp, opam, openjdk) with apt-get... (this may take a while)')
-        retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'curl' 'libgmp-dev', 'opam', 'openjdk-11-jdk'])
+        retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'curl', 'libgmp-dev', 'opam', 'openjdk-11-jdk'])
         if retcode != 0:
             print('Error: apt-get failed')
             sys.exit(1)
