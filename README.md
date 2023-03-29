@@ -78,7 +78,7 @@ and run the test for the other tools.
 
 ### 3. Duet in docker container with `arm64`
 
-Build `Duet` maybe failed in `ubuntu:20.04` docker container on `arm64` macOS because of build failure of dependency z3.4.8.1. You can avoid this issue by installing z3.4.8.5 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.5` ; `make`)
+Build `Duet` may fail in `ubuntu:20.04` docker container on `arm64` macOS because of build failure of dependency z3.4.8.1. You can avoid this issue by installing z3.4.8.5 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.5` ; `make`)
 
 ### 4. Additional tools for Mac
 
