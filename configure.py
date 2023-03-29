@@ -80,6 +80,16 @@ def opam_config_make_env():
     return result
 
 
+def opam_switch_exists(switch_name):
+    if subprocess.run(['opam', 'switch', 'show'], stdout=subprocess.PIPE).stdout == switch_name:
+        return True
+
+    if subprocess.run(['opam', 'switch', 'list'], stdout=subprocess.PIPE).stdout.find(f" {switch_name} ") != -1:
+        return True
+
+    return False
+
+
 def install_dependencies(system_kind):
     # gmp, opam, jdk
     if system_kind == 'mac-intel':
@@ -153,27 +163,30 @@ def install_dependencies(system_kind):
             print('Error: apt-get install cvc4 failed')
             sys.exit(1)
 
+    
     # prepare opam switch - duet
-    if system_kind == 'mac-apple-silicon':
-        print('Warn: Recommended ocaml version for Duet is 4.08.0, but it is not supported on Apple Silicon. '
-              'Use 4.12.0(the lowest version supported on Apple Silicon) instead. '
-              'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.5 instead. '
-              'The result may be different from the paper.')
-        retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.12.0', '--yes'])
-        if retcode != 0:
-            print('Error: opam switch create 4.08.0 failed')
-            sys.exit(1)
-    else:
-        retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.08.0', '--yes'])
-        if retcode != 0:
-            print('Error: opam switch create 4.08.0 failed')
-            sys.exit(1)
+    if not opam_switch_exists("duet"):
+        if system_kind == 'mac-apple-silicon':
+            print('Warn: Recommended ocaml version for Duet is 4.08.0, but it is not supported on Apple Silicon. '
+                'Use 4.12.0(the lowest version supported on Apple Silicon) instead. '
+                'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.5 instead. '
+                'The result may be different from the paper.')
+            retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.12.0', '--yes'])
+            if retcode != 0:
+                print('Error: opam switch create 4.08.0 failed')
+                sys.exit(1)
+        else:
+            retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.08.0', '--yes'])
+            if retcode != 0:
+                print('Error: opam switch create 4.08.0 failed')
+                sys.exit(1)
 
     # prepare opam switch - abssynth
-    retcode = subprocess.call(['opam', 'switch', 'create', 'abs_synth', '4.12.0', '--yes'])
-    if retcode != 0:
-        print('Error: opam switch create 4.12.0 failed')
-        sys.exit(1)
+    if not opam_switch_exists("abs_synth"):
+        retcode = subprocess.call(['opam', 'switch', 'create', 'abs_synth', '4.12.0', '--yes'])
+        if retcode != 0:
+            print('Error: opam switch create 4.12.0 failed')
+            sys.exit(1)
 
     # install python packages for evaluation script
     print('Installing python packages for evaluation script...')
