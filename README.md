@@ -1,7 +1,9 @@
 # Artifacts for "Inductive Program Synthesis via Iterative Forward-Backward Abstract Interpretation"
 
-We have changed the tool name from "AbsSynth" to "Simba" in the final version,
+NOTE: We have changed the tool name from "AbsSynth" to "Simba" in the final version,
 but this change is not applied in this artifact. So its name is still `AbsSynth`.
+
+The artifacts include the main tool(AbsSynth), the other baseline solvers(Duet, Probe), benchmarks and evaluation scripts.
 
 ## Virtual Machine Image
 
@@ -62,22 +64,23 @@ Choose one of these list for test environment:
   + MacOS with arch `arm64`(Apple Silicon) (in this case, testing `Probe` is not available)
   + Other Unix OS with `x86_64` (not tested, provided build scripts will not working)
 
-* Build and run of `AbsSynth` is tested on:
+* Build and run of `abs_synth` is tested on:
   + macOS Ventura arch `x86_64`
   + macOS Ventura arch `arm64`
   + ubuntu-20.04+ arch `x86_64`
 
-
 ### 2. Probe in `arm64`
 
 `Probe` tightly depends on `cvc4` which is not available in `arm64`, so it cannot be tested on that environment.
-If you are not interested in comparing `AbsSynth` to `Probe`,
+If you are not interested in comparing `abs_synth` to `probe`,
 you can skip the related dependencies(`java`, `coursier`, `sbt`, `cvc4`, etc.)
 and run the test for the other tools.
 
-### 3. Duet in `arm64`
+### 3. Duet in `macOS` `monterey` or later
 
-Build `Duet` maybe failed on `arm64` macOS because of build failure of dependency z3.4.8.1. You can avoid this issue by installing z3.4.8.14 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.14` ; `make`)
+Build `Duet` maybe failed on `macOS` `monterey` or later because of build failure of dependency z3.4.8.1.
+z3.4.8.1 depends on python2 which is removed from `monterey`.
+You can avoid this issue by installing z3.4.8.14 instead of 4.8.1. (`opam switch duet 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.14` ; `make`)
 
 ### 4. Additional tools for Mac
 

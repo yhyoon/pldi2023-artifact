@@ -1,6 +1,6 @@
 OCAML_VERSION=4.08.0
-opam switch create $OCAML_VERSION
-opam switch $OCAML_VERSION
+opam switch create duet $OCAML_VERSION
+opam switch duet
 eval `opam config env`
 opam install --yes ocamlbuild containers containers-data z3.4.8.1 core.v0.13.0 batteries.3.0.0 ocamlgraph.1.8.8
 if [ "$(uname)" = "Darwin" ]; then

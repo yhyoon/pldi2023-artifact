@@ -1,6 +1,7 @@
 import os
 import sys
 import platform
+import getpass
 import subprocess
 import re
 
@@ -90,6 +91,11 @@ def opam_switch_exists(switch_name):
 
 
 def install_dependencies(system_kind):
+    if getpass.getuser() == 'root':
+        sudo_opt = []
+    else:
+        sudo_opt = ['sudo']
+
     # gmp, opam, jdk
     if system_kind == 'mac-intel':
         print('Installing dependencies(gmp, opam, openjdk) with Homebrew... (this may take a while)')
@@ -106,7 +112,7 @@ def install_dependencies(system_kind):
             sys.exit(1)
     else:
         print('Installing dependencies(curl, gmp, opam, openjdk) with apt-get... (this may take a while)')
-        retcode = subprocess.call(['sudo', 'apt-get', 'install', '--yes', 'curl' 'libgmp-dev', 'opam', 'openjdk-11-jdk'])
+        retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'curl' 'libgmp-dev', 'opam', 'openjdk-11-jdk'])
         if retcode != 0:
             print('Error: apt-get failed')
             sys.exit(1)
@@ -152,7 +158,7 @@ def install_dependencies(system_kind):
     else:
         # linux
         print('Installing cvc4 with apt-get... (this may take a while)')
-        retcode = subprocess.call(['sudo', 'apt-get', 'install', '--yes', 'cvc4'])
+        retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'cvc4'])
         if retcode != 0:
             print('Error: apt-get install cvc4 failed')
             sys.exit(1)
