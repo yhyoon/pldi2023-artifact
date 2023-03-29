@@ -61,7 +61,7 @@ Choose one of these list for test environment:
 3. If those `Best` or `Safe and Easy` items are not available
   + Use provided docker image using docker.io or any other container engine (we hope it works, but not tested)
   + MacOS with arch `arm64`(Apple Silicon) (in this case, testing `Probe` is not available)
-  + Other Unix OS with `x86_64` (not tested, provided build scripts will not working)
+  + Other Unix OS with `x86_64` (not tested, provided build scripts may fail in some parts)
 
 * Build and run of `AbsSynth` is tested on:
   + macOS Ventura arch `x86_64`
