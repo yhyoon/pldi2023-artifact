@@ -226,7 +226,7 @@ def build_all_solvers(system_kind):
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.14', 'core', 'batteries', 'ocamlgraph']
     else:
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
-    retcode = subprocess.call(['opam', 'install', '-confirm-level=unsafe-yes', *opam_pkgs_duet],
+    retcode = subprocess.call(['opam', 'install', '--confirm-level=unsafe-yes', *opam_pkgs_duet],
                               env=duet_env)
     if retcode != 0:
         print('Warn: install opam package for duet (maybe) failed')
@@ -246,7 +246,7 @@ def build_all_solvers(system_kind):
     subprocess.call(['opam', 'switch', 'abs_synth'])
     abs_synth_env = opam_config_make_env()
     opam_pkgs_abs_synth = ['dune', 'merlin', 'ocaml-lsp-server', 'dune-build-info', 'batteries', 'ocamlgraph', 'core_kernel', 'yojson', 'containers-data', 'containers', 'z3.4.8.14']
-    retcode = subprocess.call(['opam', 'install', '-confirm-level=unsafe-yes', *opam_pkgs_abs_synth],
+    retcode = subprocess.call(['opam', 'install', '--confirm-level=unsafe-yes', *opam_pkgs_abs_synth],
                    env=abs_synth_env)
     if retcode != 0:
         print('Warn: install opam package for abs_synth (maybe) failed')
