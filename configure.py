@@ -124,14 +124,9 @@ def install_dependencies(system_kind):
         print('Skip installing sbt for Apple Silicon')
     elif system_kind == 'mac-intel':
         print('Installing sbt with Homebrew... (this may take a while)')
-        retcode = subprocess.call(['brew', 'install', 'coursier/formulas/coursier'])
+        retcode = subprocess.call(['brew', 'install', 'sbt'])
         if retcode != 0:
             print('Error: brew failed')
-            sys.exit(1)
-        
-        retcode = subprocess.call(['cs', 'setup'])
-        if retcode != 0:
-            print('Error: coursier failed')
             sys.exit(1)
     else:
         # linux
@@ -171,7 +166,7 @@ def install_dependencies(system_kind):
         if system_kind == 'mac-apple-silicon':
             print('Warn: Recommended ocaml version for Duet is 4.08.0, but it is not supported on Apple Silicon. '
                 'Use 4.12.0(the lowest version supported on Apple Silicon) instead. '
-                'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.5 instead. '
+                'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.14 instead. '
                 'The result may be different from the paper.')
             retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.12.0', '--yes'])
             if retcode != 0:
@@ -228,52 +223,51 @@ def build_all_solvers(system_kind):
     duet_env = opam_config_make_env()
     opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
     if system_kind == 'mac-apple-silicon':
-        opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.5', 'core', 'batteries', 'ocamlgraph']
+        opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.14', 'core', 'batteries', 'ocamlgraph']
     else:
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
-    retcode = subprocess.call(['opam', 'install', '--yes', *opam_pkgs_duet],
+    retcode = subprocess.call(['opam', 'install', '-confirm-level=unsafe-yes', *opam_pkgs_duet],
                               env=duet_env)
     if retcode != 0:
-        print('Warn: install opam package for duet failed')
+        print('Warn: install opam package for duet (maybe) failed')
+        print('Keep going...')
+
+    retcode = subprocess.call(['ocamlbuild', '-use-ocamlfind', 'src/main.native'],
+                                cwd=os.path.join(os.path.split(__file__)[0], 'duet'),
+                                env=duet_env)
+    if retcode != 0:
         print('Warn: build duet failed')
         print('Keep going...')
     else:
-        retcode = subprocess.call(['ocamlbuild', '-use-ocamlfind', 'src/main.native'],
-                                  cwd=os.path.join(os.path.split(__file__)[0], 'duet'),
-                                  env=duet_env)
-        if retcode != 0:
-            print('Warn: build duet failed')
-            print('Keep going...')
-        else:
-            succeeded_solvers.append('duet')
+        succeeded_solvers.append('duet')
 
     # AbsSynth
     print('Building AbsSynth...')
     subprocess.call(['opam', 'switch', 'abs_synth'])
     abs_synth_env = opam_config_make_env()
-    opam_pkgs_abs_synth = ['dune', 'merlin', 'ocaml-lsp-server', 'dune-build-info', 'batteries', 'ocamlgraph', 'core_kernel', 'yojson', 'containers-data', 'containers', 'z3']
-    retcode = subprocess.call(['opam', 'install', '--yes', *opam_pkgs_abs_synth],
+    opam_pkgs_abs_synth = ['dune', 'merlin', 'ocaml-lsp-server', 'dune-build-info', 'batteries', 'ocamlgraph', 'core_kernel', 'yojson', 'containers-data', 'containers', 'z3.4.8.14']
+    retcode = subprocess.call(['opam', 'install', '-confirm-level=unsafe-yes', *opam_pkgs_abs_synth],
                    env=abs_synth_env)
     if retcode != 0:
-        print('Warn: install opam package for abs_synth failed')
+        print('Warn: install opam package for abs_synth (maybe) failed')
+        print('Keep going...')
+
+    retcode = subprocess.call(['dune', 'build'],
+                                cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
+                                env=abs_synth_env)
+    if retcode != 0:
         print('Warn: build abs_synth failed')
     else:
-        retcode = subprocess.call(['dune', 'build'],
-                                  cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
-                                  env=abs_synth_env)
-        if retcode != 0:
-            print('Warn: build abs_synth failed')
-        else:
-            # dune install --prefix=_install
-            subprocess.call(['dune', 'install', '--prefix=_install'],
-                                      cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
-                                      env=abs_synth_env)
-            # cp _install/bin/abs_synth abs_synth.exe
-            subprocess.call(['cp', '_install/bin/abs_synth', 'abs_synth.exe'],
-                                      cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
-                                      env=abs_synth_env)
-            succeeded_solvers.append('abs_synth')
-    
+        # dune install --prefix=_install
+        subprocess.call(['dune', 'install', '--prefix=_install'],
+                                    cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
+                                    env=abs_synth_env)
+        # cp _install/bin/abs_synth abs_synth.exe
+        subprocess.call(['cp', '_install/bin/abs_synth', 'abs_synth.exe'],
+                                    cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
+                                    env=abs_synth_env)
+        succeeded_solvers.append('abs_synth')
+
     if len(succeeded_solvers) > 0:
         print('Build succeeded solvers: {}'.format(', '.join(succeeded_solvers)))
     else:

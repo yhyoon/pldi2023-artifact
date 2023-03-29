@@ -75,9 +75,9 @@ If you are not interested in comparing `AbsSynth` to `Probe`,
 you can skip the related dependencies(`java`, `coursier`, `sbt`, `cvc4`, etc.)
 and run the test for the other tools.
 
-### 3. Duet in docker container with `arm64`
+### 3. Duet in `arm64`
 
-Build `Duet` maybe failed in `ubuntu:20.04` docker container on `arm64` macOS because of build failure of dependency z3.4.8.1. You can avoid this issue by installing z3.4.8.5 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.5` ; `make`)
+Build `Duet` maybe failed on `arm64` macOS because of build failure of dependency z3.4.8.1. You can avoid this issue by installing z3.4.8.14 instead of 4.8.1. (`opam switch 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.14` ; `make`)
 
 ### 4. Additional tools for Mac
 
@@ -121,21 +121,25 @@ $ brew install gmp # for mac
 ```sh
 $ sudo apt-get install -y opam  # for linux
 $ brew install opam  # for mac
+$
+$ opam init --auto-setup --disable-sandboxing --yes
+$
+
 ```
 
-* `java 8`(Linux - https://openjdk.org/) (Mac - https://bell-sw.com/pages/downloads/): for java compiler (`probe`)
+* `openjdk`(Linux - https://openjdk.org/): for java compiler (`probe`)
 ```sh
-$ sudo apt-get install -y open-jdk-8-jdk # for linux
+$ sudo apt-get install -y openjdk-11-jdk # for linux
 $
-$ brew tap bell-sw/liberica # for mac
-$ brew install --cask liberica-jdk8
+$ brew install openjdk # for mac
 ```
 
 * `scala`, `sbt`(https://www.scala-lang.org/download/): for scala compiler (`probe`)
 ```sh
 # java must be installed before this step
 $ curl -fLo coursier https://github.com/coursier/launchers/raw/master/coursier && chmod +x coursier && ./coursier setup --yes  # for linux
-$ brew install coursier/formulas/coursier && cs setup  # for mac
+$
+$ brew install sbt  # for mac
 ```
 
 * `cvc4`(https://cvc4.github.io/downloads.html): solver (`probe`)
@@ -164,6 +168,10 @@ Tested on :
 * Ubuntu 20.04.5 LTS 64bit Server
 * Ubuntu 22.04.5 LTS 64bit Server
 * macOS Ventura 13.1 (Intel Core Mac)
+* macOS Ventura 13.1 (Apple Silicon M1 Mac):
+  + only abs_synth builds in default
+  + cannot use probe
+  + for duet, `opam install ocamlbuild containers containers-data z3.4.8.14 core batteries ocamlgraph && make` instead of `./build`
 
 Run the following commands:
 ```sh
