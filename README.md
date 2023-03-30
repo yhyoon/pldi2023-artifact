@@ -1,7 +1,8 @@
 # Artifacts for "Inductive Program Synthesis via Iterative Forward-Backward Abstract Interpretation"
 
 NOTE: We have changed the tool name from "AbsSynth" to "Simba" in the final version,
-but this change is not applied in this artifact. So its name is still `AbsSynth`.
+but this change is not applied in this artifact yet. So its name is still `AbsSynth`.
+Final de-anonymized version of this artifact will contain the revised tool.
 
 The artifacts include the main tool(AbsSynth), the other baseline solvers(Duet, Probe), benchmarks and evaluation scripts.
 
@@ -94,8 +95,9 @@ This artifact requires following tools and libraries to build and run.
 ### TL;DR
 In short:
 ```sh
+$ cd pldi2023-artifact
 $ python3 -m pip install --user virtualenv
-$ python3 -m virtualenv .env --python=python3.11
+$ python3 -m virtualenv .env --python=python3.10
 $ source .env/bin/activate
 $ python3 configure.py
 ```
@@ -108,7 +110,7 @@ It is also important to keep in mind that all packages and libraries will be dir
 
 * `python3`: for running build and evaluation scripts
 The build and evaluation script is written in [Python3](https://www.python.org/downloads/)
-Version 3.11.x is recommended.
+Version 3.10 or later is recommended.
 
 * `curl`: for running some build commands(linux)
 ```sh

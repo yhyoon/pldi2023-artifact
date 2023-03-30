@@ -7,21 +7,81 @@ from tempfile import NamedTemporaryFile
 import re
 
 
+def get_linux_version():
+    # trial 1: via command lsb_release
+    result_data = subprocess.run(['lsb_release', '-i', '-r'], stdout=subprocess.PIPE)
+    if result_data.returncode == 0:
+        id_matched = re.search(r'Distributor ID:\s+(\w+)', result_data.stdout.decode('utf-8')).group(1)
+        version_matched = re.search(r'Release:\s+(\d+.\d+)', result_data.stdout.decode('utf-8')).group(1)
+        if id_matched and version_matched:
+            major_str, minor_str = version_matched.split('.')
+            return id_matched.lower(), int(major_str), int(minor_str)
+    
+    # trial 2: via /etc/lsb-release
+    try:
+        with open('/etc/lsb-release', 'rt') as f:
+            data = f.read()
+            id_matched = re.search(r'DISTRIB_ID=(\w+)', data).group(1)
+            version_matched = re.search(r'DISTRIB_RELEASE=(\d+.\d+)', data).group(1)
+            if id_matched and version_matched:
+                major_str, minor_str = version_matched.split('.')
+                return id_matched.lower(), int(major_str), int(minor_str)
+    except FileNotFoundError:
+        pass
+
+    # trial 3: via /etc/os-release
+    try:
+        with open('/etc/os-release', 'rt') as f:
+            data = f.read()
+            id_matched = re.search(r'ID=(\w+)', data).group(1)
+            version_matched = re.search(r'VERSION_ID="(\d+.\d+)"', data).group(1)
+            if id_matched and version_matched:
+                major_str, minor_str = version_matched.split('.')
+                return id_matched.lower(), int(major_str), int(minor_str)
+    except FileNotFoundError:
+        pass
+
+    # trial 4: via /etc/issue
+    try:
+        with open('/etc/issue', 'rt') as f:
+            data = f.read()
+            id_matched = re.search(r'(\w+) (\d+.\d+)', data).group(1)
+            version_matched = re.search(r'(\w+) (\d+.\d+)', data).group(2)
+            if id_matched and version_matched:
+                major_str, minor_str = version_matched.split('.')
+                return id_matched.lower(), int(major_str), int(minor_str)
+    except FileNotFoundError:
+        pass
+
+    # fail
+    return "unknown", 0, 0
+
+
+# return os and arch
+# os: mac | ubuntu | linux (windows is not supported, linux = other linux distros than ubuntu)
+# arch: x86 | arm
+# (mac && arm = apple silicon)
 def detect_system_kind():
     if sys.platform.startswith('win'):
         print('Error: Windows is not supported')
         sys.exit(1)
-    elif sys.platform == 'darwin':
+
+    if platform.processor() == 'arm' or platform.processor() == 'aarch64':
+        arch_kind = 'arm'
+        print(f'Warning: Some parts(e.g., running Probe) are not yet supported in {platform.processor()}')
+    else:
+        arch_kind = 'x86'
+
+    if sys.platform == 'darwin':
         # mac os
-        if platform.processor() == 'arm':
+        os_kind = 'mac'
+        if arch_kind == 'arm':
             # m1
-            system_kind = 'mac-apple-silicon'
-            print('Detected System: ' + system_kind)
-            print('Warning: Some parts(e.g., running Probe) are not yet supported in Apple Silicon')
+            print(f'Detected System: Apple Silicon({os_kind}, {arch_kind})')
         else:
-            system_kind = 'mac-intel'
-            print('Detected System: ' + system_kind)
-        
+            # intel
+            print(f'Detected System: Apple Intel({os_kind}, {arch_kind})')
+
         # check if xcode is installed
         result_data = subprocess.run(['xcode-select', '-p'], stdout=subprocess.PIPE)
         if result_data.returncode != 0:
@@ -35,28 +95,24 @@ def detect_system_kind():
             print('Error: Homebrew is not installed')
             print('Please install Homebrew from https://brew.sh/')
             sys.exit(1)
-    elif 'linux' in sys.platform:
-        if 'ubuntu' in platform.version().lower():
-            system_kind = 'ubuntu'
-            print('Detected System: ' + system_kind)
 
-            result_data = subprocess.run(['hostnamectl'], stdout=subprocess.PIPE)
-            result_out = result_data.stdout.decode('utf-8').splitlines()
-            for line in result_out:
-                if line.strip().startswith('Operating System:'):
-                    ubuntu_version = re.search(r'Ubuntu (\d+.\d+)', line).group(1)
-                    print('Detected Ubuntu version: ' + ubuntu_version)
-                    if not ubuntu_version.startswith('20.') and not ubuntu_version.startswith('22.'):
-                        print('Warning: Ubuntu version ' + ubuntu_version + ' is not tested')                    
+    elif 'linux' in sys.platform:
+        id, major, minor = get_linux_version()
+        if id == 'ubuntu':
+            os_kind = 'ubuntu'
+            print(f'Detected System: {os_kind}{major}.{minor} {arch_kind}')
+
+            if major < 20:
+                print('Warning: Ubuntu version ' + ubuntu_version + ' is not tested')
+        elif id != 'unknown':
+            os_kind = 'linux'
+            print(f'Detected System: {os_kind}{major}.{minor} {arch_kind}')
+            print('Warning: this linux distribution is not tested')
         else:
-            system_kind = 'linux'
-            print('Detected System: ' + system_kind)
-            print('Warning: this linux distribution is not tested: ' + sys.platform)
-    else:
-        print('Unknown platform ' + sys.platform)
-        sys.exit(1)
-    
-    return system_kind
+            print('Unknown platform ' + sys.platform)
+            sys.exit(1)
+
+    return os_kind, arch_kind
 
 
 def opam_config_make_env():
@@ -91,33 +147,34 @@ def opam_switch_exists(switch_name):
     return False
 
 
-def install_dependencies(system_kind):
+def install_dependencies(os_kind, arch_kind):
     if getpass.getuser() == 'root':
         sudo_opt = []
     else:
         sudo_opt = ['sudo']
 
     # gmp, opam, jdk
-    if system_kind == 'mac-intel':
-        print('Installing dependencies(gmp, opam, openjdk) with Homebrew... (this may take a while)')
-        retcode = subprocess.call(['brew', 'install', 'gmp', 'opam', 'openjdk'])
-        if retcode != 0:
-            print('Error: brew failed')
-            sys.exit(1)
-    elif system_kind == 'mac-apple-silicon':
-        # Probe is not supported, we don't need jdk
-        print('Installing dependencies(gmp, opam) with Homebrew... (this may take a while)')
-        retcode = subprocess.call(['brew', 'install', 'gmp', 'opam'])
-        if retcode != 0:
-            print('Error: brew failed')
-            sys.exit(1)
+    if os_kind == 'mac':
+        if arch_kind == 'x86':
+            print('Installing dependencies(gmp, opam, openjdk) with Homebrew... (this may take a while)')
+            retcode = subprocess.call(['brew', 'install', 'gmp', 'opam', 'openjdk'])
+            if retcode != 0:
+                print('Error: brew failed')
+                sys.exit(1)
+        else:
+            # Probe is not supported, we don't need jdk
+            print('Installing dependencies(gmp, opam) with Homebrew... (this may take a while)')
+            retcode = subprocess.call(['brew', 'install', 'gmp', 'opam'])
+            if retcode != 0:
+                print('Error: brew failed')
+                sys.exit(1)
     else:
         print('Installing dependencies(curl, gmp, opam, openjdk) with apt-get... (this may take a while)')
         retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'curl', 'libgmp-dev', 'opam', 'openjdk-11-jdk'])
         if retcode != 0:
             print('Error: apt-get failed')
             sys.exit(1)
-    
+
     # opam init
     print('Initializing opam... (this may take a while)')
     retcode = subprocess.call(['opam', 'init', '--auto-setup', '--disable-sandboxing', '--yes'])
@@ -126,56 +183,60 @@ def install_dependencies(system_kind):
         sys.exit(1)
 
     # scala build system
-    if system_kind == 'mac-apple-silicon':
-        print('Skip installing sbt for Apple Silicon')
-    elif system_kind == 'mac-intel':
-        print('Installing sbt with Homebrew... (this may take a while)')
-        retcode = subprocess.call(['brew', 'install', 'sbt'])
-        if retcode != 0:
-            print('Error: brew failed')
-            sys.exit(1)
+    if os_kind == 'mac':
+        if arch_kind == 'arm':
+            print('Skip installing sbt for Apple Silicon')
+        else:
+            print('Installing sbt with Homebrew... (this may take a while)')
+            retcode = subprocess.call(['brew', 'install', 'sbt'])
+            if retcode != 0:
+                print('Error: brew failed')
+                sys.exit(1)
     else:
         # linux
-        print('Installing sbt with coursier... (this may take a while)')
-        curl_result = subprocess.run(['curl', '-fL', 'https://github.com/coursier/launchers/raw/master/coursier'], stdout=subprocess.PIPE)
-        coursier = NamedTemporaryFile(delete=False)
-        coursier.write(curl_result.stdout)
-        os.chmod(coursier.name, 0o755)
-        coursier.close()
-        cs_result = subprocess.run([coursier.name, 'setup', '--yes'], input=curl_result.stdout)
-        os.unlink(coursier.name)
-        if cs_result.returncode != 0:
-            print('Error: coursier failed')
-            sys.exit(1)
-        os.environ['PATH'] = os.environ['PATH'] + ':' + os.path.expanduser('~/.local/share/coursier/bin')
+        if arch_kind == 'arm':
+            print('Skip installing sbt for ARM')
+        else:
+            print('Installing sbt with coursier... (this may take a while)')
+            curl_result = subprocess.run(['curl', '-fL', 'https://github.com/coursier/launchers/raw/master/coursier'], stdout=subprocess.PIPE)
+            coursier = NamedTemporaryFile(delete=False)
+            coursier.write(curl_result.stdout)
+            os.chmod(coursier.name, 0o755)
+            coursier.close()
+            cs_result = subprocess.run([coursier.name, 'setup', '--yes'], input=curl_result.stdout)
+            os.unlink(coursier.name)
+            if cs_result.returncode != 0:
+                print('Error: coursier failed')
+                sys.exit(1)
+            os.environ['PATH'] = os.environ['PATH'] + ':' + os.path.expanduser('~/.local/share/coursier/bin')
 
     # cvc4
-    if system_kind == 'mac-apple-silicon':
-        print('Skip installing cvc4 for Apple Silicon')
-    elif system_kind == 'mac-intel':
-        print('Installing cvc4 with Homebrew... (this may take a while)')
-        retcode = subprocess.call(['brew', 'tap', 'cvc4/cvc4'])
-        if retcode != 0:
-            print('Error: brew tap failed')
-            sys.exit(1)
-        retcode = subprocess.call(['brew', 'install', 'cvc4/cvc4/cvc4'])
-        if retcode != 0:
-            print('Error: brew install cvc4 failed')
-            sys.exit(1)
+    if arch_kind == 'arm':
+        print('Skip installing cvc4 for ARM')
     else:
-        # linux
-        print('Installing cvc4 with apt-get... (this may take a while)')
-        retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'cvc4'])
-        if retcode != 0:
-            print('Error: apt-get install cvc4 failed')
-            sys.exit(1)
-
+        if os_kind == 'mac':
+            print('Installing cvc4 with Homebrew... (this may take a while)')
+            retcode = subprocess.call(['brew', 'tap', 'cvc4/cvc4'])
+            if retcode != 0:
+                print('Error: brew tap failed')
+                sys.exit(1)
+            retcode = subprocess.call(['brew', 'install', 'cvc4/cvc4/cvc4'])
+            if retcode != 0:
+                print('Error: brew install cvc4 failed')
+                sys.exit(1)
+        else:
+            # linux
+            print('Installing cvc4 with apt-get... (this may take a while)')
+            retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'cvc4'])
+            if retcode != 0:
+                print('Error: apt-get install cvc4 failed')
+                sys.exit(1)
     
     # prepare opam switch - duet
     if opam_switch_exists("duet"):
         print('opam switch for duet already exists')
     else:
-        if system_kind == 'mac-apple-silicon':
+        if os_kind == 'mac' and arch_kind == 'arm':
             print('Warn: Recommended ocaml version for Duet is 4.08.0, but it is not supported on Apple Silicon. '
                 'Use 4.12.0(the lowest version supported on Apple Silicon) instead. '
                 'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.14 instead. '
@@ -207,11 +268,11 @@ def install_dependencies(system_kind):
         sys.exit(1)
 
 
-def build_all_solvers(system_kind):
+def build_all_solvers(os_kind, arch_kind):
     succeeded_solvers = []
 
     # Probe
-    if system_kind == 'mac-apple-silicon':
+    if arch_kind == 'arm':
         print('Skip building Probe for Apple Silicon')
     else:
         print('Building Probe...')
@@ -239,7 +300,7 @@ def build_all_solvers(system_kind):
     print('Building Duet...')
     subprocess.call(['opam', 'switch', 'duet'])
     duet_env = opam_config_make_env()
-    if system_kind == 'mac-apple-silicon':
+    if os_kind == 'mac' and arch_kind == 'arm':
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.14', 'core', 'batteries', 'ocamlgraph']
     else:
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
@@ -308,10 +369,10 @@ def main(argv):
     # check system
     
     # system_kind is one of {'mac-intel', 'mac-apple-silicon', 'ubuntu', 'linux'}
-    system_kind = detect_system_kind()
+    os_kind, arch_kind = detect_system_kind()
 
-    install_dependencies(system_kind)
-    build_all_solvers(system_kind)
+    install_dependencies(os_kind, arch_kind)
+    build_all_solvers(os_kind, arch_kind)
 
 
 if __name__ == '__main__':
