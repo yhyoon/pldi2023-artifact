@@ -102,9 +102,9 @@ class SolverDuet(Solver):
             lib_path_key = "LD_LIBRARY_PATH"
 
         if lib_path_key in os.environ:
-            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3") + ":" + os.environ[lib_path_key]}
+            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "duet", "lib", "z3") + ":" + os.environ[lib_path_key]}
         else:
-            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3")}
+            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "duet", "lib", "z3")}
 
     def params(self, target: str) -> List[str]:
         if target.startswith(bench_name_to_dir["bitvec"]):
