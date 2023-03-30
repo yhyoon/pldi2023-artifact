@@ -94,7 +94,7 @@ In short:
 ```sh
 $ cd pldi2023-artifact
 $ python3 -m pip install --user virtualenv
-$ python3 -m virtualenv .env --python=python3.10
+$ python3 -m virtualenv .env --python=python3.10 # 3.8 or later maybe ok
 $ source .env/bin/activate
 $ python3 configure.py
 ```
@@ -106,8 +106,8 @@ It is also important to keep in mind that all packages and libraries will be dir
 ### Dependencies
 
 * `python3`: for running build and evaluation scripts
-The build and evaluation script is written in [Python3](https://www.python.org/downloads/)
-Version 3.10 or later is recommended.
+The build(configure.py) and evaluation(eval/*.py) scripts are written in [Python3](https://www.python.org/downloads/)
+Version 3.10 or later is recommended, but we have also tested it on version 3.8.10 without encountering any issues.
 
 * `curl`: for running some build commands(linux)
 ```sh
@@ -119,14 +119,13 @@ $ sudo apt-get install -y curl # for linux
 $ sudo apt-get install -y libgmp-dev # for linux
 $ brew install gmp # for mac
 ```
+
 * `opam`(https://opam.ocaml.org/): for ocaml compiler (`abs_synth`, `duet`)
 ```sh
 $ sudo apt-get install -y opam  # for linux
 $ brew install opam  # for mac
 $
 $ opam init --auto-setup --disable-sandboxing --yes
-$
-
 ```
 
 * `openjdk`(Linux - https://openjdk.org/): for java compiler (`probe`)
@@ -149,7 +148,7 @@ $ brew install sbt  # for mac
 $ # for linux case 1: if available
 $ sudo apt-get install cvc4
 $
-$ # for linux case 2: if apt-get install is not working
+$ # for linux in x86_64: if apt-get install is not working
 $ cd probe
 $ wget https://github.com/CVC4/CVC4/releases/download/1.8/cvc4-1.8-x86_64-linux-opt
 $ ln -s cvc4-1.8-x86_64-linux-opt cvc4
@@ -166,15 +165,6 @@ $ python3 -m pip install pandas matplotlib  # common
 ```
 
 ### Build
-Tested on :
-* Ubuntu 20.04.5 LTS 64bit Server
-* Ubuntu 22.04.5 LTS 64bit Server
-* macOS Ventura 13.1 (Intel Core Mac)
-* macOS Ventura 13.1 (Apple Silicon M1 Mac):
-  + only abs_synth builds in default
-  + cannot use probe
-  + for duet, `opam install ocamlbuild containers containers-data z3.4.8.14 core batteries ocamlgraph && make` instead of `./build`
-
 Run the following commands:
 ```sh
 $ cd abs_synth
@@ -189,6 +179,15 @@ $ cd probe
 $ sbt assembly
 $ cd ..
 ```
+
+Tested on :
+* Ubuntu 20.04.5 LTS 64bit Server on Intel x86_64
+* Ubuntu 22.04.5 LTS 64bit Server on Intel x86_64
+* macOS Ventura 13.1 (Intel Core Mac)
+* macOS Ventura 13.1 (Apple Silicon M1 Mac):
+  + only abs_synth builds in default
+  + cannot use probe
+  + for duet, run `opam install ocamlbuild containers containers-data z3.4.8.14 core batteries ocamlgraph && make` instead of `./build`
 
 ## Running
 
