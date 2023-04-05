@@ -642,6 +642,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "  where \\textbf{Time} gives synthesis time,",
         "  $T_{A}$ gives time spent for forward and backward analysis,",
         "  and $|P|$ shows the size of the synthesized program (measured by number of AST nodes).}",
+        "  \\vspace{-0.1in}"
         "  \\label{tbl:compare_detail}",
         "  \\begin{tabular}{c|l|rr|rr|rrr}",
         "    \\toprule",
@@ -726,6 +727,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
         ],
         "    \\bottomrule",
         "  \\end{tabular}",
+        "  \\vspace{-0.2in}"
         "\\end{table}"
     ]
 
