@@ -1,4 +1,5 @@
 import argparse
+import random
 
 import common_util
 from common_util import *
@@ -130,6 +131,8 @@ def main():
                            help='print Figure 3.(c) (main summary table) in the paper')
     subparser.add_argument('-detail_table', action='store_true',
                            help='print Table 1 (detail results of chosen subset) in the paper')
+    subparser.add_argument('-random_table', action='store_true',
+                           help='print table for detail results of randomly chosen subset (not in the paper)')
     subparser.add_argument('-ablation_table', action='store_true',
                            help='print Figure 4.(b) (ablation summary table) in the paper')
     subparser.add_argument('-plot', action='store_true',
@@ -141,7 +144,9 @@ def main():
     subparser = subparsers.add_parser('batch', help='Run Every Solvers to Every Benchmarks and Print Statistics'
                                                     '(WARNING: this command is very very time-consuming)')
     subparser.add_argument('-chosen', action='store_true',
-                           help='run chosen subset of benchmarks (Table 1 in paper)')
+                           help='run chosen subset of benchmarks (Table 1 in paper), cannot be used with -random')
+    subparser.add_argument('-random', action='store_true',
+                           help='run random subset of benchmarks (Similar to Table 1 in paper, but different on each run), cannot be used with -chosen')
     subparser.add_argument('-ablation', action='store_true',
                            help='run variation solvers of abs_synth for ablation study too (Figure 4 in paper)')
     subparser.add_argument('-p', type=int, metavar='NUM', nargs='?', default=1,
@@ -175,17 +180,48 @@ def main():
                 log_write_with_time(f"===== run {solver} on {bench} =====")
                 run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
     elif args.command == 'stat':
-        print_stat.draw_all(args.main_table, args.detail_table, args.ablation_table, args.plot, args.table_out)
+        random_subset = None
+        if args.random_table:
+            rand_chosen_hd_problems = random.sample(problem_map["hd"][0], 5)
+            rand_chosen_deob_problems = random.sample(problem_map["deobfusc"][0], 5)
+            rand_chosen_crypto_problems = random.sample(problem_map["crypto"][0], 5)
+            rand_chosen_lobster_problems = random.sample(problem_map["lobster"][0], 5)
+            random_subset = {
+                "hd": rand_chosen_hd_problems,
+                "deobfusc": rand_chosen_deob_problems,
+                "crypto": rand_chosen_crypto_problems,
+                "lobster": rand_chosen_lobster_problems,
+            }
+
+        print_stat.draw_all(args.main_table, args.detail_table, random_subset, args.ablation_table, args.plot, args.table_out)
     elif args.command == 'batch':
+        if args.chosen and args.random:
+            raise Exception("Cannot use -chosen and -random at the same time")
+
+        bench_subset: Optional[Dict[str, List[str]]] = None
+        if args.chosen:
+            bench_subset = tbl1_rand_chosen_bench
+        elif args.random:
+            rand_chosen_hd_problems = random.sample(problem_map["hd"][0], 5)
+            rand_chosen_deob_problems = random.sample(problem_map["deobfusc"][0], 5)
+            rand_chosen_crypto_problems = random.sample(problem_map["crypto"][0], 5)
+            rand_chosen_lobster_problems = random.sample(problem_map["lobster"][0], 5)
+            bench_subset = {
+                "hd": rand_chosen_hd_problems,
+                "deobfusc": rand_chosen_deob_problems,
+                "crypto": rand_chosen_crypto_problems,
+                "lobster": rand_chosen_lobster_problems,
+            }
+
         for bench in ["crypto", "lobster", "hd", "deobfusc"]:
             for solver in solver_names:
                 log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
-                run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
+                run.run_test(solver, bench, bench_subset, args.overwrite, args.timeout, args.thread_count)
             if args.ablation:
                 for solver in ablation_names:
                     log_write_with_time(f"===== BATCH: run {solver} on {bench} =====")
-                    run.run_test(solver, bench, args.chosen, args.overwrite, args.timeout, args.thread_count)
-        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, args.ablation, not args.chosen, args.table_out)
+                    run.run_test(solver, bench, bench_subset, args.overwrite, args.timeout, args.thread_count)
+        print_stat.draw_all(not args.chosen and not args.ablation, args.chosen, bench_subset if args.random else None, args.ablation, not args.chosen, args.table_out)
     elif args.command == 'aggregation':
         with open(args.csv_out, "wt") as fout:
             def read_and_write(f, index):

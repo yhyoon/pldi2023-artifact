@@ -4,6 +4,7 @@ import argparse
 import itertools
 import matplotlib.pyplot as plt
 import numpy
+import random
 
 import solvers
 import common_util
@@ -377,7 +378,7 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
 
-def draw_detail_table(dfs, table_out):
+def draw_detail_table(dfs, bench_to_chosen: Dict[str, List[str]], caption, table_out):
     main_df, solver_to_df, solver_bench_to_df = dfs
 
     def solver_problem_detail(solver: str, problem: str) -> pd.Series:
@@ -391,13 +392,6 @@ def draw_detail_table(dfs, table_out):
                               "time": None,
                               "size": None,
                               "solution": None})
-
-    bench_to_chosen = {
-        "hd": tbl1_rand_chosen_hd_problems,
-        "deobfusc": tbl1_rand_chosen_deob_problems,
-        "lobster": tbl1_rand_chosen_lobster_problems,
-        "crypto": tbl1_rand_chosen_crypto_problems,
-    }
 
     # table 1: randomly chosen detail table raw data
     # solver |->
@@ -480,7 +474,7 @@ def draw_detail_table(dfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_hd_problems
+            ) for problem in bench_to_chosen['hd']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -498,7 +492,7 @@ def draw_detail_table(dfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_deob_problems
+            ) for problem in bench_to_chosen['deobfusc']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -516,7 +510,7 @@ def draw_detail_table(dfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_lobster_problems
+            ) for problem in bench_to_chosen['lobster']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -534,7 +528,7 @@ def draw_detail_table(dfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_crypto_problems
+            ) for problem in bench_to_chosen['crypto']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -542,14 +536,18 @@ def draw_detail_table(dfs, table_out):
         ),
     ]
 
+    all_set = set()
+    for k, v in bench_to_chosen.items():
+        all_set.update(v)
     # health check
-    required_pairs = health_check_solver_problem(solver_names, tbl1_rand_chosen_bench)
+    required_pairs = health_check_solver_problem(solver_names, all_set)
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
-    table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n"
-                    "Analysis times are not included in this table. You can see them by manually running\n"
-                    " abs_synth with option '-log'.\n")
+    if caption:
+        table_out.write("Table 1. Results for 20 randomly chosen benchmark problems (5 for each domain).\n"
+                        "Analysis times are not included in this table. You can see them by manually running\n"
+                        " abs_synth with option '-log'.\n")
     table_out.write("\n".join(detail_lines))
     table_out.write("\n\n")
 
@@ -861,6 +859,7 @@ def draw_main_table(dfs: Tuple[pd.DataFrame, Dict[str, pd.DataFrame], Dict[str, 
 
 def draw_all(print_main_table: bool,
              print_detail_table: bool,
+             random_subset: Optional[Dict[str, List[str]]],
              print_ablation_table: bool,
              print_plot: bool,
              table_out):
@@ -874,7 +873,10 @@ def draw_all(print_main_table: bool,
         draw_main_table(dfs, table_out)
 
     if print_detail_table:
-        draw_detail_table(dfs, table_out)
+        draw_detail_table(dfs, tbl1_rand_chosen_bench, True, table_out)
+    
+    if random_subset is not None:
+        draw_detail_table(dfs, random_subset, False, table_out)
 
     if print_ablation_table:
         draw_ablation_table(dfs, table_out)
@@ -917,6 +919,8 @@ def main():
                         help='print Figure 3.(c) (main summary table) in the paper')
     parser.add_argument('-detail_table', action='store_true',
                         help='print Table 1 (detail results of chosen subset) in the paper')
+    parser.add_argument('-random_table', action='store_true',
+                        help='print table for detail results of randomly chosen subset (not in the paper)')
     parser.add_argument('-ablation_table', action='store_true',
                         help='print Figure 4.(b) (ablation summary table) in the paper')
     parser.add_argument('-plot', action='store_true',
@@ -928,7 +932,20 @@ def main():
 
     common_util.log_out = args.log_out
 
-    draw_all(args.main_table, args.detail_table, args.ablation_table, args.plot, args.table_out)
+    random_subset = None
+    if args.random_table:
+        rand_chosen_hd_problems = random.sample(problem_map["hd"][0], 5)
+        rand_chosen_deob_problems = random.sample(problem_map["deobfusc"][0], 5)
+        rand_chosen_crypto_problems = random.sample(problem_map["crypto"][0], 5)
+        rand_chosen_lobster_problems = random.sample(problem_map["lobster"][0], 5)
+        random_subset = {
+            "hd": rand_chosen_hd_problems,
+            "deobfusc": rand_chosen_deob_problems,
+            "crypto": rand_chosen_crypto_problems,
+            "lobster": rand_chosen_lobster_problems,
+        }
+
+    draw_all(args.main_table, args.detail_table, random_subset, args.ablation_table, args.plot, args.table_out)
 
 
 if __name__ == '__main__':
