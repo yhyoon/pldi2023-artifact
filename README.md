@@ -8,7 +8,7 @@ The artifacts include the main tool(AbsSynth), the other baseline solvers(Duet, 
 
 ## Virtual Machine Image
 
-We provide a [VirtualBox VM image](pldi2023artifact_VM.zip) to address the difficulty
+We provide a [VirtualBox VM image](pldi2023artifact_VM_v3.zip) to address the difficulty
 of setting up the execution environment for the artifact.
 The image includes all the necessary components to immediately run the artifact.
 You can skip the [Dependencies](#dependencies) and [Build](#build) part
