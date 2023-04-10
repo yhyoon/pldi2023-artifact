@@ -4,10 +4,10 @@ The artifacts include the main tool(Simba), the other baseline solvers(Duet, Pro
 
 ## Virtual Machine Image
 
-We provide a [VirtualBox VM image](https://zenodo.org/record/7783701/files/pldi2023artifact_VM.zip?download=1) to address the difficulty
-of setting up the execution environment for the artifact.
+We provide a [VirtualBox VM image](https://zenodo.org/record/7783701/files/pldi2023artifact_VM.zip?download=1)
+to address the difficulty of setting up the execution environment for the artifact.
 The image includes all the necessary components to immediately run the artifact.
-You can skip the [Dependencies](#dependencies) and [Build](#build) part
+You can skip the [Dependencies and Build](#dependencies-and-build) part
 and just jump to the [Running](#running) part.
 However, due to limitations of the virtual machine,
 it may not achieve the performance number reported in the paper.
@@ -54,18 +54,18 @@ If you're operating in an ARM64 environment but still want to achieve optimal pe
 Choose one of these list for test environment:
 1. Best performance, but some tools and libs are installed into your environment
   + Ubuntu-20.04 or later with arch `x86_64`
-  + MacOS with arch `x86_64`(Intel)
+  + MacOS with arch `x86_64`
 2. Safe and (relatively)easy, but cannot show full performance
-  + Use provided docker image using Docker Desktop
-  + Use provided VM Image using VirtualBox
+  + Use the docker image(x86) using Docker Desktop
+  + Use the VM Image using VirtualBox
 3. If those `Best` or `Safe and Easy` items are not available
-  + Use provided docker image using docker.io or any other container engine (we hope it works, but not tested)
-  + MacOS with arch `arm64`(Apple Silicon) (in this case, testing `Probe` is not available)
+  + Use the docker image(x86) using docker.io or any other container engine (we hope it works, but not tested)
+  + MacOS with `arm64`(Apple Silicon M* Mac) (in this case, testing `Probe` is not available)
   + Other Unix OS with `x86_64` (not tested, provided build scripts maybe not working)
 
 ### 2. Probe in `arm64`
 
-`Probe` tightly depends on `cvc4` which is not available in `arm64`, so it cannot be tested on that environment.
+`Probe` tightly coupled with `cvc4` which is not available in `arm64`, so it cannot be tested on that environment.
 If you are not interested in comparing `simba` to `probe`,
 you can skip the related dependencies(`java`, `coursier`, `sbt`, `cvc4`, etc.)
 and run the test for the other tools.
@@ -76,11 +76,14 @@ Build `Duet` maybe failed on `macOS` `monterey` or later because of build failur
 z3.4.8.1 depends on python2 which is removed from `monterey`.
 You can avoid this issue by installing z3.4.8.14 instead of 4.8.1. (`opam switch duet 4.08.0` ; `eval $(opam config env)` ; `opam install --yes z3.4.8.14` ; `make`)
 
-### 4. Additional tools for Mac
+### 4. Additional required tools for Mac
 
-If you want to run this artifact manually on macOS, you need install [Xcode Command Line Tools](https://mac.install.guide/commandlinetools/4.html) and [Homebrew](https://brew.sh/index) before the following detailed steps.
+If you want to run this artifact manually on macOS,
+you need install [Xcode Command Line Tools](https://mac.install.guide/commandlinetools/4.html)
+and [Homebrew](https://brew.sh/index) before the following detailed steps.
 
-If you don't want to install these tools or the other dependency libraries, it's recommended to use VM Image or Docker Image we provided.
+If you don't want to install these tools or the other dependency libraries,
+it's recommended to use VM Image or Docker Image we provided.
 
 ## Dependencies and Build
 This artifact requires following tools and libraries to build and run.
@@ -95,9 +98,16 @@ $ source .env/bin/activate
 $ python3 configure.py
 ```
 
-If you are using `linux` system, it is important that you have sudoer permission in your environment for `sudo apt-get install SOMETHING`. When you encounter this situation for the first time, you will be prompted to input your password. Therefore, please note that this process is not completely noninteractive.
+If you are using `linux` system, it is important that
+you have sudoer permission in your environment for `sudo apt-get install SOMETHING`.
+When you encounter this situation for the first time,
+you will be prompted to input your password.
+Therefore, please note that this process is not completely noninteractive.
 
-It is also important to keep in mind that all packages and libraries will be directly installed into your environment, which could potentially affect your existing system. Therefore, it is strongly advised that you proceed with caution.
+It is also important to keep in mind that
+all packages and libraries will be directly installed into your environment,
+which could potentially affect your existing system.
+Therefore, it is strongly advised that you proceed with caution.
 
 ### Dependencies
 
@@ -105,7 +115,7 @@ It is also important to keep in mind that all packages and libraries will be dir
 The build(configure.py) and evaluation(eval/*.py) scripts are written in [Python3](https://www.python.org/downloads/)
 Version 3.10 or later is recommended, but we have also tested it on version 3.8.10 without encountering any issues.
 
-* `curl`: for running some build commands(linux)
+* `curl`: for install sbt by coursier(in linux only)
 ```sh
 $ sudo apt-get install -y curl # for linux
 ```
