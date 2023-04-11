@@ -259,7 +259,7 @@ $ ./artifact aggregation -h
 Here is the directory structure of this artifact:
 
 ```
-/abs_synth: our solver - abssynth
+/simba: our solver - simba
 /duet: baseline solver - duet
 /probe: baseline solver - probe
 /eval/*.py: evaluation scripts written in python3
