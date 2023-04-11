@@ -4,7 +4,7 @@ The artifacts include the main tool(Simba), the other baseline solvers(Duet, Pro
 
 ## Virtual Machine Image
 
-We provide a VirtualBox VM image (pldi2023artifact_VM_vN.zip)
+We provide a VirtualBox VM image (`pldi2023artifact_VM_vN.zip`)
 to address the difficulty of setting up the execution environment for the artifact.
 The image includes all the necessary components to immediately run the artifact.
 You can skip the [Dependencies and Build](#dependencies-and-build) part
@@ -23,7 +23,7 @@ The artifact is in directory `~/pldi2023-artifact`.
 
 ## Docker Image
 
-As an alternative to the VM image, we also offer a Docker Image (pldi2023_artifact_23_docker_img_x64_vN.tar.gz) for your convenience.
+As an alternative to the VM image, we also offer a Docker Image (`pldi2023_artifact_23_docker_img_x64_vN.tar.gz`) for your convenience.
 Install [Docker Desktop](https://www.docker.com/products/docker-desktop/), download the gzipped docker image file and run with:
 ```sh
 $ gzip -d pldi2023_artifact_23_docker_img_x64_vN.tar.gz
