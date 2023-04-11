@@ -210,7 +210,7 @@ def install_dependencies(os_kind, arch_kind):
             coursier.write(curl_result.stdout)
             os.chmod(coursier.name, 0o755)
             coursier.close()
-            cs_result = subprocess.run([coursier.name, 'setup', '--yes'], input=curl_result.stdout)
+            cs_result = subprocess.run([coursier.name, 'setup', '--yes'])
             os.unlink(coursier.name)
             if cs_result.returncode != 0:
                 print('Error: coursier failed')
