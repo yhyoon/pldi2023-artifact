@@ -197,11 +197,13 @@ def main():
             rand_chosen_deob_problems = random.sample(problem_map["deobfusc"][0], 5)
             rand_chosen_crypto_problems = random.sample(problem_map["crypto"][0], 5)
             rand_chosen_lobster_problems = random.sample(problem_map["lobster"][0], 5)
+            rand_chosen_cond_problems = random.sample(problem_map["bitvec-cond"][0], 5)
             random_subset = {
                 "hd": rand_chosen_hd_problems,
                 "deobfusc": rand_chosen_deob_problems,
                 "crypto": rand_chosen_crypto_problems,
                 "lobster": rand_chosen_lobster_problems,
+                "bitvec-cond": rand_chosen_cond_problems,
             }
 
         print_stat.draw_all(args.main_table, args.detail_table, random_subset, args.cmp_bench_names, args.ablation_table, args.plot,
@@ -219,11 +221,13 @@ def main():
             rand_chosen_deob_problems = random.sample(problem_map["deobfusc"][0], 5)
             rand_chosen_crypto_problems = random.sample(problem_map["crypto"][0], 5)
             rand_chosen_lobster_problems = random.sample(problem_map["lobster"][0], 5)
+            rand_chosen_cond_problems = random.sample(problem_map["bitvec-cond"][0], 5)
             bench_subset = {
                 "hd": rand_chosen_hd_problems,
                 "deobfusc": rand_chosen_deob_problems,
                 "crypto": rand_chosen_crypto_problems,
                 "lobster": rand_chosen_lobster_problems,
+                "bitvec-cond": rand_chosen_cond_problems,
             }
 
         for bench in ["crypto", "lobster", "hd", "deobfusc", "bitvec-cond"]:
