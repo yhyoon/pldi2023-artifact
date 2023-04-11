@@ -178,6 +178,12 @@ $ git apply ../probe_fix.patch  # fix build problem
 $ cd ..
 ```
 
+or,
+```sh
+$ tar -xzf probe.f43ed83.fix.tar.gz  # prepared result
+```
+
+
 * `duet`: a baseline solver
 ```sh
 $ git clone git@github.com:wslee/duet.git
@@ -186,9 +192,22 @@ $ git checkout 627199a80c2eaad7c7a1c287ec65bf3de664e493  # last commit available
 $ cd ..
 ```
 
+or,
+```sh
+$ tar -xzf duet.627199a.tar.gz  # prepared result
+```
+
 * `simba`: our solver
 ```sh
-git clone git@github.com:yhyoon/simba.git
+$ git clone git@github.com:yhyoon/simba.git
+$ cd simba
+$ git checkout 7d0b304866f020eb66b976527e69e07aefeb76c9  # last commit available at 2023-04-10
+$ cd ..
+```
+
+or,
+```sh
+$ tar -xzf simba.7d0b304.tar.gz  # prepared result
 ```
 
 
