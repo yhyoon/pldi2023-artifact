@@ -1,4 +1,5 @@
 from typing import Optional
+import subprocess
 import re
 
 from common_util import *
@@ -135,9 +136,25 @@ class SolverSimbaEx15(SolverSimba):
         return ["-ex_cut", "15", "-report_json", json_path, target]
 
 
+def opam_switch_exists(switch_name):
+    if subprocess.run(['opam', 'switch', 'show'], stdout=subprocess.PIPE).stdout.decode('utf-8') == switch_name:
+        return True
+
+    if subprocess.run(['opam', 'switch', 'list'], stdout=subprocess.PIPE).stdout.decode('utf-8').find(
+            f" {switch_name} ") != -1:
+        return True
+
+    return False
+
+
 class SolverDuet(Solver):
     # command for bv: ./main.native -fastdt -ex_all -max_size 10000 -init_comp_size 3 [target_name]
     # command for circuit: ./main.native -max_size 128 -max_height 16 -init_comp_size 1 [target_name]
+
+    _cached_additional_env: Optional[Dict[str, str]]
+
+    def __init__(self):
+        self._cached_additional_env = None
 
     def name(self) -> str:
         return "duet"
@@ -146,6 +163,9 @@ class SolverDuet(Solver):
         return os.path.join(artifact_root_path, "duet", "main.native")
 
     def additional_env(self) -> Optional[Dict[str, str]]:
+        if self._cached_additional_env is not None:
+            return self._cached_additional_env
+
         import platform
         os_name = platform.system()
         if os_name == "Darwin":
@@ -153,10 +173,19 @@ class SolverDuet(Solver):
         else:
             lib_path_key = "LD_LIBRARY_PATH"
 
-        if lib_path_key in os.environ:
-            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3") + ":" + os.environ[lib_path_key]}
-        else:
-            return {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3")}
+        if opam_switch_exists("duet"):  # build by configure.py
+            if lib_path_key in os.environ:
+                e = {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "duet", "lib", "z3") + ":" + os.environ[lib_path_key]}
+            else:
+                e = {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "duet", "lib", "z3")}
+        else:  # build by duet/build
+            if lib_path_key in os.environ:
+                e = {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3") + ":" + os.environ[lib_path_key]}
+            else:
+                e = {lib_path_key: os.path.join(os.environ["HOME"], ".opam", "4.08.0", "lib", "z3")}
+
+        self._cached_additional_env = e
+        return self._cached_additional_env
 
     def params(self, target: str) -> List[str]:
         if target.startswith(bench_name_to_dir["bitvec"]) or target.startswith(bench_name_to_dir["bitvec-cond"]):
