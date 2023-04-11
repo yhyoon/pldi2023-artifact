@@ -16,7 +16,7 @@ def get_linux_version():
         if id_matched and version_matched:
             major_str, minor_str = version_matched.split('.')
             return id_matched.lower(), int(major_str), int(minor_str)
-    
+
     # trial 2: via /etc/lsb-release
     try:
         with open('/etc/lsb-release', 'rt') as f:
@@ -102,6 +102,7 @@ def detect_system_kind():
             os_kind = 'ubuntu'
             print(f'Detected System: {os_kind}{major}.{minor} {arch_kind}')
 
+            ubuntu_version = f'{major}.{minor}'
             if major < 20:
                 print('Warning: Ubuntu version ' + ubuntu_version + ' is not tested')
         elif id != 'unknown':
@@ -111,6 +112,9 @@ def detect_system_kind():
         else:
             print('Unknown platform ' + sys.platform)
             sys.exit(1)
+    else:
+        print('Unknown platform ' + sys.platform)
+        sys.exit(1)
 
     return os_kind, arch_kind
 
@@ -133,7 +137,7 @@ def opam_config_make_env():
                 v = v[1:-1]
 
             result[k] = v
-    
+
     return result
 
 
@@ -141,7 +145,8 @@ def opam_switch_exists(switch_name):
     if subprocess.run(['opam', 'switch', 'show'], stdout=subprocess.PIPE).stdout.decode('utf-8') == switch_name:
         return True
 
-    if subprocess.run(['opam', 'switch', 'list'], stdout=subprocess.PIPE).stdout.decode('utf-8').find(f" {switch_name} ") != -1:
+    if subprocess.run(['opam', 'switch', 'list'], stdout=subprocess.PIPE).stdout.decode('utf-8').find(
+            f" {switch_name} ") != -1:
         return True
 
     return False
@@ -170,7 +175,8 @@ def install_dependencies(os_kind, arch_kind):
                 sys.exit(1)
     else:
         print('Installing dependencies(curl, gmp, opam, openjdk) with apt-get... (this may take a while)')
-        retcode = subprocess.call([*sudo_opt, 'apt-get', 'install', '--yes', 'curl', 'libgmp-dev', 'opam', 'openjdk-11-jdk'])
+        retcode = subprocess.call(
+            [*sudo_opt, 'apt-get', 'install', '--yes', 'curl', 'libgmp-dev', 'opam', 'openjdk-11-jdk'])
         if retcode != 0:
             print('Error: apt-get failed')
             sys.exit(1)
@@ -198,7 +204,8 @@ def install_dependencies(os_kind, arch_kind):
             print('Skip installing sbt for ARM')
         else:
             print('Installing sbt with coursier... (this may take a while)')
-            curl_result = subprocess.run(['curl', '-fL', 'https://github.com/coursier/launchers/raw/master/coursier'], stdout=subprocess.PIPE)
+            curl_result = subprocess.run(['curl', '-fL', 'https://github.com/coursier/launchers/raw/master/coursier'],
+                                         stdout=subprocess.PIPE)
             coursier = NamedTemporaryFile(delete=False)
             coursier.write(curl_result.stdout)
             os.chmod(coursier.name, 0o755)
@@ -231,16 +238,16 @@ def install_dependencies(os_kind, arch_kind):
             if retcode != 0:
                 print('Error: apt-get install cvc4 failed')
                 sys.exit(1)
-    
+
     # prepare opam switch - duet
     if opam_switch_exists("duet"):
         print('opam switch for duet already exists')
     else:
         if os_kind == 'mac' and arch_kind == 'arm':
             print('Warn: Recommended ocaml version for Duet is 4.08.0, but it is not supported on Apple Silicon. '
-                'Use 4.12.0(the lowest version supported on Apple Silicon) instead. '
-                'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.14 instead. '
-                'The result may be different from the paper.')
+                  'Use 4.12.0(the lowest version supported on Apple Silicon) instead. '
+                  'Also, z3.4.8.1 is not supported on ocaml 4.12.0, so we use z3.4.8.14 instead. '
+                  'The result may be different from the paper.')
             retcode = subprocess.call(['opam', 'switch', 'create', 'duet', '4.12.0', '--yes'])
             if retcode != 0:
                 print('Error: opam switch create 4.08.0 failed')
@@ -251,11 +258,11 @@ def install_dependencies(os_kind, arch_kind):
                 print('Error: opam switch create 4.08.0 failed')
                 sys.exit(1)
 
-    # prepare opam switch - abssynth
-    if opam_switch_exists("abs_synth"):
-        print('opam switch for abs_synth already exists')
+    # prepare opam switch - simba
+    if opam_switch_exists("simba"):
+        print('opam switch for simba already exists')
     else:
-        retcode = subprocess.call(['opam', 'switch', 'create', 'abs_synth', '4.12.0', '--yes'])
+        retcode = subprocess.call(['opam', 'switch', 'create', 'simba', '4.12.0', '--yes'])
         if retcode != 0:
             print('Error: opam switch create 4.12.0 failed')
             sys.exit(1)
@@ -276,6 +283,7 @@ def build_all_solvers(os_kind, arch_kind):
         print('Skip building Probe for Apple Silicon')
     else:
         print('Building Probe...')
+        subprocess.call(['tar', '-xzf', 'probe.f43ed83.fix.tar.gz'])
         # sbt assembly
         # check sbt exists
         retcode = subprocess.call(['which', 'sbt'])
@@ -290,7 +298,8 @@ def build_all_solvers(os_kind, arch_kind):
         else:
             succeeded_solvers.append('probe')
 
-    opam_ver_seq = subprocess.run(['opam', '--version'], stdout=subprocess.PIPE).stdout.decode('utf-8').strip().split(".")
+    opam_ver_seq = subprocess.run(['opam', '--version'], stdout=subprocess.PIPE).stdout.decode('utf-8').strip().split(
+        ".")
     if int(opam_ver_seq[0]) >= 2 and int(opam_ver_seq[1]) >= 1:
         opam_install_cmd_head = ['opam', 'install', '--confirm-level=unsafe-yes']
     else:
@@ -298,58 +307,63 @@ def build_all_solvers(os_kind, arch_kind):
 
     # Duet
     print('Building Duet...')
+    subprocess.call(['tar', '-xzf', 'duet.627199a.tar.gz'])
     subprocess.call(['opam', 'switch', 'duet'])
     duet_env = opam_config_make_env()
     if os_kind == 'mac' and arch_kind == 'arm':
         opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.14', 'core', 'batteries', 'ocamlgraph']
     else:
-        opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0', 'ocamlgraph.1.8.8']
+        opam_pkgs_duet = ['ocamlbuild', 'containers', 'containers-data', 'z3.4.8.1', 'core.v0.13.0', 'batteries.3.0.0',
+                          'ocamlgraph.1.8.8']
     retcode = subprocess.call([*opam_install_cmd_head, *opam_pkgs_duet],
                               env=duet_env)
     if retcode != 0:
         print('Warn: install opam package for duet (maybe) failed')
         check_result = subprocess.run(['opam', 'list', '-i', 'z3'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        if check_result.stdout.decode('utf-8').find("No matches") != -1 or check_result.stderr.decode('utf-8').find("No matches") != -1:
+        if check_result.stdout.decode('utf-8').find("No matches") != -1 or check_result.stderr.decode('utf-8').find(
+                "No matches") != -1:
             print('retry install z3.4.8.14 instead of 4.8.1')
             subprocess.call([*opam_install_cmd_head, 'z3.4.8.14'],
                             env=duet_env)
         print('Keep going...')
 
     retcode = subprocess.call(['ocamlbuild', '-use-ocamlfind', 'src/main.native'],
-                                cwd=os.path.join(os.path.split(__file__)[0], 'duet'),
-                                env=duet_env)
+                              cwd=os.path.join(os.path.split(__file__)[0], 'duet'),
+                              env=duet_env)
     if retcode != 0:
         print('Warn: build duet failed')
         print('Keep going...')
     else:
         succeeded_solvers.append('duet')
 
-    # AbsSynth
-    print('Building AbsSynth...')
-    subprocess.call(['opam', 'switch', 'abs_synth'])
-    abs_synth_env = opam_config_make_env()
-    opam_pkgs_abs_synth = ['dune', 'merlin', 'ocaml-lsp-server', 'dune-build-info', 'batteries', 'ocamlgraph', 'core_kernel', 'yojson', 'containers-data', 'containers', 'z3.4.8.14']
-    retcode = subprocess.call([*opam_install_cmd_head, *opam_pkgs_abs_synth],
-                   env=abs_synth_env)
+    # Simba
+    print('Building Simba...')
+    subprocess.call(['tar', '-xzf', 'simba.7d0b304.tar.gz'])
+    subprocess.call(['opam', 'switch', 'simba'])
+    simba_env = opam_config_make_env()
+    opam_pkgs_simba = ['dune', 'merlin', 'ocaml-lsp-server', 'dune-build-info', 'batteries', 'ocamlgraph',
+                       'core_kernel', 'yojson', 'containers-data', 'containers', 'z3.4.8.14']
+    retcode = subprocess.call([*opam_install_cmd_head, *opam_pkgs_simba],
+                              env=simba_env)
     if retcode != 0:
-        print('Warn: install opam package for abs_synth (maybe) failed')
+        print('Warn: install opam package for simba (maybe) failed')
         print('Keep going...')
 
     retcode = subprocess.call(['dune', 'build'],
-                                cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
-                                env=abs_synth_env)
+                              cwd=os.path.join(os.path.split(__file__)[0], 'simba'),
+                              env=simba_env)
     if retcode != 0:
-        print('Warn: build abs_synth failed')
+        print('Warn: build simba failed')
     else:
         # dune install --prefix=_install
         subprocess.call(['dune', 'install', '--prefix=_install'],
-                                    cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
-                                    env=abs_synth_env)
-        # cp _install/bin/abs_synth abs_synth.exe
-        subprocess.call(['cp', '_install/bin/abs_synth', 'abs_synth.exe'],
-                                    cwd=os.path.join(os.path.split(__file__)[0], 'abs_synth'),
-                                    env=abs_synth_env)
-        succeeded_solvers.append('abs_synth')
+                        cwd=os.path.join(os.path.split(__file__)[0], 'simba'),
+                        env=simba_env)
+        # cp _install/bin/simba simba.exe
+        subprocess.call(['cp', '_install/bin/simba', 'simba.exe'],
+                        cwd=os.path.join(os.path.split(__file__)[0], 'simba'),
+                        env=simba_env)
+        succeeded_solvers.append('simba')
 
     if len(succeeded_solvers) > 0:
         print('Build succeeded solvers: {}'.format(', '.join(succeeded_solvers)))
@@ -358,8 +372,9 @@ def build_all_solvers(os_kind, arch_kind):
         sys.exit(1)
 
     if len(succeeded_solvers) < 3:
-        print('Bulid failed solvers: {}'.format(', '.join(set(['probe', 'duet', 'abs_synth']) - set(succeeded_solvers))))
-        print('You can run ./artifact command to run the artifact evaluation for the solvers that are built successfully')
+        print('Bulid failed solvers: {}'.format(', '.join({'probe', 'duet', 'simba'} - set(succeeded_solvers))))
+        print(
+            'You can run ./artifact command to run the artifact evaluation for the solvers that are built successfully')
     else:
         print('All solvers are built successfully')
         print('You can run ./artifact command to run the artifact evaluation')
@@ -367,7 +382,7 @@ def build_all_solvers(os_kind, arch_kind):
 
 def main(argv):
     # check system
-    
+
     # system_kind is one of {'mac-intel', 'mac-apple-silicon', 'ubuntu', 'linux'}
     os_kind, arch_kind = detect_system_kind()
 
