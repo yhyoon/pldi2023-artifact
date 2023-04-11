@@ -5,6 +5,7 @@ import itertools
 import json
 import matplotlib.pyplot as plt
 import numpy
+import random
 
 import solvers
 import common_util
@@ -430,7 +431,7 @@ def draw_bar_plots(solver_bench_to_df: Dict[str, Dict[str, pd.DataFrame]],
     ])
 
 
-def draw_detail_table(dfs: AllDfs, table_out):
+def draw_detail_table(dfs: AllDfs, bench_to_chosen: Dict[str, List[str]], caption, table_out):
     def solver_problem_detail(solver: str, problem: str) -> pd.Series:
         try:
             df = dfs.solver_bench_to_df[solver][problem_bench_map[problem]]
@@ -442,14 +443,6 @@ def draw_detail_table(dfs: AllDfs, table_out):
                               "time": None,
                               "size": None,
                               "solution": None})
-
-    bench_to_chosen = {
-        "hd": tbl1_rand_chosen_hd_problems,
-        "deobfusc": tbl1_rand_chosen_deob_problems,
-        "lobster": tbl1_rand_chosen_lobster_problems,
-        "crypto": tbl1_rand_chosen_crypto_problems,
-        "bitvec-cond": tbl1_rand_chosen_bvcond_problems,
-    }
 
     # table 1: randomly chosen detail table raw data
     # solver |->
@@ -543,7 +536,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_hd_problems
+            ) for problem in bench_to_chosen['hd']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -561,7 +554,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_deob_problems
+            ) for problem in bench_to_chosen['deobfusc']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -579,7 +572,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_bvcond_problems
+            ) for problem in bench_to_chosen['bitvec-cond']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -597,7 +590,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_lobster_problems
+            ) for problem in bench_to_chosen['lobster']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -615,7 +608,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                         )
                     ]
                 ],
-            ) for problem in tbl1_rand_chosen_crypto_problems
+            ) for problem in bench_to_chosen['crypto']
         ],
         "{:25s}|| {:15s}| {:15s}| {:15s}|".format(
             "".center(25, "-"),
@@ -623,14 +616,18 @@ def draw_detail_table(dfs: AllDfs, table_out):
         ),
     ]
 
+    all_set = set()
+    for k, v in bench_to_chosen.items():
+        all_set.update(v)
     # health check
-    required_pairs = health_check_solver_problem(solver_names, tbl1_rand_chosen_bench)
+    required_pairs = health_check_solver_problem(solver_names, all_set)
     if len(required_pairs) > 0:
         table_out.write(f"WARN: incomplete table. you need run {str(required_pairs)}\n")
 
-    table_out.write("Table 1. Results for 25 randomly chosen benchmark problems (5 for each category).\n"
-                    "Analysis times are not included in this table. You can see them by manually running\n"
-                    " simba with option '-log'.\n")
+    if caption:
+        table_out.write("Table 1. Results for 25 randomly chosen benchmark problems (5 for each category).\n"
+                        "Analysis times are not included in this table. You can see them by manually running\n"
+                        " simba with option '-log'.\n")
     table_out.write("\n".join(txt_detail_lines))
     table_out.write("\n\n")
 
@@ -667,7 +664,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("simba", "hd", problem),
                 lookup_analysis_time("simba", "hd", problem),
                 lookup_size_and_format("simba", "hd", problem),
-            ) for problem in tbl1_rand_chosen_hd_problems
+            ) for problem in bench_to_chosen['hd']
         ],
         "    \\hline",
         "    \\multirow{5}{*}{\\textsc{Deobfusc}}",
@@ -681,7 +678,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("simba", "deobfusc", problem),
                 lookup_analysis_time("simba", "deobfusc", problem),
                 lookup_size_and_format("simba", "deobfusc", problem),
-            ) for problem in tbl1_rand_chosen_deob_problems
+            ) for problem in bench_to_chosen['deobfusc']
         ],
         "    \\hline",
         "    \\multirow{5}{*}{\\textsc{BitVec-Cond}}",
@@ -695,7 +692,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("simba", "bitvec-cond", problem),
                 lookup_analysis_time("simba", "bitvec-cond", problem),
                 lookup_size_and_format("simba", "bitvec-cond", problem),
-            ) for problem in tbl1_rand_chosen_bvcond_problems
+            ) for problem in bench_to_chosen['bitvec-cond']
         ],
         "    \\hline",
         "    \\multirow{5}{*}{\\textsc{Lobster}}",
@@ -709,7 +706,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("simba", "lobster", problem),
                 lookup_analysis_time("simba", "lobster", problem),
                 lookup_size_and_format("simba", "lobster", problem),
-            ) for problem in tbl1_rand_chosen_lobster_problems
+            ) for problem in bench_to_chosen['lobster']
         ],
         "    \\hline",
         "    \\multirow{5}{*}{\\textsc{Crypto}}",
@@ -723,7 +720,7 @@ def draw_detail_table(dfs: AllDfs, table_out):
                 lookup_time_and_format("simba", "crypto", problem),
                 lookup_analysis_time("simba", "crypto", problem),
                 lookup_size_and_format("simba", "crypto", problem),
-            ) for problem in tbl1_rand_chosen_crypto_problems
+            ) for problem in bench_to_chosen['crypto']
         ],
         "    \\bottomrule",
         "  \\end{tabular}",
@@ -731,9 +728,10 @@ def draw_detail_table(dfs: AllDfs, table_out):
         "\\end{table}"
     ]
 
-    with open(os.path.join(artifact_root_path, "figures", "tbl_sample_detail.tex"), "wt") as f:
-        f.write("\n".join(tex_detail_lines))
-    log_write_with_time("created tbl_sample_detail.tex: randomly chosen 5 samples for each domains")
+    if caption:
+        with open(os.path.join(artifact_root_path, "figures", "tbl_sample_detail.tex"), "wt") as f:
+            f.write("\n".join(tex_detail_lines))
+        log_write_with_time("created tbl_sample_detail.tex: randomly chosen 5 samples for each domains")
 
 
 def draw_cmp_table(dfs: AllDfs, cmp_bench_names: List[str], table_out):
@@ -1230,6 +1228,7 @@ def draw_main_table(dfs: AllDfs, table_out):
 
 def draw_all(print_main_table: bool,
              print_detail_table: bool,
+             random_subset: Optional[Dict[str, List[str]]],
              cmp_bench_names: List[str],
              print_ablation_table: bool,
              print_plot: bool,
@@ -1251,7 +1250,10 @@ def draw_all(print_main_table: bool,
         draw_main_table(dfs, table_out)
 
     if print_detail_table:
-        draw_detail_table(dfs, table_out)
+        draw_detail_table(dfs, tbl1_rand_chosen_bench, True, table_out)
+
+    if random_subset is not None:
+        draw_detail_table(dfs, random_subset, False, table_out)
 
     if len(cmp_bench_names) > 0:
         draw_cmp_table(dfs, cmp_bench_names, table_out)
@@ -1285,6 +1287,8 @@ def main():
                         help='print Figure 3.(c) (main summary table) in the paper')
     parser.add_argument('-detail_table', action='store_true',
                         help='print Table 1 (detail results of chosen subset) in the paper')
+    parser.add_argument('-random_table', action='store_true',
+                        help='print table for detail results of randomly chosen subset (not in the paper)')
     parser.add_argument('-cmp_table', type=str, metavar='NAME', nargs='+', required=True,
                         dest='cmp_bench_names',
                         help='list benchmark names to compare solvers'
@@ -1294,7 +1298,7 @@ def main():
     parser.add_argument('-plot', action='store_true',
                         help='draw and store all the plots(Figure 2, Figure 3.(a)(b), Figure 4.(a) in the paper')
     parser.add_argument('-all', action='store_true', default=False,
-                        help='activate all flag options to draw all figures and tables')
+                        help='activate {main, detail, ablation, plot} flag options to draw all figures and tables in the paper')
     parser.add_argument('-table_out', type=argparse.FileType('w'), metavar='FILE', nargs='?', default=sys.stdout,
                         help='print tables to... (default: stdout)')
 
@@ -1302,7 +1306,20 @@ def main():
 
     common_util.log_out = args.log_out
 
-    draw_all(args.main_table, args.detail_table, args.cmp_bench_names, args.ablation_table, args.plot,
+    random_subset = None
+    if args.random_table:
+        rand_chosen_hd_problems = random.sample(problem_map["hd"][0], 5)
+        rand_chosen_deob_problems = random.sample(problem_map["deobfusc"][0], 5)
+        rand_chosen_crypto_problems = random.sample(problem_map["crypto"][0], 5)
+        rand_chosen_lobster_problems = random.sample(problem_map["lobster"][0], 5)
+        random_subset = {
+            "hd": rand_chosen_hd_problems,
+            "deobfusc": rand_chosen_deob_problems,
+            "crypto": rand_chosen_crypto_problems,
+            "lobster": rand_chosen_lobster_problems,
+        }
+
+    draw_all(args.main_table, args.detail_table, random_subset, args.cmp_bench_names, args.ablation_table, args.plot,
              all_on=args.all, table_out=args.table_out)
 
 

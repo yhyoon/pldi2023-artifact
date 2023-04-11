@@ -1,4 +1,4 @@
-from typing import Callable, Any, Tuple, Dict, List, FrozenSet
+from typing import Callable, Any, Tuple, Dict, List, FrozenSet, Optional
 import os
 import sys
 import time
@@ -109,13 +109,13 @@ tbl1_rand_chosen_bvcond_problems = [
     "icfp_gen_14.1",
 ]
 
-tbl1_rand_chosen_bench = frozenset((
-    *tbl1_rand_chosen_hd_problems,
-    *tbl1_rand_chosen_deob_problems,
-    *tbl1_rand_chosen_lobster_problems,
-    *tbl1_rand_chosen_crypto_problems,
-    *tbl1_rand_chosen_bvcond_problems,
-))
+tbl1_rand_chosen_bench: Dict[str, List[str]] = {
+    "hd": tbl1_rand_chosen_hd_problems,
+    "deobfusc": tbl1_rand_chosen_deob_problems,
+    "lobster": tbl1_rand_chosen_lobster_problems,
+    "crypto": tbl1_rand_chosen_crypto_problems,
+    "bitvec-cond": tbl1_rand_chosen_bvcond_problems,
+}
 
 
 def _gen_problems() -> Tuple[Dict[str, Tuple[List[str], FrozenSet[str], pd.DataFrame]], Dict[str, str]]:

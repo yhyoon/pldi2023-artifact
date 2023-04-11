@@ -48,7 +48,7 @@ def pop_target_and_run(solver: Solver, targets: List[List[str]], targets_lock, t
                 write_result(out_path, solver, problem_name, sol_time, sol_size, sol)
 
 
-def run_test(solver_name: str, bench: str, chosen: bool, overwrite: bool, timeout_in_sec: int, thread_count: int):
+def run_test(solver_name: str, bench: str, bench_subset: Optional[Dict[str, List[str]]], overwrite: bool, timeout_in_sec: int, thread_count: int):
     for line in all_result_status_str():
         log_write_with_time(line)
 
@@ -60,12 +60,16 @@ def run_test(solver_name: str, bench: str, chosen: bool, overwrite: bool, timeou
 
     target_files: List[str] = list()
 
+    bench_subset_check = set()
+    for k, v in bench_subset.items():
+        bench_subset_check.update(v)
+
     def is_target(path):
         file_name = os.path.split(path)[1]
         problem_name, ext = os.path.splitext(file_name)
         if ext == ".sl":
-            if chosen:
-                return problem_name in tbl1_rand_chosen_bench
+            if bench_subset is not None:
+                return problem_name in bench_subset_check
             else:
                 return True
         else:
